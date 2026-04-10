@@ -173,47 +173,48 @@
     to { opacity: 1; transform: translate(-50%, 0) scale(1); }
 }
 
-/* Terapkan secara mutlak ke semua button dalam submenu */
-#sidebar .sidebar-nav .submenu-items button {
-    display: flex !important;
-    flex-direction: row !important; /* Paksa menyamping walau sedang status aktif */
-    align-items: center;
-    justify-content: flex-start; /* Untuk submenu, biasanya menyamping (row) */
-    padding: 14px 20px;
-    text-align: left;
-    width: 100%;
-    height: auto !important; /* Reset tinggi agar tidak terpengaruh menu utama */
-    gap: 12px;
-    border-radius: 12px; /* Konsisten UI seperti baris list pengaturan */
-    flex-wrap: nowrap !important; /* Memaksa ikon dan teks selalu di 1 baris */
-    transform: none !important; /* Hilangkan efek geser/angkat */
-    background: transparent;
-}
-#sidebar .sidebar-nav .submenu-items button span {
-    font-size: 0.85rem; /* Teks submenu lebih besar karena orientasinya horizontal */
-    text-align: left;
-    margin: 0 !important; /* Reset margin center */
-    height: auto !important; /* Reset tinggi statis */
-    width: auto !important;
-    flex: 1 0 auto !important; /* Memastikan ruang teks tidak dikompresi */
-    white-space: nowrap !important; /* STRICT: Larang teks untuk membuat baris baru */
-    overflow: visible; /* Pastikan teks utuh */
-}
-#sidebar .sidebar-nav .submenu-items button i,
-#sidebar .sidebar-nav .submenu-items button svg {
-    width: 18px;
-    height: 18px;
-    margin: 0 !important; /* Reset margin center agar sejajar di kiri */
-    margin-bottom: 0 !important; /* Pastikan margin bawah tidak mendorong teks */
-    flex-shrink: 0 !important; /* KUNCI: Pastikan ikon tidak mengecil saat teks menebal */
-}
-
-#sidebar .sidebar-nav .submenu-items button.active-tab {
-    background-color: color-mix(in srgb, var(--accent-color) 10%, transparent) !important;
-    color: var(--accent-color) !important;
-    font-weight: 700;
-    transform: none !important;
-    box-shadow: none !important;
+@media (max-width: 767px) {
+    /* Terapkan secara mutlak ke semua button dalam submenu HANYA di Mobile */
+    #sidebar .sidebar-nav .submenu-items button {
+        display: flex !important;
+        flex-direction: row !important;
+        align-items: center;
+        justify-content: flex-start;
+        padding: 14px 20px;
+        text-align: left;
+        width: 100%;
+        height: auto !important;
+        gap: 12px;
+        border-radius: 12px;
+        flex-wrap: nowrap !important;
+        transform: none !important;
+        background: transparent;
+    }
+    #sidebar .sidebar-nav .submenu-items button span {
+        font-size: 0.85rem;
+        text-align: left;
+        margin: 0 !important;
+        height: auto !important;
+        width: auto !important;
+        flex: 1 0 auto !important;
+        white-space: nowrap !important;
+        overflow: visible;
+    }
+    #sidebar .sidebar-nav .submenu-items button i,
+    #sidebar .sidebar-nav .submenu-items button svg {
+        width: 18px;
+        height: 18px;
+        margin: 0 !important;
+        margin-bottom: 0 !important;
+        flex-shrink: 0 !important;
+    }
+    #sidebar .sidebar-nav .submenu-items button.active-tab {
+        background-color: color-mix(in srgb, var(--accent-color) 10%, transparent) !important;
+        color: var(--accent-color) !important;
+        font-weight: 700;
+        transform: none !important;
+        box-shadow: none !important;
+    }
 }
 #sidebar .sidebar-nav button .submenu-icon {
     display: none;
@@ -273,23 +274,24 @@
         flex-direction: column;
         justify-content: flex-start;
         height: auto; /* Reset height untuk PC */
-        gap: 12px;
-        overflow-y: auto; /* Mengembalikan scroll khusus untuk versi Desktop jika menu terlalu banyak */
-    }
-    #sidebar .sidebar-nav button {
-        flex-direction: row;
-        justify-content: flex-start;
-        padding: 14px 18px; /* Disesuaikan agar lebih rapi */
-        height: auto; /* Reset height untuk PC */
-        font-size: 0.9rem; /* Ukuran font disesuaikan */
-        border-radius: 16px;
+        gap: 6px; /* Rapatkan sedikit */
+        flex: 1; /* Biarkan mengisi tinggi yang ada untuk scroll yang mulus */
+        overflow-y: auto; /* Mengembalikan scroll khusus untuk versi Desktop */
+        overflow-x: hidden; /* Mencegah layar berkedip karena horizontal overflow */
     }
 
     #sidebar .sidebar-nav button {
+        flex-direction: row;
+        justify-content: flex-start;
+        padding: 12px 16px; /* Disesuaikan agar tidak terlalu besar */
+        height: auto; /* Reset height untuk PC */
+        font-size: 0.9rem; /* Ukuran font disesuaikan */
+        border-radius: 12px; /* Disesuaikan */
         width: 100%; /* Memaksa menu memenuhi lebar sidebar */
         flex: none; /* Mereset flex: 1 yang terbawa dari versi mobile */
-        transition: all 0.4s var(--bezier);
-        gap: 16px; /* Jarak ikon & teks untuk Desktop */
+        transition: all 0.3s var(--bezier);
+        gap: 14px; /* Jarak ikon & teks untuk Desktop */
+        box-sizing: border-box; /* Hindari overflow dari padding */
     }
     #sidebar .sidebar-nav button span {
         font-size: 0.9rem; /* Mengembalikan teks ke ukuran asalnya khusus di PC */
@@ -297,12 +299,14 @@
         text-align: left;
         width: auto;
         margin: 0;
+        line-height: 1.5; /* Reset line-height dari mobile */
     }
     #sidebar .sidebar-nav button i,
     #sidebar .sidebar-nav button svg {
         margin: 0; /* Reset margin auto */
         width: 20px;
         height: 20px;
+        flex-shrink: 0;
     }
     #sidebar.collapsed .sidebar-nav button span {
         display: none;
@@ -313,13 +317,11 @@
     }
     #sidebar .sidebar-nav button:hover {
         background-color: var(--hover-bg);
-        transform: translateX(6px);
     }
     #sidebar .sidebar-nav button.active-tab {
         background-color: var(--accent-color);
         color: #ffffff;
         box-shadow: 0 8px 25px -6px var(--accent-color);
-        transform: translateX(4px);
     }
     #sidebar .sidebar-nav button.active-tab i,
     #sidebar .sidebar-nav button.active-tab svg {
@@ -335,21 +337,35 @@
         background: transparent;
         border: none;
         box-shadow: none;
-        gap: 8px;
-        padding: 0 0 0 16px;
+        gap: 4px;
+        padding: 0 0 0 12px;
         width: 100%;
         min-width: auto;
         animation: none;
     }
     #sidebar .sidebar-nav .submenu-items.active button {
-        padding: 14px 18px;
-        font-size: 0.9rem;
-        gap: 16px;
+        padding: 10px 14px;
+        font-size: 0.85rem;
+        gap: 12px;
+        background-color: transparent;
+        color: var(--text-secondary-color);
+        box-shadow: none;
+    }
+    #sidebar .sidebar-nav .submenu-items.active button:hover {
+        background-color: var(--hover-bg);
+        color: var(--text-color);
+    }
+    #sidebar .sidebar-nav .submenu-items.active button.active-tab {
+        background-color: color-mix(in srgb, var(--accent-color) 15%, transparent);
+        color: var(--accent-color);
+        font-weight: 600;
+        box-shadow: none;
     }
     #sidebar .sidebar-nav .submenu-items.active button i,
     #sidebar .sidebar-nav .submenu-items.active button svg {
-        width: 20px;
-        height: 20px;
+        width: 18px;
+        height: 18px;
+        color: inherit; /* Ikuti warna teks menu aktif */
     }
     #sidebar .sidebar-nav button .submenu-icon {
         display: block;

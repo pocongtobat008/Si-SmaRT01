@@ -73,7 +73,7 @@
 
         <div class="table-responsive" style="overflow-x: auto; position: relative; -webkit-overflow-scrolling: touch;">
             <!-- Continer for SVG + Table to handle scroll together -->
-            <div id="laporan-warga-scroll-wrapper" style="position: relative; min-width: 1100px;">
+            <div id="laporan-warga-scroll-wrapper" style="position: relative; min-width: 1100px; padding-bottom: 40px;">
                 <!-- SVG Layer -->
                 <svg id="svg-relations" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 10;">
                     <defs>

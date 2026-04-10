@@ -454,7 +454,7 @@
 
                     <div class="glass-card" style="padding: 0; border-radius: 20px; position: relative; overflow: hidden;">
                         <div class="table-responsive" style="overflow-x: auto; position: relative;">
-                            <div id="ws-laporan-scroll-wrapper" style="position: relative; min-width: 1100px;">
+                            <div id="ws-laporan-scroll-wrapper" style="position: relative; min-width: 1100px; padding-bottom: 40px;">
                                 <svg id="ws-svg-relations" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 10;">
                                     <defs>
                                         <marker id="ws-arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">

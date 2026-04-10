@@ -831,7 +831,8 @@ function drawRelationLines(data) {
             
             // Karena sifat kurva Bezier Kuadratik (Q), tinggi maksimal fisik kurva adalah 50% dari tinggi Control Point.
             // Maka dari itu, nilai Y dari Control Point (midY) harus dikali 2 dari target puncak visual.
-            const midY = line.y1 - (visualPeak * 2);
+            // Garis Advance (Biru) melengkung ke bawah agar tidak menabrak header tabel di baris pertama
+            const midY = line.isAdvance ? line.y1 + (visualPeak * 2) : line.y1 - (visualPeak * 2);
             
             const d = `M ${line.x1} ${line.y1} Q ${midX} ${midY} ${line.x2} ${line.y2}`;
             const curve = document.createElementNS("http://www.w3.org/2000/svg", "path");
@@ -1092,7 +1093,8 @@ function drawWsRelationLines(data) {
             
             // Karena sifat kurva Bezier Kuadratik (Q), tinggi maksimal fisik kurva adalah 50% dari tinggi Control Point.
             // Maka dari itu, nilai Y dari Control Point (midY) harus dikali 2 dari target puncak visual.
-            const midY = line.y1 - (visualPeak * 2);
+            // Garis Advance (Biru) melengkung ke bawah agar tidak menabrak header tabel di baris pertama
+            const midY = line.isAdvance ? line.y1 + (visualPeak * 2) : line.y1 - (visualPeak * 2);
             
             const d = `M ${line.x1} ${line.y1} Q ${midX} ${midY} ${line.x2} ${line.y2}`;
             const curve = document.createElementNS("http://www.w3.org/2000/svg", "path");

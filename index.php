@@ -131,6 +131,7 @@ foreach($pengurus as $p) {
                     <a href="#kawasan" class="hover:text-emerald-400 transition-colors">Kawasan</a>
                     <a href="#fasilitas" class="hover:text-emerald-400 transition-colors">Fasilitas</a>
                     <a href="#wisata" class="hover:text-emerald-400 transition-colors">Wisata</a>
+                    <a href="#struktur" class="hover:text-emerald-400 transition-colors">Pengurus</a>
                 <?php else: ?>
                     <?php foreach($menus as $m): ?>
                         <a href="<?= htmlspecialchars($m['url']) ?>" class="hover:text-emerald-400 transition-colors"><?= htmlspecialchars($m['nama_menu']) ?></a>
@@ -212,38 +213,61 @@ foreach($pengurus as $p) {
 
     <!-- STRUKTUR ORGANISASI -->
     <?php if(!empty($struktur)): ?>
-    <section id="struktur" class="py-24 relative bg-[#03100c]">
-        <div class="container mx-auto px-6 md:px-12">
-            <div class="text-center mb-20 reveal">
+    <section id="struktur" class="py-32 relative bg-[#010a08] overflow-hidden">
+        <!-- Background Visual Decorations -->
+        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[800px] bg-emerald-500/5 rounded-full blur-[120px] pointer-events-none"></div>
+        
+        <div class="container mx-auto px-6 md:px-12 relative z-10">
+            <div class="text-center mb-24 reveal">
                 <div class="inline-flex items-center space-x-3 px-4 py-2 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[10px] font-bold tracking-[0.2em] uppercase mb-4">
-                    <i class="fas fa-users"></i><span>Susunan Pengurus</span>
+                    <i class="fas fa-sitemap"></i><span>Susunan Pengurus</span>
                 </div>
-                <h2 class="text-4xl md:text-5xl font-bold mb-6">Struktur Organisasi</h2>
-                <p class="text-emerald-100/60 text-lg max-w-2xl mx-auto font-light">Jajaran pengurus yang melayani dan mengayomi warga dengan sepenuh hati demi lingkungan yang lebih baik.</p>
+                <h2 class="text-4xl md:text-6xl font-bold mb-6">Struktur Organisasi</h2>
+                <p class="text-emerald-100/50 text-lg max-w-2xl mx-auto font-light">Jajaran pengurus yang berdedikasi melayani dan mengayomi warga dengan sepenuh hati demi lingkungan yang lebih baik.</p>
             </div>
             
-            <div class="flex flex-col items-center gap-12 relative">
-                <!-- Garis Vertikal Tengah (Tulang Punggung Tree) -->
-                <div class="absolute left-1/2 top-10 bottom-10 w-[2px] bg-gradient-to-b from-emerald-500/50 via-emerald-500/20 to-transparent -translate-x-1/2 z-0 hidden md:block"></div>
+            <div class="flex flex-col items-center relative">
+                <?php 
+                $levels = array_keys($struktur);
+                sort($levels);
+                foreach($levels as $index => $tingkat): 
+                    $anggota = $struktur[$tingkat];
+                    $isLast = ($index === count($levels) - 1);
+                ?>
                 
-                <?php foreach($struktur as $tingkat => $anggota): ?>
-                <div class="flex flex-wrap justify-center gap-6 relative z-10 w-full reveal">
+                <!-- Level Container -->
+                <div class="flex flex-wrap justify-center gap-6 md:gap-10 relative z-10 w-full reveal" style="transition-delay: <?= $index * 100 ?>ms;">
                     <?php foreach($anggota as $a): ?>
-                    <div class="glass p-8 rounded-[2rem] card-glow flex flex-col items-center text-center w-full sm:w-[280px] bg-[#041a14]/90 backdrop-blur-xl border-emerald-500/20 hover:-translate-y-2 transition-transform duration-300">
-                        <div class="w-32 h-32 rounded-full overflow-hidden mb-6 border-4 border-emerald-500/30 p-1 bg-emerald-500/10 shadow-[0_0_30px_rgba(16,185,129,0.2)]">
-                            <?php if($a['foto']): ?>
-                                <img src="<?= htmlspecialchars($a['foto']) ?>" alt="<?= htmlspecialchars($a['nama']) ?>" class="w-full h-full object-cover rounded-full">
-                            <?php else: ?>
-                                <div class="w-full h-full rounded-full bg-gradient-to-br from-emerald-400 to-emerald-600 flex items-center justify-center text-white text-4xl font-bold">
-                                    <?= strtoupper(substr($a['nama'], 0, 1)) ?>
-                                </div>
-                            <?php endif; ?>
+                    <div class="group relative w-full sm:w-[260px]">
+                        <!-- Organigram Card -->
+                        <div class="glass p-8 rounded-[2.5rem] card-glow flex flex-col items-center text-center bg-[#031510]/80 backdrop-blur-xl border border-emerald-500/20 hover:border-emerald-400/50 hover:-translate-y-3 transition-all duration-500 relative z-10 overflow-hidden">
+                            <!-- Subtle hover background glow -->
+                            <div class="absolute inset-0 bg-gradient-to-b from-emerald-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                            
+                            <div class="w-32 h-32 rounded-full overflow-hidden mb-6 border-4 border-[#031510] ring-4 ring-emerald-500/30 p-1 bg-emerald-500/10 shadow-[0_0_30px_rgba(16,185,129,0.3)] group-hover:ring-emerald-400 transition-all duration-500">
+                                <?php if($a['foto']): ?>
+                                    <img src="<?= htmlspecialchars($a['foto']) ?>" alt="<?= htmlspecialchars($a['nama']) ?>" class="w-full h-full object-cover rounded-full group-hover:scale-110 transition-transform duration-700">
+                                <?php else: ?>
+                                    <div class="w-full h-full rounded-full bg-gradient-to-br from-emerald-400 to-emerald-600 flex items-center justify-center text-white text-5xl font-bold group-hover:scale-110 transition-transform duration-700">
+                                        <?= strtoupper(substr($a['nama'], 0, 1)) ?>
+                                    </div>
+                                <?php endif; ?>
+                            </div>
+                            <h4 class="text-xl font-bold mb-2 text-white group-hover:text-emerald-300 transition-colors"><?= htmlspecialchars($a['nama']) ?></h4>
+                            <p class="text-emerald-950 text-xs font-bold tracking-widest uppercase bg-emerald-400 px-4 py-2 rounded-full inline-block shadow-lg shadow-emerald-500/20"><?= htmlspecialchars($a['jabatan']) ?></p>
                         </div>
-                        <h4 class="text-xl font-bold mb-2 text-white"><?= htmlspecialchars($a['nama']) ?></h4>
-                        <p class="text-emerald-400 text-sm font-bold tracking-widest uppercase bg-emerald-500/10 px-4 py-1.5 rounded-full inline-block"><?= htmlspecialchars($a['jabatan']) ?></p>
                     </div>
                     <?php endforeach; ?>
                 </div>
+
+                <!-- Garis Penghubung antar-tingkatan -->
+                <?php if(!$isLast): ?>
+                <div class="w-[2px] h-12 md:h-16 bg-gradient-to-b from-emerald-500/50 to-emerald-500/10 relative reveal" style="transition-delay: <?= $index * 100 + 50 ?>ms;">
+                    <!-- Glowing titik tengah -->
+                    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-emerald-400 shadow-[0_0_10px_rgba(52,211,153,0.8)]"></div>
+                </div>
+                <?php endif; ?>
+
                 <?php endforeach; ?>
             </div>
         </div>

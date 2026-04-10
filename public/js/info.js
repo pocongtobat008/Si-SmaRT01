@@ -29,7 +29,7 @@ window.closeInfoModal = function(id) {
 // 1. CRUD PENGATURAN UMUM
 // ==========================================
 window.loadWebSettings = function() {
-    fetch('api/info/get_settings.php')
+    fetch('api/cms_get_settings.php')
         .then(r => r.json())
         .then(res => {
             if (res.status === 'success') {
@@ -98,7 +98,7 @@ window.saveWebSettings = function() {
     if(transFile) fd.append('web_transparansi_file', transFile);
 
     showLoading('Menyimpan Profil Web...');
-    fetch('api/info/save_settings.php', { method: 'POST', body: fd })
+    fetch('api/cms_save_settings.php', { method: 'POST', body: fd })
         .then(r => r.json())
         .then(res => {
             if (res.status === 'success') {
@@ -118,7 +118,7 @@ window.loadCmsMenus = function() {
     const tbody = document.getElementById('cms-menu-body');
     tbody.innerHTML = '<tr><td colspan="5" class="text-center py-5">Memuat data...</td></tr>';
     
-    fetch('api/info/get_menus.php')
+    fetch('api/cms_get_menus.php')
         .then(r => r.json())
         .then(res => {
             if (res.status === 'success' && res.data.length > 0) {
@@ -173,7 +173,7 @@ window.saveCmsMenu = function() {
     fd.append('urutan', document.getElementById('cms-menu-urutan').value);
     fd.append('status', document.getElementById('cms-menu-status').value);
 
-    fetch('api/info/save_menu.php', { method: 'POST', body: fd }).then(r=>r.json()).then(res=>{
+    fetch('api/cms_save_menu.php', { method: 'POST', body: fd }).then(r=>r.json()).then(res=>{
         if(res.status==='success') { showToast(res.message); closeInfoModal('modal-cms-menu'); loadCmsMenus(); } 
         else showToast(res.message, 'error'); 
     });
@@ -182,7 +182,7 @@ window.saveCmsMenu = function() {
 window.deleteMenu = function(id) {
     if(confirm('Hapus menu navigasi ini?')) {
         const fd = new FormData(); fd.append('id', id);
-        fetch('api/info/delete_menu.php', { method: 'POST', body: fd }).then(r=>r.json()).then(res=>{ if(res.status==='success') loadCmsMenus(); });
+        fetch('api/cms_delete_menu.php', { method: 'POST', body: fd }).then(r=>r.json()).then(res=>{ if(res.status==='success') loadCmsMenus(); });
     }
 }
 
@@ -193,7 +193,7 @@ window.loadCmsBlogs = function() {
     const container = document.getElementById('cms-blog-list');
     container.innerHTML = '<p class="text-secondary col-span-full text-center py-5">Memuat artikel...</p>';
     
-    fetch('api/info/get_blogs.php')
+    fetch('api/cms_get_blogs.php')
         .then(r => r.json())
         .then(res => {
             if (res.status === 'success' && res.data.length > 0) {
@@ -248,7 +248,7 @@ window.saveCmsBlog = function() {
     fd.append('status', document.getElementById('cms-blog-status').value);
 
     showLoading('Memproses...');
-    fetch('api/info/save_blog.php', { method: 'POST', body: fd }).then(r=>r.json()).then(res=>{
+    fetch('api/cms_save_blog.php', { method: 'POST', body: fd }).then(r=>r.json()).then(res=>{
         if(res.status==='success') { showToast(res.message); closeInfoModal('modal-cms-blog'); loadCmsBlogs(); } 
         else showToast(res.message, 'error'); 
     });
@@ -257,6 +257,6 @@ window.saveCmsBlog = function() {
 window.deleteBlog = function(id) {
     if(confirm('Hapus artikel ini selamanya?')) {
         const fd = new FormData(); fd.append('id', id);
-        fetch('api/info/delete_blog.php', { method: 'POST', body: fd }).then(r=>r.json()).then(res=>{ if(res.status==='success') loadCmsBlogs(); });
+        fetch('api/cms_delete_blog.php', { method: 'POST', body: fd }).then(r=>r.json()).then(res=>{ if(res.status==='success') loadCmsBlogs(); });
     }
 }

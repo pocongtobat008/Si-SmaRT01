@@ -72,6 +72,7 @@
     align-items: center;
     padding: 4px 10px; /* Padding lebih tipis */
     margin: 0;
+    overflow-y: hidden; /* Mencegah munculnya scroll vertikal/geser ke bawah saat text tebal */
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
     scroll-snap-type: x mandatory;
@@ -91,7 +92,7 @@
     justify-content: center;
     flex: 1; /* Auto-fill width proportionally */
     min-width: 0; /* Penting agar teks bisa dipotong jika kepanjangan */
-    padding: 8px 0;
+    padding: 8px 2px; /* Padding horizontal kecil agar stabil di mode space-around */
     text-align: center;
     background: none;
     border: none;
@@ -109,12 +110,13 @@
 #sidebar .sidebar-nav button span {
     font-size: 0.62rem; /* Ukuran teks ideal untuk navigasi bawah */
     font-weight: 500;
-    letter-spacing: 0.01em;
+    letter-spacing: 0; /* Dinolkan agar centering text lebih akurat */
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis; /* Jika teks menu terlalu panjang, akan ada titik-titik (...) */
     width: 100%;
     text-align: center;
+    display: block; /* Memaksa agar tetap berada tepat di tengah (center) */
 }
 
 #sidebar .sidebar-nav button i {
@@ -132,7 +134,7 @@
 }
 
 #sidebar .sidebar-nav button.active-tab {
-    transform: translateY(-4px) scale(1.05);
+    transform: translateY(-3px); /* Menghilangkan scale agar lebar tidak bertambah (mencegah geser/shifted) */
 }
 
 #sidebar .sidebar-nav button.active-tab span {
@@ -366,12 +368,12 @@
     backdrop-filter: blur(25px);
     -webkit-backdrop-filter: blur(25px);
     border-bottom: 1px solid var(--card-border);
-    padding: 16px 20px;
-    padding-top: calc(16px + env(safe-area-inset-top)); 
+    padding: 10px 16px; /* Padding lebih ramping untuk mobile */
+    padding-top: calc(8px + env(safe-area-inset-top)); 
     box-shadow: 0 4px 30px -10px var(--shadow-color);
     display: flex;
     align-items: center;
-    min-height: 64px;
+    min-height: 60px; /* Lebih ramping dari sebelumnya (64px) */
     transition: all 0.4s var(--bezier);
 }
 
@@ -385,35 +387,39 @@
 }
 
 #main-header .header-left h2 {
-    font-size: 1.2rem; /* Slightly larger for better mobile presence */
-    font-weight: 800; /* Bolder for premium feel */
+    font-size: clamp(1rem, 4.5vw, 1.15rem); /* Responsive Font Size */
+    font-weight: 700;
     color: var(--text-color);
     margin: 0;
-    letter-spacing: -0.02em;
+    letter-spacing: -0.01em;
     line-height: 1.1;
+    max-width: 180px; /* Mencegah teks terlalu panjang menabrak ikon kanan */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis; /* Judul terpotong rapi jika kepanjangan */
 }
 
 #main-header .header-left p {
-    font-size: 0.7rem;
+    font-size: 0.65rem; /* Subtitle lebih kecil agar kontras dengan title */
     color: var(--text-secondary-color);
     margin: 0;
-    margin-top: 2px;
+    margin-top: 1px;
     font-weight: 500;
-    opacity: 0.8;
+    opacity: 0.7;
 }
 
 .header-right {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 8px; /* Rapatkan jarak antar tombol untuk mobile */
 }
 
 .header-btn {
     background: var(--secondary-bg);
     border: 1px solid var(--border-color);
     color: var(--text-color);
-    width: 36px;
-    height: 36px;
+    width: 34px; /* Sedikit lebih kecil agar title punya lebih banyak ruang */
+    height: 34px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -429,8 +435,8 @@
 }
 
 .user-profile {
-    width: 36px;
-    height: 36px;
+    width: 34px;
+    height: 34px;
     border-radius: 12px;
     overflow: hidden;
     cursor: pointer;
@@ -457,10 +463,26 @@
         border-radius: 20px;
         box-shadow: 0 12px 40px -12px var(--shadow-strong);
         padding: 14px 24px;
+        min-height: 64px;
     }
     
     #sidebar.collapsed ~ #main-content #main-header {
         left: 124px;
+    }
+
+    #main-header .header-left h2 {
+        font-size: 1.2rem;
+        max-width: none;
+    }
+
+    #main-header .header-left p {
+        font-size: 0.7rem;
+        margin-top: 2px;
+        opacity: 0.8;
+    }
+
+    .header-right {
+        gap: 12px;
     }
 }
 
@@ -469,8 +491,8 @@
     border: 1px solid var(--border-color);
     cursor: pointer;
     color: var(--text-color);
-    width: 40px;
-    height: 40px;
+    width: 34px; /* Disamakan dengan header-btn untuk mobile */
+    height: 34px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -484,6 +506,13 @@
     border-color: var(--accent-color);
     transform: translateY(-2px);
     box-shadow: 0 4px 12px var(--shadow-color);
+}
+
+@media (min-width: 768px) {
+    .header-btn, .user-profile, #theme-toggle, #main-header .user-avatar {
+        width: 36px; /* Mengembalikan ukuran untuk layar Desktop */
+        height: 36px;
+    }
 }
 
 #main-header .user-avatar i, #theme-toggle i {

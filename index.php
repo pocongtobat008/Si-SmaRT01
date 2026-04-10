@@ -184,7 +184,7 @@ foreach($pengurus as $p) {
                         <i class="fas fa-users-rectangle text-white text-xl"></i>
                     </div>
                 <?php endif; ?>
-                <div class="flex flex-col">
+                <div class="flex flex-col text-left">
                     <span class="text-xl font-extrabold tracking-tight uppercase leading-none text-emerald-950"><?= htmlspecialchars($web_nama) ?></span>
                     <span class="text-[9px] tracking-[0.4em] uppercase opacity-40 font-bold mt-1">Sistem Informasi Warga</span>
                 </div>
@@ -194,6 +194,7 @@ foreach($pengurus as $p) {
             <div class="hidden lg:flex items-center space-x-12 text-[10px] font-bold tracking-[0.2em] uppercase text-emerald-900/60">
                 <?php if(empty($menus)): ?>
                     <a href="#kawasan" class="hover:text-emerald-600 transition-all">Kawasan</a>
+                    <a href="#visimisi" class="hover:text-emerald-600 transition-all">Visi Misi</a>
                     <a href="#organisasi" class="hover:text-emerald-600 transition-all">Organisasi</a>
                     <a href="#layanan" class="hover:text-emerald-600 transition-all">Layanan</a>
                     <a href="#wisata" class="hover:text-emerald-600 transition-all">Wisata</a>
@@ -210,7 +211,7 @@ foreach($pengurus as $p) {
             </div>
 
             <!-- Mobile Toggle -->
-            <button id="menu-btn" class="lg:hidden w-12 h-12 flex items-center justify-center glass rounded-2xl text-emerald-700 shadow-sm">
+            <button id="menu-btn" class="lg:hidden w-12 h-12 flex items-center justify-center glass rounded-2xl text-emerald-700 shadow-sm transition-transform active:scale-90">
                 <i class="fas fa-bars-staggered"></i>
             </button>
         </div>
@@ -223,6 +224,7 @@ foreach($pengurus as $p) {
         </button>
         <?php if(empty($menus)): ?>
             <a href="#kawasan" class="mobile-link">Kawasan</a>
+            <a href="#visimisi" class="mobile-link">Visi Misi</a>
             <a href="#organisasi" class="mobile-link">Organisasi</a>
             <a href="#layanan" class="mobile-link">Layanan</a>
             <a href="#wisata" class="mobile-link">Wisata</a>
@@ -236,7 +238,7 @@ foreach($pengurus as $p) {
 
     <!-- Hero Section -->
     <section class="relative min-h-screen flex items-center pt-32 lg:pt-20 overflow-hidden">
-        <div class="container mx-auto px-6 md:px-12 relative z-10">
+        <div class="container mx-auto px-6 md:px-12 relative z-10 text-left">
             <div class="grid lg:grid-cols-2 items-center gap-16 lg:gap-24">
                 <div class="space-y-10">
                     <div class="inline-flex items-center space-x-3 px-5 py-3 rounded-full bg-emerald-600/5 border border-emerald-600/10 text-emerald-700 text-[10px] font-bold tracking-[0.2em] uppercase glass">
@@ -261,6 +263,17 @@ foreach($pengurus as $p) {
                             <i class="fas fa-play-circle text-emerald-600 text-xl"></i>
                             <span>TUR KAWASAN</span>
                         </a>
+                    </div>
+
+                    <!-- Suasana Warga Card (Visible on Mobile & Tablet) -->
+                    <div class="lg:hidden mt-12 glass p-8 rounded-[2.5rem] shadow-xl border-emerald-100 reveal">
+                        <div class="flex items-center space-x-4 mb-4">
+                            <div class="w-10 h-10 bg-yellow-400 rounded-full flex items-center justify-center text-emerald-950">
+                                <i class="fas fa-quote-left text-xs"></i>
+                            </div>
+                            <span class="font-bold text-sm text-emerald-900 tracking-tight">Suasana Warga</span>
+                        </div>
+                        <p class="text-sm text-emerald-900/60 leading-relaxed font-medium italic">"View bukit & sawah di sini luar biasa, ekonomi warganya juga hidup sekali."</p>
                     </div>
                 </div>
                 
@@ -296,25 +309,131 @@ foreach($pengurus as $p) {
         <div class="container mx-auto px-6 md:px-12">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
                 <div class="glass p-12 rounded-[4rem] card-glow reveal">
-                    <div class="w-20 h-20 bg-emerald-600/10 rounded-3xl flex items-center justify-center text-emerald-600 mb-8 text-4xl">
+                    <div class="w-20 h-20 bg-emerald-600/10 rounded-3xl flex items-center justify-center text-emerald-600 mb-8 text-4xl shadow-inner border border-emerald-100">
                         <i class="fas fa-mountain-sun"></i>
                     </div>
                     <h3 class="text-2xl font-bold mb-4 text-emerald-950">Bukit & Sawah</h3>
                     <p class="text-emerald-900/50 text-sm leading-relaxed font-medium">Pemandangan alam murni di kanan-kiri yang menyejukkan mata setiap hari.</p>
                 </div>
                 <div class="glass p-12 rounded-[4rem] card-glow reveal bg-emerald-600 shadow-2xl shadow-emerald-200">
-                    <div class="w-20 h-20 bg-white/20 rounded-3xl flex items-center justify-center text-white mb-8 text-4xl">
+                    <div class="w-20 h-20 bg-white/20 rounded-3xl flex items-center justify-center text-white mb-8 text-4xl border border-white/10 shadow-inner">
                         <i class="fas fa-hand-holding-dollar"></i>
                     </div>
                     <h3 class="text-2xl font-bold mb-4 text-white">Ekonomi Warga</h3>
                     <p class="text-white/60 text-sm leading-relaxed font-medium">Warga produktif yang aktif berwirausaha secara lengkap di lingkungan RT.</p>
                 </div>
                 <div class="glass p-12 rounded-[4rem] card-glow reveal">
-                    <div class="w-20 h-20 bg-emerald-600/10 rounded-3xl flex items-center justify-center text-emerald-600 mb-8 text-4xl">
-                        <i class="fas fa-building-circle-check"></i>
+                    <div class="w-20 h-20 bg-emerald-600/10 rounded-3xl flex items-center justify-center text-emerald-600 mb-8 text-4xl shadow-inner border border-emerald-100">
+                        <i class="fas fa-microchip"></i>
                     </div>
-                    <h3 class="text-2xl font-bold mb-4 text-emerald-950">Subsidi Nyata</h3>
-                    <p class="text-emerald-900/50 text-sm leading-relaxed font-medium">Rumah subsidi berkualitas tinggi, solusi impian memiliki hunian terjangkau.</p>
+                    <h3 class="text-2xl font-bold mb-4 text-emerald-950">Go Digital</h3>
+                    <p class="text-emerald-900/50 text-sm leading-relaxed font-medium">Sistem administrasi warga yang modern, transparan, dan mudah diakses kapan saja.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Visi & Misi Section -->
+    <section id="visimisi" class="py-32 bg-emerald-600/5">
+        <div class="container mx-auto px-6 md:px-12">
+            <div class="grid lg:grid-cols-2 gap-20 items-center">
+                <div class="reveal">
+                    <h2 class="text-[10px] font-black tracking-[0.5em] text-emerald-600 uppercase mb-4 text-left">Arah & Tujuan</h2>
+                    <h3 class="text-5xl font-extrabold text-emerald-950 tracking-tight leading-tight mb-8 text-left">Visi & Misi <br> <span class="text-emerald-500">Kawasan Kita.</span></h3>
+                    <div class="glass p-10 rounded-[3rem] border-l-8 border-emerald-600 text-left card-glow">
+                        <h4 class="text-xl font-extrabold text-emerald-900 mb-4 tracking-tight">VISI KAMI</h4>
+                        <p class="text-emerald-950/70 font-medium leading-relaxed italic">
+                            "<?= htmlspecialchars($web_visi) ?>"
+                        </p>
+                    </div>
+                </div>
+                <div class="space-y-6 reveal text-left">
+                    <h4 class="text-xl font-extrabold text-emerald-900 tracking-tight mb-6 uppercase">MISI KAMI</h4>
+                    
+                    <?php if(!empty(trim($settingsData['web_misi'] ?? ''))): ?>
+                        <!-- Dinamis Misi dari CMS -->
+                        <div class="glass p-8 rounded-[2.5rem] card-glow">
+                            <div class="text-sm text-emerald-900/70 font-medium leading-relaxed space-y-3">
+                                <?= nl2br(htmlspecialchars($settingsData['web_misi'])) ?>
+                            </div>
+                        </div>
+                    <?php else: ?>
+                        <!-- Default Fallback Design -->
+                        <div class="space-y-4 text-left">
+                            <div class="flex gap-6 items-start glass p-6 rounded-3xl hover:bg-white transition-all card-glow">
+                                <div class="w-12 h-12 bg-emerald-600/10 rounded-2xl flex items-center justify-center text-emerald-600 flex-shrink-0">
+                                    <i class="fas fa-leaf"></i>
+                                </div>
+                                <div>
+                                    <h5 class="font-bold text-emerald-950 text-sm tracking-tight">Pelestarian Alam</h5>
+                                    <p class="text-xs text-emerald-900/50 mt-1 font-medium">Menjaga keasrian view bukit dan kebersihan lingkungan sawah.</p>
+                                </div>
+                            </div>
+                            <div class="flex gap-6 items-start glass p-6 rounded-3xl hover:bg-white transition-all card-glow">
+                                <div class="w-12 h-12 bg-emerald-600/10 rounded-2xl flex items-center justify-center text-emerald-600 flex-shrink-0">
+                                    <i class="fas fa-rocket"></i>
+                                </div>
+                                <div>
+                                    <h5 class="font-bold text-emerald-950 text-sm tracking-tight">Ekonomi Mandiri</h5>
+                                    <p class="text-xs text-emerald-900/50 mt-1 font-medium">Mendukung dan memfasilitasi wirausaha warga agar kawasan semakin maju.</p>
+                                </div>
+                            </div>
+                            <div class="flex gap-6 items-start glass p-6 rounded-3xl hover:bg-white transition-all card-glow">
+                                <div class="w-12 h-12 bg-emerald-600/10 rounded-2xl flex items-center justify-center text-emerald-600 flex-shrink-0">
+                                    <i class="fas fa-handshake"></i>
+                                </div>
+                                <div>
+                                    <h5 class="font-bold text-emerald-950 text-sm tracking-tight">Kerukunan Warga</h5>
+                                    <p class="text-xs text-emerald-900/50 mt-1 font-medium">Membangun silaturahmi yang erat dan suasana pesantren yang religius.</p>
+                                </div>
+                            </div>
+                            <div class="flex gap-6 items-start glass p-6 rounded-3xl hover:bg-white transition-all card-glow">
+                                <div class="w-12 h-12 bg-emerald-600/10 rounded-2xl flex items-center justify-center text-emerald-600 flex-shrink-0">
+                                    <i class="fas fa-laptop-code"></i>
+                                </div>
+                                <div>
+                                    <h5 class="font-bold text-emerald-950 text-sm tracking-tight">Layanan Digital</h5>
+                                    <p class="text-xs text-emerald-900/50 mt-1 font-medium">Memberikan pelayanan administrasi warga yang cepat dan transparan.</p>
+                                </div>
+                            </div>
+                        </div>
+                    <?php endif; ?>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Informasi Penting -->
+    <section class="py-32 relative">
+        <div class="container mx-auto px-6 md:px-12">
+            <div class="glass p-12 md:p-16 rounded-[4rem] relative overflow-hidden bg-gradient-to-br from-white/60 to-emerald-50/40 text-left reveal">
+                <div class="absolute top-0 right-0 p-12 opacity-5 hidden lg:block">
+                    <i class="fas fa-circle-info text-[10rem] text-emerald-900"></i>
+                </div>
+                <div class="relative z-10">
+                    <h3 class="text-3xl font-extrabold text-emerald-950 mb-10 tracking-tight">Informasi Penting Warga</h3>
+                    <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-12">
+                        <div class="space-y-3">
+                            <span class="text-emerald-600 font-black text-[10px] tracking-widest uppercase">Keamanan</span>
+                            <p class="font-bold text-emerald-950">Lapor Tamu 1x24 Jam</p>
+                            <p class="text-xs text-emerald-900/40 leading-relaxed font-medium">Wajib bagi tamu yang menginap demi keamanan bersama.</p>
+                        </div>
+                        <div class="space-y-3">
+                            <span class="text-emerald-600 font-black text-[10px] tracking-widest uppercase">Kebersihan</span>
+                            <p class="font-bold text-emerald-950">Jadwal Sampah</p>
+                            <p class="text-xs text-emerald-900/40 leading-relaxed font-medium">Pengangkutan dilakukan setiap hari Selasa dan Jumat pagi.</p>
+                        </div>
+                        <div class="space-y-3">
+                            <span class="text-emerald-600 font-black text-[10px] tracking-widest uppercase">Iuran</span>
+                            <p class="font-bold text-emerald-950">Batas Pembayaran</p>
+                            <p class="text-xs text-emerald-900/40 leading-relaxed font-medium">Setiap tanggal 10 tiap bulannya melalui bendahara RT.</p>
+                        </div>
+                        <div class="space-y-3">
+                            <span class="text-emerald-600 font-black text-[10px] tracking-widest uppercase">Kontak</span>
+                            <p class="font-bold text-emerald-950">Hotline Darurat</p>
+                            <p class="text-xs text-emerald-900/40 leading-relaxed font-medium">Hubungi Satgas Keamanan di: 0812-3456-7890 (24 Jam).</p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -323,28 +442,25 @@ foreach($pengurus as $p) {
     <!-- STRUKTUR ORGANISASI -->
     <?php if(!empty($pengurus)): ?>
     <section id="organisasi" class="py-32 bg-white/40 relative">
-        <div class="container mx-auto px-6 md:px-12">
-            <div class="text-center mb-20 reveal">
-                <h2 class="text-[10px] font-black tracking-[0.5em] text-emerald-600 uppercase mb-4">Susunan Pengurus</h2>
-                <h3 class="text-5xl font-extrabold text-emerald-950 tracking-tight mb-4">Struktur Organisasi</h3>
-                <p class="text-emerald-900/50 text-lg max-w-2xl mx-auto font-medium">Jajaran pengurus yang berdedikasi melayani dan mengayomi warga dengan sepenuh hati demi lingkungan yang lebih baik.</p>
-            </div>
+        <div class="container mx-auto px-6 md:px-12 text-center mb-20 reveal">
+            <h2 class="text-[10px] font-black tracking-[0.5em] text-emerald-600 uppercase mb-4">Pengurus Lingkungan</h2>
+            <h3 class="text-5xl font-extrabold text-emerald-950 tracking-tight">Struktur Organisasi</h3>
+        </div>
 
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
-                <?php foreach($pengurus as $index => $a): ?>
-                <div class="glass p-10 rounded-[4rem] card-glow reveal flex flex-col items-center text-center group transition-all duration-700" style="transition-delay: <?= ($index % 4) * 0.1 ?>s;">
-                    <div class="w-32 h-32 rounded-[2.5rem] bg-emerald-50 border-2 border-emerald-100 flex items-center justify-center mb-8 group-hover:bg-emerald-600 transition-all shadow-inner overflow-hidden">
-                        <?php if($a['foto']): ?>
-                            <img src="<?= htmlspecialchars($a['foto']) ?>" alt="<?= htmlspecialchars($a['nama']) ?>" class="w-full h-full object-cover">
-                        <?php else: ?>
-                            <i class="fas fa-user-tie text-5xl text-emerald-600 group-hover:text-white transition-colors"></i>
-                        <?php endif; ?>
-                    </div>
-                    <h4 class="text-xl font-bold text-emerald-900"><?= htmlspecialchars($a['jabatan']) ?></h4>
-                    <span class="text-emerald-600 text-xs font-bold mt-2"><?= htmlspecialchars($a['nama']) ?></span>
+        <div class="container mx-auto px-6 md:px-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
+            <?php foreach($pengurus as $index => $a): ?>
+            <div class="glass p-10 rounded-[4rem] card-glow reveal flex flex-col items-center text-center group transition-all duration-700" style="transition-delay: <?= ($index % 4) * 0.1 ?>s;">
+                <div class="w-32 h-32 rounded-[2.5rem] bg-emerald-50 border-2 border-emerald-100 flex items-center justify-center mb-8 group-hover:bg-emerald-600 transition-all shadow-inner overflow-hidden">
+                    <?php if($a['foto']): ?>
+                        <img src="<?= htmlspecialchars($a['foto']) ?>" alt="<?= htmlspecialchars($a['nama']) ?>" class="w-full h-full object-cover">
+                    <?php else: ?>
+                        <i class="fas fa-user-tie text-5xl text-emerald-600 group-hover:text-white transition-colors"></i>
+                    <?php endif; ?>
                 </div>
-                <?php endforeach; ?>
+                <h4 class="text-xl font-bold text-emerald-900"><?= htmlspecialchars($a['jabatan']) ?></h4>
+                <span class="text-emerald-600 text-xs font-bold mt-2"><?= htmlspecialchars($a['nama']) ?></span>
             </div>
+            <?php endforeach; ?>
         </div>
     </section>
     <?php endif; ?>
@@ -353,23 +469,23 @@ foreach($pengurus as $p) {
     <section id="layanan" class="py-32 relative">
         <div class="container mx-auto px-6 md:px-12">
             <div class="flex flex-col lg:flex-row gap-20 items-center">
-                <div class="flex-1 space-y-12 reveal">
+                <div class="flex-1 space-y-12 reveal text-left">
                     <h2 class="text-5xl font-extrabold text-emerald-950 tracking-tight leading-tight">Layanan Warga <br><span class="text-emerald-600">Digital RT.</span></h2>
                     <p class="text-lg text-emerald-900/50 font-medium">Pengurusan surat pengantar, pembayaran iuran, hingga lapor keluhan kini lebih transparan dan cepat lewat portal mandiri.</p>
                     <div class="grid grid-cols-2 gap-6">
-                        <div class="glass p-8 rounded-3xl hover:bg-white transition-all cursor-pointer group shadow-sm">
+                        <div class="glass p-8 rounded-3xl hover:bg-white transition-all cursor-pointer group shadow-sm card-glow">
                             <i class="fas fa-envelope-open-text text-emerald-600 text-2xl mb-4 block group-hover:scale-110 transition-transform"></i>
                             <h5 class="font-bold text-sm text-emerald-950 tracking-tight uppercase">Surat RT</h5>
                         </div>
-                        <div class="glass p-8 rounded-3xl hover:bg-white transition-all cursor-pointer group shadow-sm">
+                        <div class="glass p-8 rounded-3xl hover:bg-white transition-all cursor-pointer group shadow-sm card-glow">
                             <i class="fas fa-receipt text-emerald-600 text-2xl mb-4 block group-hover:scale-110 transition-transform"></i>
                             <h5 class="font-bold text-sm text-emerald-950 tracking-tight uppercase">Iuran</h5>
                         </div>
-                        <div class="glass p-8 rounded-3xl hover:bg-white transition-all cursor-pointer group shadow-sm">
+                        <div class="glass p-8 rounded-3xl hover:bg-white transition-all cursor-pointer group shadow-sm card-glow">
                             <i class="fas fa-bullhorn text-emerald-600 text-2xl mb-4 block group-hover:scale-110 transition-transform"></i>
                             <h5 class="font-bold text-sm text-emerald-950 tracking-tight uppercase">Laporan</h5>
                         </div>
-                        <div class="glass p-8 rounded-3xl hover:bg-white transition-all cursor-pointer group shadow-sm">
+                        <div class="glass p-8 rounded-3xl hover:bg-white transition-all cursor-pointer group shadow-sm card-glow">
                             <i class="fas fa-circle-info text-emerald-600 text-2xl mb-4 block group-hover:scale-110 transition-transform"></i>
                             <h5 class="font-bold text-sm text-emerald-950 tracking-tight uppercase">Warta</h5>
                         </div>
@@ -377,9 +493,9 @@ foreach($pengurus as $p) {
                 </div>
 
                 <div class="flex-1 w-full reveal">
-                    <div class="glass p-12 rounded-[4.5rem] bg-white/50 shadow-2xl relative overflow-hidden">
+                    <div class="glass p-12 rounded-[4.5rem] bg-white/50 shadow-2xl relative overflow-hidden text-left">
                         <div class="absolute top-0 right-0 w-32 h-32 bg-emerald-500/5 rounded-full -mr-10 -mt-10"></div>
-                        <h4 class="text-2xl font-extrabold text-emerald-950 mb-10 border-b-4 border-emerald-100 pb-4 inline-block">Warta Terbaru</h4>
+                        <h4 class="text-2xl font-extrabold text-emerald-950 mb-10 border-b-4 border-emerald-100 pb-4 inline-block tracking-tight">Warta Terbaru</h4>
                         <div class="space-y-10">
                             <?php if(!empty($blogs)): ?>
                                 <?php foreach($blogs as $index => $b): 
@@ -388,7 +504,7 @@ foreach($pengurus as $p) {
                                     $bgClass = $index % 2 == 0 ? 'bg-emerald-600 text-white' : 'bg-emerald-100 text-emerald-600';
                                 ?>
                                 <div class="flex gap-8 group cursor-pointer items-center">
-                                    <div class="w-20 h-20 <?= $bgClass ?> rounded-[1.5rem] flex-shrink-0 flex flex-col items-center justify-center font-bold group-hover:rotate-3 transition-transform">
+                                    <div class="w-20 h-20 <?= $bgClass ?> rounded-[1.5rem] flex-shrink-0 flex flex-col items-center justify-center font-bold group-hover:rotate-3 transition-transform shadow-lg shadow-emerald-100">
                                         <span class="text-2xl leading-none tracking-tight"><?= $tgl ?></span>
                                         <span class="text-[9px] uppercase tracking-widest mt-1"><?= $bln ?></span>
                                     </div>
@@ -435,25 +551,25 @@ foreach($pengurus as $p) {
     <section id="wisata" class="py-32">
         <div class="container mx-auto px-6 md:px-12 text-center reveal mb-20">
             <h2 class="text-4xl font-extrabold text-emerald-950 tracking-tight">Destinasi Wisata Alam Sekitar</h2>
-            <p class="text-emerald-900/40 mt-4 font-medium italic">Dekat dengan rekreasi alam yang menyejukkan jiwa.</p>
+            <p class="text-emerald-900/40 mt-4 font-medium italic underline decoration-emerald-200 decoration-4 underline-offset-4 tracking-tight">Rekreasi alam yang menyejukkan jiwa.</p>
         </div>
         <div class="container mx-auto px-6 md:px-12 grid grid-cols-1 md:grid-cols-2 gap-12">
             <div class="group relative h-[500px] overflow-hidden rounded-[4rem] reveal shadow-2xl">
                 <img src="https://images.unsplash.com/photo-1544123232-220b8069572c?auto=format&fit=crop&q=80&w=1200" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-all duration-1000 opacity-60" alt="Mata Air Sodong" loading="lazy">
                 <div class="absolute inset-0 bg-gradient-to-t from-emerald-950/90 via-emerald-950/10 to-transparent"></div>
-                <div class="absolute bottom-12 left-12 text-white">
+                <div class="absolute bottom-12 left-12 text-white text-left">
                     <span class="text-[10px] font-bold tracking-[0.4em] uppercase opacity-70 mb-2 block">Ekologi</span>
                     <h4 class="text-4xl font-extrabold tracking-tight">Mata Air Sodong</h4>
-                    <p class="text-white/70 mt-3 text-sm max-w-sm font-medium leading-relaxed">Mata air jernih pegunungan yang melegenda, letaknya sangat dekat dari kawasan Pesona.</p>
+                    <p class="text-white/70 mt-3 text-sm max-w-sm font-medium leading-relaxed">Mata air jernih pegunungan yang melegenda dekat kawasan Pesona.</p>
                 </div>
             </div>
             <div class="group relative h-[500px] overflow-hidden rounded-[4rem] reveal shadow-2xl">
                 <img src="https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?auto=format&fit=crop&q=80&w=1200" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-all duration-1000 opacity-60" alt="Kolam Renang" loading="lazy">
                 <div class="absolute inset-0 bg-gradient-to-t from-emerald-950/90 via-emerald-950/10 to-transparent"></div>
-                <div class="absolute bottom-12 left-12 text-white">
+                <div class="absolute bottom-12 left-12 text-white text-left">
                     <span class="text-[10px] font-bold tracking-[0.4em] uppercase opacity-70 mb-2 block">Rekreasi</span>
                     <h4 class="text-4xl font-extrabold tracking-tight">Goa Lalay Pool</h4>
-                    <p class="text-white/70 mt-3 text-sm max-w-sm font-medium leading-relaxed">Kolam renang bernuansa alam unik untuk liburan keluarga di akhir pekan.</p>
+                    <p class="text-white/70 mt-3 text-sm max-w-sm font-medium leading-relaxed">Kolam renang alam unik untuk liburan keluarga di akhir pekan.</p>
                 </div>
             </div>
         </div>
@@ -462,10 +578,16 @@ foreach($pengurus as $p) {
     <!-- Footer -->
     <footer class="py-32 bg-emerald-950 text-white rounded-t-[5rem] mt-20 relative overflow-hidden">
         <div class="container mx-auto px-6 text-center relative z-10">
-            <div class="w-20 h-20 bg-white/10 rounded-[2.5rem] flex items-center justify-center mx-auto mb-10 backdrop-blur-xl border border-white/10">
+            <div class="w-20 h-20 bg-white/10 rounded-[2.5rem] flex items-center justify-center mx-auto mb-10 backdrop-blur-xl border border-white/10 shadow-lg">
                 <i class="fas fa-heart text-emerald-400 text-3xl animate-pulse"></i>
             </div>
-            <h2 class="text-5xl md:text-6xl font-extrabold italic tracking-tighter mb-16 uppercase">We Love You <br> <?= htmlspecialchars($web_nama) ?></h2>
+            
+            <h2 class="text-5xl md:text-6xl font-extrabold tracking-tighter mb-6 uppercase" style="font-family: 'Plus Jakarta Sans', sans-serif;">
+                We Love You <br> <?= htmlspecialchars($web_nama) ?>
+            </h2>
+            <p class="text-emerald-400 text-lg md:text-xl font-bold tracking-tight mb-16 italic">
+                "Menyambung silaturahmi untuk tetap bersinergi"
+            </p>
             
             <div class="grid grid-cols-3 gap-8 max-w-4xl mx-auto mb-24 opacity-40">
                 <div class="flex flex-col items-center space-y-4">
@@ -483,25 +605,25 @@ foreach($pengurus as $p) {
             </div>
             
             <p class="text-white/20 text-[9px] tracking-[0.8em] font-black uppercase">
-                &copy; <?= date('Y') ?> Portal Warga • Diberdayakan oleh Si-SmaRT
+                &copy; 2024 Portal Warga RT 001 • Pesona Kahuripan Development
             </p>
         </div>
     </footer>
 
     <script>
-        // Navbar scroll effect
+        // Navbar Scroll Logic
         window.addEventListener('scroll', function() {
             const nav = document.getElementById('navbar');
             if (window.scrollY > 80) {
                 nav.classList.add('glass-nav', 'py-4', 'shadow-2xl');
-                nav.classList.remove('py-6');
+                nav.classList.remove('py-8');
             } else {
                 nav.classList.remove('glass-nav', 'py-4', 'shadow-2xl');
-                nav.classList.add('py-6');
+                nav.classList.add('py-8');
             }
         });
 
-        // Mobile Menu
+        // Mobile Menu Logic
         const menuBtn = document.getElementById('menu-btn');
         const closeBtn = document.getElementById('close-btn');
         const overlay = document.getElementById('mobile-menu-overlay');
@@ -524,7 +646,7 @@ foreach($pengurus as $p) {
         closeBtn.addEventListener('click', closeMenu);
         links.forEach(link => link.addEventListener('click', closeMenu));
 
-        // Intersection Observer
+        // Smooth Reveal Intersection Observer
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {

@@ -70,11 +70,11 @@
     flex-direction: row;
     justify-content: space-around; /* Distribute items evenly */
     align-items: center;
-    padding: 4px 10px; /* Padding lebih tipis */
+    padding: 0 10px; /* Only horizontal padding */
     margin: 0;
     width: 100%;
-    height: 100%;
-    overflow: visible; /* Hapus overflow agar navbar stabil dan tidak hilang akibat hidden scrollbar */
+    height: 65px; /* STRICT HEIGHT: Mencegah navbar amblas karena flex-box membesar */
+    overflow: visible; /* Safe for submenus */
     gap: 0; /* Let space-around handle gaps */
 }
 
@@ -83,9 +83,11 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    flex: 1 1 0px; /* Memaksa lebar dibagi rata secara ketat agar tidak geser jika teks memanjang */
+    flex: 1 1 0%; /* Memaksa lebar dibagi rata secara ketat */
     min-width: 0; /* Penting agar teks bisa dipotong jika kepanjangan */
-    padding: 8px 2px; /* Padding horizontal kecil agar stabil di mode space-around */
+    max-width: 100%; /* Prevent expanding */
+    height: 100%; /* Ensure it doesn't grow */
+    padding: 0 2px;
     text-align: center;
     background: none;
     border: none;
@@ -93,10 +95,18 @@
     color: var(--text-secondary-color);
     opacity: 0.6; /* Menu tidak aktif sedikit pudar */
     text-decoration: none;
-    white-space: nowrap;
-    transition: all 0.4s var(--bezier);
+    transition: all 0.3s var(--bezier);
     border-radius: 12px;
-    gap: 3px; /* Jarak antara ikon dan teks */
+    gap: 0; /* Gunakan margin untuk akurasi posisi */
+}
+
+#sidebar .sidebar-nav button i,
+#sidebar .sidebar-nav button svg {
+    margin: 0 auto 3px auto; /* Force true center agar tidak geser ke kanan */
+    width: 22px;
+    height: 22px;
+    display: block;
+    flex-shrink: 0; /* Prevent shrinking */
 }
 
 #sidebar .sidebar-nav button span {
@@ -107,15 +117,12 @@
     overflow: hidden;
     text-overflow: ellipsis; /* Jika teks menu terlalu panjang, akan ada titik-titik (...) */
     width: 100%;
+    max-width: 100%;
     text-align: center;
     display: block; /* Memaksa agar tetap berada tepat di tengah (center) */
-}
-
-#sidebar .sidebar-nav button i {
-    margin-right: 0;
-    margin-bottom: 2px;
-    width: 22px;
-    height: 22px;
+    margin: 0 auto;
+    line-height: 1.2;
+    height: 12px; /* Strict height to prevent layout jumps when font-weight changes */
 }
 
 #sidebar .sidebar-nav button:hover,
@@ -127,6 +134,11 @@
 
 #sidebar .sidebar-nav button.active-tab {
     /* Hapus transform translateY agar container tidak memicu overflow (penyebab navbar amblas) */
+}
+
+#sidebar .sidebar-nav button.active-tab i,
+#sidebar .sidebar-nav button.active-tab svg {
+    transform: scale(1.08); /* Memberi sedikit penekanan ikon membesar TANPA merusak layout X/Y */
 }
 
 #sidebar .sidebar-nav button.active-tab span {
@@ -170,7 +182,8 @@
     font-size: 0.85rem; /* Teks submenu lebih besar karena orientasinya horizontal */
     text-align: left;
 }
-#sidebar .sidebar-nav .submenu-items.active button i {
+#sidebar .sidebar-nav .submenu-items.active button i,
+#sidebar .sidebar-nav .submenu-items.active button svg {
     width: 18px;
     height: 18px;
 }
@@ -229,6 +242,7 @@
         padding: 0 20px;
         flex-direction: column;
         justify-content: flex-start;
+        height: auto; /* Reset height untuk PC */
         gap: 12px;
         overflow-y: auto; /* Mengembalikan scroll khusus untuk versi Desktop jika menu terlalu banyak */
     }
@@ -236,6 +250,7 @@
         flex-direction: row;
         justify-content: flex-start;
         padding: 14px 18px; /* Disesuaikan agar lebih rapi */
+        height: auto; /* Reset height untuk PC */
         font-size: 0.9rem; /* Ukuran font disesuaikan */
         border-radius: 16px;
     }
@@ -248,12 +263,14 @@
     }
     #sidebar .sidebar-nav button span {
         font-size: 0.9rem; /* Mengembalikan teks ke ukuran asalnya khusus di PC */
+        height: auto; /* Reset height untuk PC */
         text-align: left;
         width: auto;
+        margin: 0;
     }
-    #sidebar .sidebar-nav button i {
-        margin-right: 0; /* Hapus margin karena sudah pakai gap */
-        margin-bottom: 0;
+    #sidebar .sidebar-nav button i,
+    #sidebar .sidebar-nav button svg {
+        margin: 0; /* Reset margin auto */
         width: 20px;
         height: 20px;
     }
@@ -274,8 +291,10 @@
         box-shadow: 0 8px 25px -6px var(--accent-color);
         transform: translateX(4px);
     }
-    #sidebar .sidebar-nav button.active-tab i {
+    #sidebar .sidebar-nav button.active-tab i,
+    #sidebar .sidebar-nav button.active-tab svg {
         color: #ffffff;
+        transform: none; /* Reset efek scale dari mobile */
     }
 
     /* Submenu Styles for Desktop (Sidebar) */
@@ -297,7 +316,8 @@
         font-size: 0.9rem;
         gap: 16px;
     }
-    #sidebar .sidebar-nav .submenu-items.active button i {
+    #sidebar .sidebar-nav .submenu-items.active button i,
+    #sidebar .sidebar-nav .submenu-items.active button svg {
         width: 20px;
         height: 20px;
     }
@@ -508,7 +528,8 @@
     }
 }
 
-#main-header .user-avatar i, #theme-toggle i {
+#main-header .user-avatar i, #theme-toggle i,
+#main-header .user-avatar svg, #theme-toggle svg {
     width: 18px;
     height: 18px;
 }

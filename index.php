@@ -151,8 +151,9 @@ foreach($pengurus as $p) {
         }
 
         #mobile-menu-overlay {
-            transition: transform 0.6s cubic-bezier(0.85, 0, 0.15, 1);
+            transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
             transform: translateX(100%);
+            will-change: transform;
         }
 
         #mobile-menu-overlay.open {
@@ -642,7 +643,7 @@ foreach($pengurus as $p) {
                 overlay.classList.add('hidden');
                 overlay.classList.remove('flex');
                 document.body.style.overflow = 'auto';
-            }, 600);
+            }, 300);
         };
 
         closeBtn.addEventListener('click', closeMenu);

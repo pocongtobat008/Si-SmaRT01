@@ -808,7 +808,8 @@ function drawRelationLines(data) {
                     const x2 = (endRect.left + endRect.width / 2) - containerRect.left;
                     const y2 = (endRect.top + endRect.height / 2) - containerRect.top;
 
-                    linesForWarga.push({ x1, y1, x2, y2, bulan: m.bulan, startRectHeight: startRect.height });
+                    const isAdvance = m.bulan > m.relasi_bulan;
+                    linesForWarga.push({ x1, y1, x2, y2, bulan: m.bulan, startRectHeight: startRect.height, isAdvance });
                 }
             }
         });
@@ -835,8 +836,14 @@ function drawRelationLines(data) {
             const d = `M ${line.x1} ${line.y1} Q ${midX} ${midY} ${line.x2} ${line.y2}`;
             const curve = document.createElementNS("http://www.w3.org/2000/svg", "path");
             curve.setAttribute("d", d);
-            curve.setAttribute("class", "relation-line");
-            curve.setAttribute("marker-end", "url(#arrowhead)");
+            
+            if (line.isAdvance) {
+                curve.setAttribute("class", "relation-line-advance");
+                curve.setAttribute("marker-end", "url(#arrowhead-advance)");
+            } else {
+                curve.setAttribute("class", "relation-line");
+                curve.setAttribute("marker-end", "url(#arrowhead)");
+            }
             curve.setAttribute("id", `line-${w.id}-${line.bulan}`); // Keep original ID format
             svg.appendChild(curve);
         });
@@ -1062,7 +1069,8 @@ function drawWsRelationLines(data) {
                     const x2 = (endRect.left + endRect.width / 2) - containerRect.left;
                     const y2 = (endRect.top + endRect.height / 2) - containerRect.top;
 
-                    linesForWarga.push({ x1, y1, x2, y2, startRectHeight: startRect.height }); // Store coordinates for later drawing
+                    const isAdvance = m.bulan > m.relasi_bulan;
+                    linesForWarga.push({ x1, y1, x2, y2, startRectHeight: startRect.height, isAdvance }); // Store coordinates for later drawing
                 }
             }
         });
@@ -1089,8 +1097,14 @@ function drawWsRelationLines(data) {
             const d = `M ${line.x1} ${line.y1} Q ${midX} ${midY} ${line.x2} ${line.y2}`;
             const curve = document.createElementNS("http://www.w3.org/2000/svg", "path");
             curve.setAttribute("d", d);
-            curve.setAttribute("class", "relation-line");
-            curve.setAttribute("marker-end", "url(#ws-arrowhead)");
+            
+            if (line.isAdvance) {
+                curve.setAttribute("class", "relation-line-advance");
+                curve.setAttribute("marker-end", "url(#ws-arrowhead-advance)");
+            } else {
+                curve.setAttribute("class", "relation-line");
+                curve.setAttribute("marker-end", "url(#ws-arrowhead)");
+            }
             svg.appendChild(curve);
         });
     });

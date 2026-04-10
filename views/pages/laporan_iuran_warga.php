@@ -56,6 +56,7 @@
     <div class="glass-card" style="padding: 12px 20px; margin-bottom: 12px; border-radius: 12px; display: flex; gap: 20px; align-items: center; justify-content: flex-end; flex-wrap: wrap;">
         <div style="display:flex; align-items:center; gap:8px; font-size:0.7rem;"><span class="rekon-dot rekon-dot-lunas" style="width:8px; height:8px; margin:0;"></span> Lunas</div>
         <div style="display:flex; align-items:center; gap:8px; font-size:0.7rem;"><span style="width:16px; height:2px; background:var(--accent-color); border-radius: 1px;"></span> Relasi Tunggakan</div>
+        <div style="display:flex; align-items:center; gap:8px; font-size:0.7rem;"><span style="width:16px; height:2px; background:#3b82f6; border-radius: 1px;"></span> Bayar Lebih Awal</div>
         <div style="display:flex; align-items:center; gap:8px; font-size:0.7rem;"><span class="rekon-dot rekon-dot-menunggak" style="width:8px; height:8px; margin:0;"></span> Belum Bayar</div>
         <div style="display:flex; align-items:center; gap:8px; font-size:0.7rem;"><span class="rekon-dot rekon-dot-sebelum" style="width:8px; height:8px; margin:0;"></span> Di Luar Periode</div>
     </div>
@@ -78,6 +79,9 @@
                     <defs>
                         <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
                             <polygon points="0 0, 10 3.5, 0 7" fill="var(--accent-color)" opacity="0.6" />
+                        </marker>
+                        <marker id="arrowhead-advance" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                            <polygon points="0 0, 10 3.5, 0 7" fill="#3b82f6" opacity="0.6" />
                         </marker>
                     </defs>
                 </svg>
@@ -163,6 +167,24 @@
 
 @keyframes drawFlow {
     to { stroke-dashoffset: 0; }
+}
+
+/* Garis Biru untuk Pembayaran Dimuka (Advance) */
+.relation-line-advance {
+    fill: none;
+    stroke: #3b82f6;
+    stroke-width: 2.2;
+    stroke-linecap: round;
+    opacity: 0.4;
+    stroke-dasharray: 1000;
+    stroke-dashoffset: 1000;
+    animation: drawFlow 1.5s ease-out forwards;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+tr:hover .relation-line-advance {
+    opacity: 0.9;
+    stroke-width: 3.5;
 }
 
 tr:hover .relation-line {

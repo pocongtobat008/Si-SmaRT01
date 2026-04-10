@@ -62,6 +62,9 @@
             <p class="panic-description" style="margin-top: 24px; font-size: 0.85rem; opacity: 0.8; max-width: 400px; margin-left: auto; margin-right: auto;">
                 Satu sentuhan untuk mengirim sinyal darurat ke daftar kontak prioritas & seluruh tim keamanan.
             </p>
+            <button class="button-secondary button-sm" style="margin: 16px auto 0; display: flex; align-items: center; gap: 6px; border-radius: 12px;" onclick="openPanicSettings()">
+                <i data-lucide="settings" style="width: 14px; height: 14px;"></i> Pengaturan Kontak Darurat
+            </button>
         </div>
 
         <div class="glass-card card-section" style="margin-top: 32px;">
@@ -166,7 +169,7 @@
 </div>
 
 <!-- Emergency Broadcast Modal -->
-<div id="modal-panic-broadcast" class="modal-overlay hidden">
+<div id="modal-panic-broadcast" class="modal-overlay hidden" style="z-index: 10020 !important;">
     <div class="modal-content glass-card-deluxe" style="max-width: 450px; text-align: center; padding: 40px;">
         <div class="panic-button" style="width: 100px; height: 100px; margin: 0 auto 24px; cursor: default;">
             <i data-lucide="send"></i>
@@ -179,17 +182,17 @@
         </div>
 
         <div style="margin-top: 32px; border-top: 1px solid var(--border-color); padding-top: 24px;">
-            <button class="button-secondary w-full" onclick="closeModal('modal-panic-broadcast')">Batalkan Sinyal</button>
+            <button class="button-secondary w-full" style="justify-content: center;" onclick="closeKmModal('modal-panic-broadcast')">Batalkan Sinyal</button>
         </div>
     </div>
 </div>
 
 <!-- Panic Settings Modal -->
-<div id="modal-panic-settings" class="modal-overlay hidden">
+<div id="modal-panic-settings" class="modal-overlay hidden" style="z-index: 10020 !important;">
     <div class="modal-content glass-card-deluxe" style="max-width: 500px;">
         <div class="section-header" style="margin-bottom: 24px;">
             <h3 class="section-title">Kontak Darurat</h3>
-            <button class="button-link" onclick="closeModal('modal-panic-settings')"><i data-lucide="x"></i></button>
+            <button class="button-link" onclick="closeKmModal('modal-panic-settings')"><i data-lucide="x"></i></button>
         </div>
         <p class="text-secondary" style="font-size: 0.85rem; margin-bottom: 20px;">Nomor di bawah ini akan dihubungi saat Panic Button ditekan.</p>
         
@@ -197,12 +200,12 @@
             <!-- Inputs will be generated here -->
         </div>
 
-        <button class="button-secondary w-full" style="margin-bottom: 12px;" onclick="addPanicNumber()">
+        <button class="button-secondary w-full" style="margin-bottom: 12px; justify-content: center;" onclick="addPanicNumber()">
             <i data-lucide="plus-circle"></i> Tambah Nomor Baru
         </button>
         
         <div class="flex gap-3">
-            <button class="button-primary flex-1" onclick="savePanicSettings()">Simpan Pengaturan</button>
+            <button class="button-primary flex-1" style="justify-content: center;" onclick="savePanicSettings()"><i data-lucide="save" style="margin-right: 6px;"></i> Simpan Pengaturan</button>
         </div>
     </div>
 </div>

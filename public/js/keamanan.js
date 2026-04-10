@@ -21,6 +21,136 @@ window.closeKmModal = function(id) {
     document.getElementById(id).classList.add('hidden');
 }
 
+// =========================================
+// 0. LOAD RINGKASAN & PANIC BUTTON
+// =========================================
+window.loadKeamananRingkasan = function() {
+    const guardEl = document.getElementById('km-current-guard');
+    const reportEl = document.getElementById('km-unread-reports');
+    const activityEl = document.getElementById('km-recent-activity');
+    
+    if (guardEl) guardEl.innerText = 'Memuat...';
+    if (reportEl) reportEl.innerText = '-';
+    if (activityEl) activityEl.innerHTML = '<p class="text-center text-secondary py-4">Memuat aktivitas...</p>';
+
+    fetch('api/keamanan/get_ringkasan.php')
+        .then(r => r.ok ? r.json() : {status:'error'})
+        .then(res => {
+            if (res.status === 'success') {
+                if (guardEl) guardEl.innerText = (res.data.satpam_aktif || 0) + ' Personel';
+                if (reportEl) reportEl.innerText = res.data.laporan_baru || 0;
+                
+                if (activityEl) {
+                    let html = '';
+                    if (res.data.aktifitas && res.data.aktifitas.length > 0) {
+                        res.data.aktifitas.forEach(a => {
+                            html += `<div style="padding: 12px; border-bottom: 1px dashed var(--border-color);"><h5 style="margin: 0 0 4px 0; color: var(--text-color);">${a.judul}</h5><p class="text-secondary" style="margin: 0; font-size: 0.8rem;"><i data-lucide="clock" style="width: 12px; height: 12px; display: inline;"></i> ${a.waktu}</p></div>`;
+                        });
+                    } else {
+                        html = '<p class="text-center text-secondary py-4">Belum ada aktivitas terbaru.</p>';
+                    }
+                    activityEl.innerHTML = html;
+                    if (typeof lucide !== 'undefined') lucide.createIcons();
+                }
+            } else throw new Error('API Not Ready');
+        }).catch(() => {
+            // Fallback UI jika Endpoint API get_ringkasan.php belum dibuat
+            if (guardEl) guardEl.innerText = '0 Personel';
+            if (reportEl) reportEl.innerText = '0';
+            if (activityEl) activityEl.innerHTML = '<p class="text-center text-secondary py-4">Belum ada data / API Ringkasan belum tersedia.</p>';
+        });
+}
+
+// Load Kontak Darurat dari Local Storage
+let panicContacts = JSON.parse(localStorage.getItem('panic_contacts')) || [
+    { nama: 'Ketua RT', nomor: '081234567890' },
+    { nama: 'Pos Satpam', nomor: '089876543210' }
+];
+
+window.openPanicSettings = function() {
+    window.renderPanicNumbers();
+    document.getElementById('modal-panic-settings').classList.remove('hidden');
+}
+
+window.renderPanicNumbers = function() {
+    const container = document.getElementById('panic-numbers-container');
+    container.innerHTML = '';
+    
+    if (panicContacts.length === 0) {
+        container.innerHTML = '<p class="text-secondary text-center" style="font-size: 0.85rem;">Belum ada kontak darurat.</p>';
+    }
+
+    panicContacts.forEach((contact, index) => {
+        container.innerHTML += `
+            <div class="panic-contact-item" style="display: flex; gap: 8px; align-items: center;">
+                <input type="text" class="input-field contact-nama" placeholder="Nama (Cth: Satpam)" value="${contact.nama}" style="flex: 1;">
+                <input type="text" class="input-field contact-nomor" placeholder="No. WA (Cth: 0812...)" value="${contact.nomor}" style="flex: 1;">
+                <button class="button-secondary" style="color: #ef4444; padding: 10px; border-radius: 12px; flex-shrink: 0;" onclick="removePanicNumber(${index})">
+                    <i data-lucide="trash-2" style="width: 18px; height: 18px;"></i>
+                </button>
+            </div>
+        `;
+    });
+    if(typeof lucide !== 'undefined') lucide.createIcons();
+}
+
+window.addPanicNumber = function() {
+    panicContacts.push({ nama: '', nomor: '' });
+    window.renderPanicNumbers();
+}
+
+window.removePanicNumber = function(index) {
+    panicContacts.splice(index, 1);
+    window.renderPanicNumbers();
+}
+
+window.savePanicSettings = function() {
+    const items = document.querySelectorAll('.panic-contact-item');
+    let newContacts = [];
+    items.forEach(item => {
+        const nama = item.querySelector('.contact-nama').value.trim();
+        const nomor = item.querySelector('.contact-nomor').value.trim();
+        if (nama || nomor) {
+            newContacts.push({ nama, nomor });
+        }
+    });
+    panicContacts = newContacts;
+    localStorage.setItem('panic_contacts', JSON.stringify(panicContacts));
+    closeKmModal('modal-panic-settings');
+    if (typeof showToast === 'function') showToast("Kontak darurat berhasil disimpan.");
+}
+
+window.triggerPanic = function() {
+    const listContainer = document.getElementById('panic-recipient-list');
+    listContainer.innerHTML = '';
+
+    if (panicContacts.length === 0) {
+        listContainer.innerHTML = '<p class="text-secondary text-center col-span-full" style="width: 100%;">Belum ada kontak darurat yang diatur. Silakan atur di pengaturan.</p>';
+    } else {
+        panicContacts.forEach(contact => {
+            let cleanWa = contact.nomor.replace(/\D/g, ''); 
+            if (cleanWa.startsWith('0')) cleanWa = '62' + cleanWa.substring(1);
+            
+            // Pre-filled WA message Darurat
+            const msg = encodeURIComponent(`*🚨 SINYAL DARURAT (PANIC BUTTON) 🚨*\n\nHarap segera merespon atau menuju lokasi. Terdapat indikasi keadaan darurat yang dilaporkan melalui Sistem Keamanan.`);
+            const waLink = `https://wa.me/${cleanWa}?text=${msg}`;
+
+            listContainer.innerHTML += `
+                <a href="${waLink}" target="_blank" class="glass-card" style="padding: 16px; display: flex; flex-direction: column; align-items: center; gap: 8px; text-decoration: none; transition: transform 0.2s; border-color: var(--border-color); background: rgba(128,128,128,0.05);" onmouseover="this.style.borderColor='var(--accent-color)'; this.style.transform='translateY(-4px)';" onmouseout="this.style.borderColor='var(--border-color)'; this.style.transform='translateY(0)';">
+                    <div style="width: 48px; height: 48px; border-radius: 50%; background: rgba(37, 211, 102, 0.1); color: #25D366; display: flex; align-items: center; justify-content: center;">
+                        <i data-lucide="phone-call" style="width: 24px; height: 24px;"></i>
+                    </div>
+                    <span style="font-weight: 700; color: var(--text-color); text-align: center;">${contact.nama}</span>
+                    <span style="font-size: 0.75rem; color: var(--text-secondary-color);">${contact.nomor}</span>
+                </a>
+            `;
+        });
+    }
+    
+    if(typeof lucide !== 'undefined') lucide.createIcons();
+    document.getElementById('modal-panic-broadcast').classList.remove('hidden');
+}
+
 // Helper untuk mengisi opsi Personel
 window.populateSatpamSelect = function(selectId, selectedId = null) {
     const sel = document.getElementById(selectId);

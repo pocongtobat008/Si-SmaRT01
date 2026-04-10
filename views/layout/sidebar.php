@@ -41,10 +41,10 @@
                 <i data-lucide="file-text"></i>
                 <span>Tunggakan</span>
             </button>
-            <button onclick="showPage('rekonsiliasi')" id="nav-rekonsiliasi" title="Audit Tahunan">
+            <!--<button onclick="showPage('rekonsiliasi')" id="nav-rekonsiliasi" title="Audit Tahunan">
                 <i data-lucide="activity"></i>
                 <span>Audit Iuran</span>
-            </button>
+            </button>-->
         </div>
         
         <!-- Grup Keuangan & Pembukuan -->

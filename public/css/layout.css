@@ -176,16 +176,21 @@
     padding: 14px 20px;
     text-align: left;
     width: 100%;
+    height: auto; /* Reset tinggi agar tidak terpengaruh menu utama */
     gap: 12px;
 }
 #sidebar .sidebar-nav .submenu-items.active button span {
     font-size: 0.85rem; /* Teks submenu lebih besar karena orientasinya horizontal */
     text-align: left;
+    margin: 0; /* Reset margin center */
+    height: auto; /* Reset tinggi statis */
+    width: auto;
 }
 #sidebar .sidebar-nav .submenu-items.active button i,
 #sidebar .sidebar-nav .submenu-items.active button svg {
     width: 18px;
     height: 18px;
+    margin: 0; /* Reset margin center agar sejajar di kiri */
 }
 #sidebar .sidebar-nav button .submenu-icon {
     display: none;

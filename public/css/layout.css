@@ -72,17 +72,10 @@
     align-items: center;
     padding: 4px 10px; /* Padding lebih tipis */
     margin: 0;
-    overflow-y: hidden; /* Mencegah munculnya scroll vertikal/geser ke bawah saat text tebal */
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    scroll-snap-type: x mandatory;
+    width: 100%;
+    height: 100%;
+    overflow: visible; /* Hapus overflow agar navbar stabil dan tidak hilang akibat hidden scrollbar */
     gap: 0; /* Let space-around handle gaps */
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-}
-
-#sidebar .sidebar-nav::-webkit-scrollbar {
-    display: none; /* Sembunyikan scrollbar Chrome/Safari */
 }
 
 #sidebar .sidebar-nav button {
@@ -90,7 +83,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    flex: 1; /* Auto-fill width proportionally */
+    flex: 1 1 0px; /* Memaksa lebar dibagi rata secara ketat agar tidak geser jika teks memanjang */
     min-width: 0; /* Penting agar teks bisa dipotong jika kepanjangan */
     padding: 8px 2px; /* Padding horizontal kecil agar stabil di mode space-around */
     text-align: center;
@@ -103,7 +96,6 @@
     white-space: nowrap;
     transition: all 0.4s var(--bezier);
     border-radius: 12px;
-    scroll-snap-align: center;
     gap: 3px; /* Jarak antara ikon dan teks */
 }
 
@@ -134,7 +126,7 @@
 }
 
 #sidebar .sidebar-nav button.active-tab {
-    transform: translateY(-3px); /* Menghilangkan scale agar lebar tidak bertambah (mencegah geser/shifted) */
+    /* Hapus transform translateY agar container tidak memicu overflow (penyebab navbar amblas) */
 }
 
 #sidebar .sidebar-nav button.active-tab span {
@@ -238,6 +230,7 @@
         flex-direction: column;
         justify-content: flex-start;
         gap: 12px;
+        overflow-y: auto; /* Mengembalikan scroll khusus untuk versi Desktop jika menu terlalu banyak */
     }
     #sidebar .sidebar-nav button {
         flex-direction: row;

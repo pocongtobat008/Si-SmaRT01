@@ -24,6 +24,9 @@
         <button class="sub-nav-tab" style="flex: 1 1 auto; justify-content: center; white-space: nowrap;" onclick="switchInfoTab('info-struktur', this)">
             <i data-lucide="users"></i> Struktur Organisasi
         </button>
+        <button class="sub-nav-tab" style="flex: 1 1 auto; justify-content: center; white-space: nowrap;" onclick="switchInfoTab('info-penting', this)">
+            <i data-lucide="info"></i> Info Penting
+        </button>
     </div>
 
     <!-- Tab Content: Pengaturan Umum (Visi, Misi, Alamat) -->
@@ -144,6 +147,10 @@
             </div>
 
             <div class="grid-container-3-col" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;">
+                <?php if(!isset($pdo)) require_once 'config/database.php'; ?>
+<!-- Quill Rich Text Editor -->
+<link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+<script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
                 <?php for($i=1; $i<=3; $i++): ?>
                 <div class="glass-card p-4" style="background: var(--bg-color-soft); border-radius: 20px;">
                     <h5 class="font-bold mb-3">Slide <?= $i ?></h5>
@@ -318,6 +325,57 @@
         </div>
     </div>
 
+    <!-- Tab Content: Informasi Penting Warga -->
+    <div id="info-penting" class="info-tab-content hidden">
+        <div class="glass-card card-section" style="margin-bottom: 24px;">
+            <div class="section-header" style="margin-bottom: 24px;">
+                <h4 class="section-title"><i data-lucide="info" style="display:inline; width:20px; margin-right:8px;" class="text-accent"></i> Kelola Informasi Penting Warga</h4>
+                <p class="text-secondary" style="font-size: 0.8rem;">Sesuaikan 4 kartu informasi cepat (Darurat, RS, Polisi, dsb) di halaman depan.</p>
+            </div>
+
+            <div class="grid-container-2-col" style="gap: 20px; margin-bottom: 24px;">
+                <div class="form-group">
+                    <label class="card-label">Judul Bagian</label>
+                    <input type="text" id="web_info_penting_judul" class="input-field mt-1" placeholder="Cth: Informasi Penting Warga">
+                </div>
+                <div class="form-group">
+                    <label class="card-label">Deskripsi Bagian</label>
+                    <input type="text" id="web_info_penting_deskripsi" class="input-field mt-1" placeholder="Cth: Pintasan informasi mendasar...">
+                </div>
+            </div>
+
+            <div class="grid-container-2-col" style="gap: 20px;">
+                <?php for($i=1; $i<=4; $i++): ?>
+                <div class="glass-card p-6" style="background: var(--bg-color-soft); border-radius: 24px; border: 1px solid var(--border-color);">
+                    <div class="flex items-center space-x-3 mb-6">
+                        <div class="w-10 h-10 rounded-xl bg-emerald-600/10 flex items-center justify-center text-emerald-600 font-bold"><?= $i ?></div>
+                        <h5 class="font-bold">Kartu <?= $i ?></h5>
+                    </div>
+                    
+                    <div class="grid-container-2-col" style="gap: 12px; margin-bottom: 12px;">
+                        <div class="form-group">
+                            <label class="card-label">Ikon (FontAwesome)</label>
+                            <input type="text" id="web_info_item_<?= $i ?>_icon" class="input-field mt-1" placeholder="Cth: fa-phone-volume">
+                        </div>
+                        <div class="form-group">
+                            <label class="card-label">Judul Kartu</label>
+                            <input type="text" id="web_info_item_<?= $i ?>_title" class="input-field mt-1">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="card-label">Deskripsi Singkat</label>
+                        <textarea id="web_info_item_<?= $i ?>_desc" class="input-field mt-1" style="min-height: 80px;"></textarea>
+                    </div>
+                </div>
+                <?php endfor; ?>
+            </div>
+
+            <div style="display: flex; justify-content: flex-end; margin-top: 24px;">
+                <button class="button-primary" style="padding: 14px 32px;" onclick="saveWebSettings()"><i data-lucide="save" style="margin-right: 8px;"></i> Simpan Info Penting</button>
+            </div>
+        </div>
+    </div>
+
 </div>
 
 <!-- MODAL MENU CMS -->
@@ -365,10 +423,35 @@
             <label class="card-label">Judul Artikel</label>
             <input type="text" id="cms-blog-judul" class="input-field" style="margin-top: 8px; font-weight: 600; font-size: 1.1rem;">
         </div>
-        <div class="form-group" style="margin-bottom: 16px;">
-            <label class="card-label">Konten / Isi Berita</label>
-            <textarea id="cms-blog-konten" class="input-field" style="margin-top: 8px; min-height: 250px; padding: 16px 20px; border-radius: 16px; resize: vertical; line-height: 1.6;"></textarea>
+
+        <div class="grid-container-2-col" style="gap: 16px; margin-bottom: 16px;">
+            <div class="form-group">
+                <label class="card-label" style="display:flex; justify-content:space-between;">Thumbnail Photo <span id="preview_blog_thumbnail"></span></label>
+                <div class="upload-premium-container mt-1" style="border-radius:12px; padding:0;">
+                    <input type="file" id="cms-blog-thumbnail-file" accept="image/*" class="upload-premium-input">
+                    <div class="upload-premium-label" style="padding:8px;"><i data-lucide="image" style="width:16px;"></i> <span style="font-size:0.7rem;">Unggah Sampul</span></div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="card-label" style="display:flex; justify-content:space-between;">Video MP4 (Opsional) <span id="preview_blog_video"></span></label>
+                <div class="upload-premium-container mt-1" style="border-radius:12px; padding:0;">
+                    <input type="file" id="cms-blog-video-file" accept="video/mp4" class="upload-premium-input">
+                    <div class="upload-premium-label" style="padding:8px;"><i data-lucide="video" style="width:16px;"></i> <span style="font-size:0.7rem;">Unggah Video</span></div>
+                </div>
+            </div>
         </div>
+
+        <div class="form-group" style="margin-bottom: 16px;">
+            <label class="card-label">Link YouTube (Integrasi)</label>
+            <input type="text" id="cms-blog-youtube" class="input-field" style="margin-top: 8px;" placeholder="https://www.youtube.com/watch?v=...">
+        </div>
+
+        <div class="form-group" style="margin-bottom: 16px;">
+            <label class="card-label">Konten Artikel</label>
+            <div id="cms-blog-editor" style="height: 250px; background: white; border-radius: 0 0 16px 16px;"></div>
+            <input type="hidden" id="cms-blog-konten">
+        </div>
+
         <div class="form-group" style="margin-bottom: 24px;">
             <label class="card-label">Status Tayang</label>
             <select id="cms-blog-status" class="input-field select-custom" style="margin-top: 8px; max-width: 200px;">
@@ -469,6 +552,159 @@
         padding: 24px 20px !important;
         max-height: 90dvh;
         overflow-y: auto;
+    }
+}
+
+/* PREMIUM CARD STYLES */
+.premium-card {
+    --bg: #fff;
+    --title-color: #fff;
+    --title-color-hover: #000;
+    --text-color: #666;
+    --button-color: #eee;
+    --button-color-hover: #ddd;
+    background: var(--bg);
+    border-radius: 2rem;
+    padding: 0.5rem;
+    width: 100%;
+    max-width: 20rem;
+    height: 30rem;
+    overflow: clip;
+    position: relative;
+    font-family: Lato, Montserrat, Helvetica, Arial, sans-serif;
+    transition: transform 0.3s ease;
+}
+
+.premium-card.dark {
+    --bg: #222;
+    --title-color: #fff;
+    --title-color-hover: #fff;
+    --text-color: #ccc;
+    --button-color: #555;
+    --button-color-hover: #444;
+}
+
+.premium-card::before {
+    content: "";
+    position: absolute;
+    width: calc(100% - 1rem);
+    height: 30%;
+    bottom: 0.5rem;
+    left: 0.5rem;
+    mask: linear-gradient(#0000, #000f 80%);
+    backdrop-filter: blur(1rem);
+    border-radius: 0 0 1.5rem 1.5rem;
+    translate: 0 0;
+    transition: translate 0.25s;
+    z-index: 1;
+}
+
+.premium-card > img, .premium-card > video {
+    max-width: 100%;
+    aspect-ratio: 2 / 3;
+    object-fit: cover;
+    object-position: 50% 5%;
+    border-radius: 1.5rem;
+    display: block;
+    transition: aspect-ratio 0.25s, object-position 0.5s;
+    width: 100%;
+    height: 100%;
+}
+
+.premium-card > section {
+    margin: 1rem;
+    height: calc(33.3333% - 1rem);
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 2;
+}
+
+.premium-card h2 {
+    margin: 0;
+    margin-block-end: 1rem;
+    font-size: 1.5rem;
+    opacity: 0;
+    translate: 0 -200%;
+    color: var(--title-color);
+    transition: color 0.5s, margin-block-end 0.25s, opacity 1s, translate 0.25s;
+}
+
+.premium-card p {
+    font-size: 0.95rem;
+    line-height: 1.3;
+    color: var(--text-color);
+    opacity: 0;
+    margin: 0;
+    translate: 0 100%;
+    transition: margin-block-end 0.25s, opacity 1s 0.2s, translate 0.25s 0.2s;
+}
+
+.premium-card > section > div {
+    flex: 1;
+    align-items: flex-end;
+    display: flex;
+    justify-content: space-between;
+    opacity: 0;
+    transition: translate 0.25s 0.2s, opacity 1s;
+}
+
+.premium-card .tag {
+    align-self: center;
+    color: var(--title-color-hover);
+    font-weight: bold;
+    font-size: 0.7rem;
+}
+
+.premium-card button {
+    border: 1px solid #0000;
+    border-radius: 1.25rem 1.25rem 1.5rem 1.25rem;
+    font-size: 1rem;
+    padding: 1rem 1.5rem 1rem 2.75rem;
+    translate: 1rem;
+    background: var(--button-color);
+    transition: background 0.33s, color 0.33s;
+    outline-offset: 2px;
+    position: relative;
+    color: var(--title-color-hover);
+    width: 8.5rem;
+    text-align: right;
+    cursor: pointer;
+}
+
+.premium-card button::before, .premium-card button::after {
+    content: "";
+    background: currentcolor;
+    position: absolute;
+    border-radius: 1rem;
+    transition: all 0.25s ease-out;
+}
+
+.premium-card button::before {
+    width: 0.85rem;
+    height: 0.1rem;
+    top: 50%;
+    left: 1.33rem;
+}
+
+.premium-card button::after {
+    width: 0.85rem;
+    height: 0.1rem;
+    top: 50%;
+    left: 1.33rem;
+    rotate: 90deg;
+}
+
+.premium-card:hover, .premium-card:focus-within {
+    &::before { translate: 0 100%; }
+    > img, > video { aspect-ratio: 1 / 1; object-position: 50% 10%; height: 60%; }
+    > section {
+        h2, p { translate: 0 0; margin-block-end: 0.5rem; opacity: 1; }
+        h2 { color: var(--title-color-hover); }
+        > div { translate: 0 0; opacity: 1; transition: translate 0.25s 0.25s, opacity 0.5s 0.25s; }
     }
 }
 </style>

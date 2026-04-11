@@ -1,7 +1,24 @@
+let quillBlog;
 window.initInfo = function () {
     if (typeof lucide !== 'undefined') lucide.createIcons();
     loadWebSettings();
     setupCmsPreviews();
+
+    // Initialize Quill
+    if (document.getElementById('cms-blog-editor')) {
+        quillBlog = new Quill('#cms-blog-editor', {
+            theme: 'snow',
+            modules: {
+                toolbar: [
+                    [{ 'header': [1, 2, 3, false] }],
+                    ['bold', 'italic', 'underline', 'strike'],
+                    [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+                    ['link', 'blockquote', 'code-block'],
+                    ['clean']
+                ]
+            }
+        });
+    }
 }
 
 // Menangani Preview Gambar Real-time saat Unggah
@@ -21,6 +38,10 @@ function setupCmsPreviews() {
     for (let i = 1; i <= 2; i++) {
         pairs.push({ input: `web_wisata_${i}_image_file`, preview: `preview_web_wisata_${i}_image` });
     }
+
+    // Tambah untuk blog
+    pairs.push({ input: 'cms-blog-thumbnail-file', preview: 'preview_blog_thumbnail' });
+    pairs.push({ input: 'cms-blog-video-file', preview: 'preview_blog_video' });
 
     pairs.forEach(pair => {
         const input = document.getElementById(pair.input);
@@ -84,8 +105,16 @@ window.loadWebSettings = function () {
                 if (document.getElementById('web_title')) document.getElementById('web_title').value = data.web_title || '';
                 if (document.getElementById('web_hero_title')) document.getElementById('web_hero_title').value = data.web_hero_title || '';
                 if (document.getElementById('web_use_gallery')) document.getElementById('web_use_gallery').value = data.web_use_gallery || 'Ya';
-                if (document.getElementById('web_transparansi_judul')) document.getElementById('web_transparansi_judul').value = data.web_transparansi_judul || '';
                 if (document.getElementById('web_transparansi_deskripsi')) document.getElementById('web_transparansi_deskripsi').value = data.web_transparansi_deskripsi || '';
+
+                // Info Penting Warga
+                if (document.getElementById('web_info_penting_judul')) document.getElementById('web_info_penting_judul').value = data.web_info_penting_judul || '';
+                if (document.getElementById('web_info_penting_deskripsi')) document.getElementById('web_info_penting_deskripsi').value = data.web_info_penting_deskripsi || '';
+                for (let i = 1; i <= 4; i++) {
+                    if (document.getElementById(`web_info_item_${i}_icon`)) document.getElementById(`web_info_item_${i}_icon`).value = data[`web_info_item_${i}_icon`] || '';
+                    if (document.getElementById(`web_info_item_${i}_title`)) document.getElementById(`web_info_item_${i}_title`).value = data[`web_info_item_${i}_title`] || '';
+                    if (document.getElementById(`web_info_item_${i}_desc`)) document.getElementById(`web_info_item_${i}_desc`).value = data[`web_info_item_${i}_desc`] || '';
+                }
 
                 // Tampilkan Tautan Preview Gambar jika sudah ada datanya
                 if (document.getElementById('preview_web_logo') && data.web_logo)
@@ -134,8 +163,16 @@ window.saveWebSettings = function () {
     fd.append('web_title', document.getElementById('web_title').value);
     fd.append('web_hero_title', document.getElementById('web_hero_title').value);
     fd.append('web_use_gallery', document.getElementById('web_use_gallery').value);
-    if (document.getElementById('web_transparansi_judul')) fd.append('web_transparansi_judul', document.getElementById('web_transparansi_judul').value);
     if (document.getElementById('web_transparansi_deskripsi')) fd.append('web_transparansi_deskripsi', document.getElementById('web_transparansi_deskripsi').value);
+
+    // Info Penting Warga
+    if (document.getElementById('web_info_penting_judul')) fd.append('web_info_penting_judul', document.getElementById('web_info_penting_judul').value);
+    if (document.getElementById('web_info_penting_deskripsi')) fd.append('web_info_penting_deskripsi', document.getElementById('web_info_penting_deskripsi').value);
+    for (let i = 1; i <= 4; i++) {
+        if (document.getElementById(`web_info_item_${i}_icon`)) fd.append(`web_info_item_${i}_icon`, document.getElementById(`web_info_item_${i}_icon`).value);
+        if (document.getElementById(`web_info_item_${i}_title`)) fd.append(`web_info_item_${i}_title`, document.getElementById(`web_info_item_${i}_title`).value);
+        if (document.getElementById(`web_info_item_${i}_desc`)) fd.append(`web_info_item_${i}_desc`, document.getElementById(`web_info_item_${i}_desc`).value);
+    }
 
     // Mengelola Input File
     const logoFile = document.getElementById('web_logo_file').files[0];
@@ -283,19 +320,25 @@ window.loadCmsBlogs = function () {
             if (res.status === 'success' && res.data.length > 0) {
                 let html = '';
                 res.data.forEach(b => {
-                    const statusClass = b.status === 'Publish' ? 'bg-blue-light text-blue' : 'bg-secondary-light text-secondary';
+                    const statusClass = b.status === 'Publish' ? 'badge bg-blue-light text-blue' : 'badge bg-secondary-light text-secondary';
+                    const mediaHtml = b.thumbnail ? `<img src="${b.thumbnail}" alt="">` : (b.video_url ? `<video src="${b.video_url}" muted loop></video>` : '<img src="https://images.unsplash.com/photo-1516245834210-c4c142787335?q=80&w=800" alt="">');
                     html += `
-                    <div class="glass-card" style="padding: 20px; display: flex; flex-direction: column; gap: 12px;">
-                        <div style="display:flex; justify-content:space-between; align-items:flex-start;">
-                            <span class="badge ${statusClass}">${b.status}</span>
-                            <span style="font-size:0.7rem; color:var(--text-secondary-color);"><i data-lucide="clock" style="width:12px; height:12px; display:inline;"></i> ${b.created_at}</span>
+                    <div class="premium-card">
+                        ${mediaHtml}
+                        <div class="absolute top-4 left-4 z-10">
+                            <span class="${statusClass}">${b.status}</span>
                         </div>
-                        <h3 style="margin:0; font-size:1.1rem; line-height:1.4;">${b.judul}</h3>
-                        <p style="margin:0; font-size:0.85rem; color:var(--text-secondary-color); line-height:1.5; display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden;">${b.konten}</p>
-                        <div style="display: flex; gap: 8px; margin-top: auto; border-top: 1px dashed var(--border-color); padding-top: 16px;">
-                            <button class="button-secondary flex-1" style="padding: 8px;" onclick="editBlog(${b.id}, '${encodeURIComponent(b.judul)}', '${encodeURIComponent(b.konten)}', '${b.status}')"><i data-lucide="edit" style="width:14px;height:14px;margin-right:6px;"></i> Edit</button>
-                            <button class="button-secondary" style="padding: 8px; color: #ef4444;" onclick="deleteBlog(${b.id})"><i data-lucide="trash-2" style="width:14px;height:14px;"></i></button>
-                        </div>
+                        <section>
+                            <h2 style="font-size:1.2rem;">${b.judul}</h2>
+                            <p style="overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;">${b.konten.replace(/<[^>]*>?/gm, '')}</p>
+                            <div>
+                                <span class="tag">${b.created_at}</span>
+                                <div style="display:flex; gap:8px; z-index:30;">
+                                    <button class="button-secondary button-sm" style="width:40px; padding:8px;" onclick="editBlog(${b.id}, '${encodeURIComponent(b.judul)}', '${encodeURIComponent(b.konten)}', '${b.status}', '${b.youtube_url || ''}', '${b.thumbnail || ''}', '${b.video_url || ''}')"><i data-lucide="edit" style="width:14px;height:14px;"></i></button>
+                                    <button class="button-secondary button-sm" style="width:40px; padding:8px; color:#ef4444;" onclick="deleteBlog(${b.id})"><i data-lucide="trash-2" style="width:14px;height:14px;"></i></button>
+                                </div>
+                            </div>
+                        </section>
                     </div>`;
                 });
                 container.innerHTML = html;
@@ -309,17 +352,23 @@ window.loadCmsBlogs = function () {
 window.addBlog = function () {
     document.getElementById('cms-blog-id').value = '0';
     document.getElementById('cms-blog-judul').value = '';
-    document.getElementById('cms-blog-konten').value = '';
+    document.getElementById('cms-blog-youtube').value = '';
+    if (quillBlog) quillBlog.root.innerHTML = '';
     document.getElementById('cms-blog-status').value = 'Publish';
+    document.getElementById('preview_blog_thumbnail').innerHTML = '';
+    document.getElementById('preview_blog_video').innerHTML = '';
     document.getElementById('modal-blog-title').innerText = 'Tulis Artikel Baru';
     document.getElementById('modal-cms-blog').classList.remove('hidden');
 }
 
-window.editBlog = function (id, judulEncoded, kontenEncoded, status) {
+window.editBlog = function (id, judulEncoded, kontenEncoded, status, youtube, thumb, video) {
     document.getElementById('cms-blog-id').value = id;
     document.getElementById('cms-blog-judul').value = decodeURIComponent(judulEncoded);
-    document.getElementById('cms-blog-konten').value = decodeURIComponent(kontenEncoded);
+    document.getElementById('cms-blog-youtube').value = youtube;
+    if (quillBlog) quillBlog.root.innerHTML = decodeURIComponent(kontenEncoded);
     document.getElementById('cms-blog-status').value = status;
+    document.getElementById('preview_blog_thumbnail').innerHTML = thumb ? `<a href="${thumb}" target="_blank" class="badge bg-blue-light text-blue" style="font-size:0.5rem;">Lihat</a>` : '';
+    document.getElementById('preview_blog_video').innerHTML = video ? `<a href="${video}" target="_blank" class="badge bg-blue-light text-blue" style="font-size:0.5rem;">Lihat</a>` : '';
     document.getElementById('modal-blog-title').innerText = 'Edit Artikel';
     document.getElementById('modal-cms-blog').classList.remove('hidden');
 }
@@ -328,12 +377,25 @@ window.saveCmsBlog = function () {
     const fd = new FormData();
     fd.append('id', document.getElementById('cms-blog-id').value);
     fd.append('judul', document.getElementById('cms-blog-judul').value);
-    fd.append('konten', document.getElementById('cms-blog-konten').value);
+    fd.append('youtube_url', document.getElementById('cms-blog-youtube').value);
+    fd.append('konten', quillBlog ? quillBlog.root.innerHTML : ''); // WordPress Style HTML
     fd.append('status', document.getElementById('cms-blog-status').value);
+
+    const thumb = document.getElementById('cms-blog-thumbnail-file').files[0];
+    if (thumb) fd.append('thumbnail', thumb);
+    const video = document.getElementById('cms-blog-video-file').files[0];
+    if (video) fd.append('video', video);
 
     showLoading('Memproses...');
     fetch('api/cms_save_blog.php', { method: 'POST', body: fd }).then(r => r.json()).then(res => {
-        if (res.status === 'success') { showToast(res.message); closeInfoModal('modal-cms-blog'); loadCmsBlogs(); }
+        if (res.status === 'success') {
+            showToast(res.message);
+            closeInfoModal('modal-cms-blog');
+            loadCmsBlogs();
+            // Reset files
+            document.getElementById('cms-blog-thumbnail-file').value = '';
+            document.getElementById('cms-blog-video-file').value = '';
+        }
         else showToast(res.message, 'error');
     });
 }

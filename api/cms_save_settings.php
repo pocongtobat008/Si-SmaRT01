@@ -35,6 +35,21 @@ try {
         'web_wisata_2_title' => $_POST['web_wisata_2_title'] ?? '',
         'web_wisata_2_category' => $_POST['web_wisata_2_category'] ?? '',
         'web_wisata_2_description' => $_POST['web_wisata_2_description'] ?? '',
+        // Info Penting Warga
+        'web_info_penting_judul' => $_POST['web_info_penting_judul'] ?? '',
+        'web_info_penting_deskripsi' => $_POST['web_info_penting_deskripsi'] ?? '',
+        'web_info_item_1_icon' => $_POST['web_info_item_1_icon'] ?? '',
+        'web_info_item_1_title' => $_POST['web_info_item_1_title'] ?? '',
+        'web_info_item_1_desc' => $_POST['web_info_item_1_desc'] ?? '',
+        'web_info_item_2_icon' => $_POST['web_info_item_2_icon'] ?? '',
+        'web_info_item_2_title' => $_POST['web_info_item_2_title'] ?? '',
+        'web_info_item_2_desc' => $_POST['web_info_item_2_desc'] ?? '',
+        'web_info_item_3_icon' => $_POST['web_info_item_3_icon'] ?? '',
+        'web_info_item_3_title' => $_POST['web_info_item_3_title'] ?? '',
+        'web_info_item_3_desc' => $_POST['web_info_item_3_desc'] ?? '',
+        'web_info_item_4_icon' => $_POST['web_info_item_4_icon'] ?? '',
+        'web_info_item_4_title' => $_POST['web_info_item_4_title'] ?? '',
+        'web_info_item_4_desc' => $_POST['web_info_item_4_desc'] ?? '',
     ];
 
     $uploadDir = dirname(__DIR__) . DIRECTORY_SEPARATOR . 'public' . DIRECTORY_SEPARATOR . 'uploads' . DIRECTORY_SEPARATOR . 'cms' . DIRECTORY_SEPARATOR;

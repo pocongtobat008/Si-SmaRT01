@@ -68,7 +68,7 @@ try {
 
 // Ambil Data Artikel/Blog Publik
 try {
-    $stmtBlog = $pdo->query("SELECT * FROM web_blogs WHERE status='Publish' ORDER BY created_at DESC LIMIT 3");
+    $stmtBlog = $pdo->query("SELECT id, judul, konten, status, thumbnail, video_url, youtube_url, created_at FROM web_blogs WHERE status='Publish' ORDER BY created_at DESC LIMIT 6");
     $blogs = $stmtBlog->fetchAll(PDO::FETCH_ASSOC);
 } catch (Exception $e) {
     $blogs = [];
@@ -77,6 +77,9 @@ try {
       `judul` varchar(255) NOT NULL,
       `konten` longtext,
       `status` enum('Publish','Draft') DEFAULT 'Publish',
+      `thumbnail` varchar(255) DEFAULT NULL,
+      `video_url` varchar(255) DEFAULT NULL,
+      `youtube_url` varchar(255) DEFAULT NULL,
       `created_at` timestamp DEFAULT CURRENT_TIMESTAMP,
       PRIMARY KEY (`id`)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;");
@@ -111,6 +114,7 @@ foreach($pengurus as $p) {
     <!-- Menggunakan Inter untuk UI dan Plus Jakarta Sans untuk Heading -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
         :root {
             --cream-bg: #fdfaf3;
             --emerald-primary: #059669;
@@ -146,10 +150,42 @@ foreach($pengurus as $p) {
             border-bottom: 1px solid rgba(5, 150, 105, 0.1);
         }
 
+        /* Modern Navigation Link Style */
+        .nav-link {
+            position: relative;
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: rgba(6, 78, 59, 0.6);
+            transition: color 0.4s ease;
+        }
+
+        .nav-link:hover {
+            color: #059669; 
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -6px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: #059669;
+            transform: scaleX(0);
+            transform-origin: right;
+            transition: transform 0.4s cubic-bezier(0.85, 0, 0.15, 1);
+        }
+
+        .nav-link:hover::after {
+            transform: scaleX(1);
+            transform-origin: left;
+        }
+
         .text-gradient {
-            background: linear-gradient(135deg, #059669 0%, #10b981 50%, #34d399 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            color: #10b981; /* Emerald 500 equivalent */
+            font-weight: 800;
         }
 
         .reveal {
@@ -391,6 +427,259 @@ foreach($pengurus as $p) {
         .slide-info--text[data-title] { font-size: clamp(1.5rem, 6cqw, 3rem); font-weight: 800; text-transform: uppercase; }
         .slide-info--text[data-subtitle] { font-size: clamp(0.8rem, 3cqw, 1.2rem); font-weight: 600; }
         .slide-info--text[data-description] { font-size: clamp(0.6rem, 2cqw, 0.9rem); font-family: var(--font-archivo); font-weight: 300; margin-top: 5px; }
+
+        /* PORTAL CARD STYLES */
+        .card {
+            --bg: #fff;
+            --title-color: #fff;
+            --title-color-hover: #000;
+            --text-color: #666;
+            --button-color: #eee;
+            --button-color-hover: #ddd;
+            background: var(--bg);
+            border-radius: 2rem;
+            padding: 0.5rem;
+            width: 100%;
+            max-width: 20rem;
+            height: 30rem;
+            overflow: clip;
+            position: relative;
+            font-family: Lato, Montserrat, Helvetica, Arial, sans-serif;
+            transition: all 0.3s ease;
+            margin: auto;
+        }
+
+        .card.dark {
+            --bg: #222;
+            --title-color: #fff;
+            --title-color-hover: #fff;
+            --text-color: #ccc;
+            --button-color: #555;
+            --button-color-hover: #444;
+        }
+
+        .card::before {
+            content: "";
+            position: absolute;
+            width: calc(100% - 1rem);
+            height: 30%;
+            bottom: 0.5rem;
+            left: 0.5rem;
+            mask: linear-gradient(#0000, #000f 80%);
+            backdrop-filter: blur(1rem);
+            border-radius: 0 0 1.5rem 1.5rem;
+            translate: 0 0;
+            transition: translate 0.25s;
+            z-index: 1;
+        }
+
+        .card > img, .card > video {
+            max-width: 100%;
+            aspect-ratio: 2 / 3;
+            object-fit: cover;
+            object-position: 50% 5%;
+            border-radius: 1.5rem;
+            display: block;
+            transition: aspect-ratio 0.25s, object-position 0.5s;
+            width: 100%;
+            height: auto;
+        }
+
+        .card > section {
+            margin: 1rem;
+            height: calc(33.3333% - 1rem);
+            display: flex;
+            flex-direction: column;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            z-index: 2;
+        }
+
+        .card h2 {
+            margin: 0;
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: #fff !important;
+            line-height: 1.2;
+            text-shadow: 0 4px 12px rgba(0,0,0,0.5);
+            line-clamp: 2;
+            -webkit-line-clamp: 2;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            transition: all 0.4s ease;
+        }
+
+        .card p {
+            font-size: 0.95rem;
+            line-height: 1.3;
+            color: var(--text-color);
+            opacity: 0;
+            margin: 0;
+            translate: 0 100%;
+            transition: margin-block-end 0.25s, opacity 1s 0.2s, translate 0.25s 0.2s;
+        }
+
+        .card > section > div {
+            flex: 1;
+            align-items: flex-end;
+            display: flex;
+            justify-content: space-between;
+            opacity: 0;
+            transition: translate 0.25s 0.2s, opacity 1s;
+        }
+
+        .card .tag {
+            align-self: center;
+            color: var(--title-color-hover);
+            font-weight: 700;
+        }
+
+        .card button {
+            border: 1px solid #0000;
+            border-radius: 1.25rem;
+            font-size: 0.85rem;
+            padding: 0.75rem 1.25rem 0.75rem 2.25rem;
+            translate: 1rem;
+            background: #10b981; /* Premium Emerald */
+            transition: background 0.33s, transform 0.33s;
+            outline-offset: 2px;
+            position: relative;
+            color: #fff;
+            width: 7rem;
+            text-align: right;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
+        }
+
+        .card button::before, .card button::after {
+            content: "";
+            background: #fff;
+            position: absolute;
+            border-radius: 1rem;
+            transition: all 0.25s ease-out;
+        }
+
+        .card button::before {
+            width: 0.7rem;
+            height: 0.1rem;
+            top: 50%;
+            left: 1.1rem;
+        }
+
+        .card button::after {
+            width: 0.7rem;
+            height: 0.1rem;
+            top: 50%;
+            left: 1.1rem;
+            rotate: 90deg;
+        }
+
+        .card:hover, .card:focus-within {
+            &::before { translate: 0 100%; }
+            .card-media-wrapper { height: 60%; }
+            > img, > video { aspect-ratio: 1 / 1; object-position: 50% 10%; }
+            > section {
+                p { translate: 0 0; margin-block-end: 0.5rem; opacity: 1; }
+                > div { translate: 0 0; opacity: 1; transition: translate 0.25s 0.25s, opacity 0.5s 0.25s; }
+            }
+        }
+
+        .card-media-wrapper {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+            overflow: hidden;
+            border-radius: 1.5rem;
+        }
+
+        .card-title-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 2rem 1.5rem 1.5rem;
+            background: linear-gradient(to top, rgba(6, 78, 59, 0.9) 0%, rgba(6, 78, 59, 0.4) 50%, transparent 100%);
+            z-index: 20;
+            transition: all 0.4s ease;
+        }
+
+.slide__bg {
+            position: absolute;
+            inset: -100%;
+            background-image: var(--bg);
+            background-size: cover;
+            background-position: center center;
+            z-index: -1;
+            pointer-events: none;
+            transition: opacity var(--slide-transition-duration) ease, transform var(--slide-transition-duration) ease;
+        }
+
+        .slide__bg::before {
+            content: ""; position: absolute; inset: 0;
+            background: rgba(0, 0, 0, 0.55);
+            backdrop-filter: blur(45px);
+        }
+
+        .slide__bg:not([data-current]) { opacity: 0; }
+        .slide__bg[data-previous] { transform: translateX(-10%); }
+        .slide__bg[data-next] { transform: translateX(10%); }
+
+        .slide-info {
+            position: relative;
+            width: var(--slide-width);
+            height: 100%;
+            aspect-ratio: var(--slide-aspect);
+            user-select: none;
+            perspective: 800px;
+            z-index: 100;
+        }
+
+        .slide-info[data-current] .slide-info--text span {
+            opacity: 1; transform: translate3d(0, 0, 0); transition-delay: 250ms;
+        }
+
+        .slide-info:not([data-current]) .slide-info--text span {
+            opacity: 0; transform: translate3d(0, 100%, 0); transition-delay: 0ms;
+        }
+
+        .slide-info__inner {
+            object-position: 50% 5%;
+            border-radius: 1.5rem;
+            display: block;
+            transition: aspect-ratio 0.25s, object-position 0.5s;
+            width: 100%;
+            height: 100%;
+        }
+
+
+        .slide-info--text { font-family: var(--font-clash-display); color: #fff; overflow: hidden; }
+        .slide-info--text span { display: block; white-space: nowrap; transition: var(--slide-transition-duration) var(--slide-transition-easing); transition-property: opacity, transform; }
+        .slide-info--text[data-title] { font-size: clamp(1.5rem, 6cqw, 3rem); font-weight: 800; text-transform: uppercase; }
+        .slide-info--text[data-subtitle] { font-size: clamp(0.8rem, 3cqw, 1.2rem); font-weight: 600; }
+        .slide-info--text[data-description] { font-size: clamp(0.6rem, 2cqw, 0.9rem); font-family: var(--font-archivo); font-weight: 300; margin-top: 5px; }
+
+        /* BLOG MODAL STYLES */
+        #blog-modal { transition: opacity 0.4s ease; cursor: zoom-out; }
+        #blog-modal.hidden { opacity: 0; pointer-events: none; }
+        .modal-body { cursor: auto; }
+        .modal-body::-webkit-scrollbar { width: 8px; }
+        .modal-body::-webkit-scrollbar-track { background: rgba(6, 78, 59, 0.05); border-radius: 10px; }
+        .modal-body::-webkit-scrollbar-thumb { background: rgba(16, 185, 129, 0.2); border-radius: 10px; border: 2px solid transparent; background-clip: content-box; }
+        .modal-body::-webkit-scrollbar-thumb:hover { background: rgba(16, 185, 129, 0.5); }
+        
+        .reveal-modal { transform: scale(0.95); transition: transform 0.4s cubic-bezier(0.85, 0, 0.15, 1); }
+        #blog-modal:not(.hidden) .reveal-modal { transform: scale(1); }
+        
+        .blog-content-area img, .blog-content-area video {
+            width: 100%; border-radius: 2rem; margin-bottom: 2rem;
+        }
+        .blog-content-area blockquote {
+            border-left: 4px solid #10b981; padding-left: 1.5rem; italic: true; margin: 2rem 0; color: #064e3b;
+        }
     </style>
 </head>
 <body>
@@ -419,16 +708,18 @@ foreach($pengurus as $p) {
             </div>
             
             <!-- Integrasi Menu CMS Dinamis -->
-            <div class="hidden lg:flex items-center space-x-12 text-[10px] font-bold tracking-[0.2em] uppercase text-emerald-900/60">
+            <div class="hidden lg:flex items-center space-x-12">
                 <?php if(empty($menus)): ?>
-                    <a href="#kawasan" class="hover:text-emerald-600 transition-all">Kawasan</a>
-                    <a href="#visimisi" class="hover:text-emerald-600 transition-all">Visi Misi</a>
-                    <a href="#organisasi" class="hover:text-emerald-600 transition-all">Organisasi</a>
-                    <a href="#layanan" class="hover:text-emerald-600 transition-all">Layanan</a>
-                    <a href="#wisata" class="hover:text-emerald-600 transition-all">Wisata</a>
+                    <a href="#kawasan" class="nav-link">Kawasan</a>
+                    <a href="#organisasi" class="nav-link">Organisasi</a>
+                    <a href="#visimisi" class="nav-link">Visi Misi</a>
+                    <a href="#info_penting" class="nav-link">Info Penting</a>
+                    <a href="#berita" class="nav-link">Berita Warga</a>
+                    <a href="#layanan" class="nav-link">Layanan</a>
+                    <a href="#wisata" class="nav-link">Wisata</a>
                 <?php else: ?>
                     <?php foreach($menus as $m): ?>
-                        <a href="<?= htmlspecialchars($m['url']) ?>" class="hover:text-emerald-600 transition-all"><?= htmlspecialchars($m['nama_menu']) ?></a>
+                        <a href="<?= htmlspecialchars($m['url']) ?>" class="nav-link"><?= htmlspecialchars($m['nama_menu']) ?></a>
                     <?php endforeach; ?>
                 <?php endif; ?>
                 
@@ -453,14 +744,16 @@ foreach($pengurus as $p) {
             <img src="<?= $web_logo ?>" class="w-20 h-20 object-contain rounded-3xl shadow-2xl mb-4 bg-white p-2" alt="Logo">
         <?php endif; ?>
         <?php if(empty($menus)): ?>
-            <a href="#kawasan" class="mobile-link">Kawasan</a>
-            <a href="#visimisi" class="mobile-link">Visi Misi</a>
-            <a href="#organisasi" class="mobile-link">Organisasi</a>
-            <a href="#layanan" class="mobile-link">Layanan</a>
-            <a href="#wisata" class="mobile-link">Wisata</a>
+            <a href="#kawasan" class="mobile-link text-2xl font-bold">Kawasan</a>
+            <a href="#info_penting" class="mobile-link text-2xl font-bold">Info Penting</a>
+            <a href="#visimisi" class="mobile-link text-2xl font-bold">Visi Misi</a>
+            <a href="#berita" class="mobile-link text-2xl font-bold">Berita Warga</a>
+            <a href="#organisasi" class="mobile-link text-2xl font-bold">Organisasi</a>
+            <a href="#layanan" class="mobile-link text-2xl font-bold">Layanan</a>
+            <a href="#wisata" class="mobile-link text-2xl font-bold">Wisata</a>
         <?php else: ?>
             <?php foreach($menus as $m): ?>
-                <a href="<?= htmlspecialchars($m['url']) ?>" class="mobile-link"><?= htmlspecialchars($m['nama_menu']) ?></a>
+                <a href="<?= htmlspecialchars($m['url']) ?>" class="mobile-link text-2xl font-bold"><?= htmlspecialchars($m['nama_menu']) ?></a>
             <?php endforeach; ?>
         <?php endif; ?>
         <a href="app.php" class="mt-4 px-12 py-6 bg-emerald-600 text-white rounded-[2.5rem] shadow-2xl text-xl font-bold">Akses Warga</a>
@@ -476,8 +769,34 @@ foreach($pengurus as $p) {
                         <span>RT 001 Go-Digital</span>
                     </div>
                     
-                    <h1 class="text-6xl md:text-7xl lg:text-[5.5rem] font-extrabold leading-[1] text-emerald-950 tracking-tight">
-                        <?= $web_hero_title ?>
+                    <h1 class="text-6xl md:text-7xl lg:text-[5.5rem] font-extrabold leading-[1] tracking-tight">
+                        <?php 
+                        // Ambil judul bersih (hanya simpan <br> jika ada)
+                        $raw_title = $settingsData['web_hero_title'] ?? "Kampung Impian <br> Kini Jadi Nyata.";
+                        $clean_title = strip_tags($raw_title, '<br>');
+                        
+                        if(strpos($clean_title, '<br>') !== false) {
+                            // Jika ada baris baru, bagi otomatis
+                            $parts = explode('<br>', $clean_title);
+                            echo '<span class="text-emerald-950">' . trim($parts[0]) . '</span>';
+                            if(count($parts) > 1) {
+                                echo '<br><span class="text-emerald-500">' . trim(strip_tags($parts[1])) . '</span>';
+                            }
+                        } else {
+                            // Jika tidak ada <br>, bagi dua berdasarkan kata
+                            $words = explode(' ', trim($clean_title));
+                            $count = count($words);
+                            if($count > 1) {
+                                $mid = ceil($count / 2);
+                                $top = array_slice($words, 0, $mid);
+                                $bottom = array_slice($words, $mid);
+                                echo '<span class="text-emerald-950">' . implode(' ', $top) . '</span>';
+                                echo '<br><span class="text-emerald-500">' . implode(' ', $bottom) . '</span>';
+                            } else {
+                                echo '<span class="text-emerald-950">' . $clean_title . '</span>';
+                            }
+                        }
+                        ?>
                     </h1>
                     
                     <p class="text-lg md:text-xl text-emerald-900/50 leading-relaxed max-w-xl font-medium">
@@ -622,6 +941,37 @@ foreach($pengurus as $p) {
         </div>
     </section>
 
+    <!-- Informasi Penting Section -->
+    <section id="info_penting" class="py-32 bg-emerald-600/5 relative">
+        <div class="container mx-auto px-6 md:px-12">
+            <div class="text-center mb-20 reveal">
+                <h2 class="text-[10px] font-black tracking-[0.5em] text-emerald-600 uppercase mb-4">Layanan Cepat</h2>
+                <h3 class="text-5xl font-extrabold text-emerald-950 tracking-tight leading-tight">
+                    <?= htmlspecialchars($settingsData['web_info_penting_judul'] ?? 'Informasi Penting Warga') ?>
+                </h3>
+                <p class="text-emerald-900/50 mt-6 font-medium max-w-2xl mx-auto">
+                    <?= htmlspecialchars($settingsData['web_info_penting_deskripsi'] ?? 'Pintasan informasi mendasar untuk kebutuhan harian Anda.') ?>
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <?php for($i=1; $i<=4; $i++): 
+                    $icon = $settingsData["web_info_item_{$i}_icon"] ?? 'fa-info-circle';
+                    $title = $settingsData["web_info_item_{$i}_title"] ?? 'Informasi';
+                    $desc = $settingsData["web_info_item_{$i}_desc"] ?? 'Deskripsi informasi penting.';
+                ?>
+                <div class="glass p-10 rounded-[3.5rem] card-glow reveal flex flex-col items-center text-center group transition-all duration-500 hover:-translate-y-2">
+                    <div class="w-20 h-20 rounded-3xl bg-white shadow-xl flex items-center justify-center text-emerald-600 mb-8 text-3xl transition-transform group-hover:scale-110">
+                        <i class="fas <?= htmlspecialchars($icon) ?>"></i>
+                    </div>
+                    <h4 class="text-xl font-extrabold text-emerald-950 mb-4"><?= htmlspecialchars($title) ?></h4>
+                    <p class="text-emerald-900/40 text-sm leading-relaxed font-medium"><?= htmlspecialchars($desc) ?></p>
+                </div>
+                <?php endfor; ?>
+            </div>
+        </div>
+    </section>
+
     <!-- Visi & Misi Section -->
     <section id="visimisi" class="py-32 bg-emerald-600/5">
         <div class="container mx-auto px-6 md:px-12">
@@ -691,43 +1041,6 @@ foreach($pengurus as $p) {
             </div>
         </div>
     </section>
-
-    <!-- Informasi Penting -->
-    <section class="py-32 relative">
-        <div class="container mx-auto px-6 md:px-12">
-            <div class="glass p-12 md:p-16 rounded-[4rem] relative overflow-hidden bg-gradient-to-br from-white/60 to-emerald-50/40 text-left reveal">
-                <div class="absolute top-0 right-0 p-12 opacity-5 hidden lg:block">
-                    <i class="fas fa-circle-info text-[10rem] text-emerald-900"></i>
-                </div>
-                <div class="relative z-10">
-                    <h3 class="text-3xl font-extrabold text-emerald-950 mb-10 tracking-tight">Informasi Penting Warga</h3>
-                    <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-12">
-                        <div class="space-y-3">
-                            <span class="text-emerald-600 font-black text-[10px] tracking-widest uppercase">Keamanan</span>
-                            <p class="font-bold text-emerald-950">Lapor Tamu 1x24 Jam</p>
-                            <p class="text-xs text-emerald-900/40 leading-relaxed font-medium">Wajib bagi tamu yang menginap demi keamanan bersama.</p>
-                        </div>
-                        <div class="space-y-3">
-                            <span class="text-emerald-600 font-black text-[10px] tracking-widest uppercase">Kebersihan</span>
-                            <p class="font-bold text-emerald-950">Jadwal Sampah</p>
-                            <p class="text-xs text-emerald-900/40 leading-relaxed font-medium">Pengangkutan dilakukan setiap hari Selasa dan Jumat pagi.</p>
-                        </div>
-                        <div class="space-y-3">
-                            <span class="text-emerald-600 font-black text-[10px] tracking-widest uppercase">Iuran</span>
-                            <p class="font-bold text-emerald-950">Batas Pembayaran</p>
-                            <p class="text-xs text-emerald-900/40 leading-relaxed font-medium">Setiap tanggal 10 tiap bulannya melalui bendahara RT.</p>
-                        </div>
-                        <div class="space-y-3">
-                            <span class="text-emerald-600 font-black text-[10px] tracking-widest uppercase">Kontak</span>
-                            <p class="font-bold text-emerald-950">Hotline Darurat</p>
-                            <p class="text-xs text-emerald-900/40 leading-relaxed font-medium">Hubungi Satgas Keamanan di: 0812-3456-7890 (24 Jam).</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
     <!-- STRUKTUR ORGANISASI -->
     <?php if(!empty($pengurus)): ?>
     <section id="organisasi" class="py-32 bg-white/40 relative">
@@ -760,61 +1073,56 @@ foreach($pengurus as $p) {
     </section>
     <?php endif; ?>
 
-    <!-- Layanan Digital Section & WARTA -->
-    <section id="layanan" class="py-32 relative">
+    <!-- SEKSI BERITA & WARTA -->
+    <section id="berita" class="py-32 relative overflow-hidden">
         <div class="container mx-auto px-6 md:px-12">
-            <div class="flex flex-col lg:flex-row gap-20 items-center">
-                <div class="flex-1 space-y-12 reveal text-left">
-                    <h2 class="text-5xl font-extrabold text-emerald-950 tracking-tight leading-tight">Layanan Warga <br><span class="text-emerald-600">Digital RT.</span></h2>
-                    <p class="text-lg text-emerald-900/50 font-medium">Pengurusan surat pengantar, pembayaran iuran, hingga lapor keluhan kini lebih transparan dan cepat lewat portal mandiri.</p>
-                    <div class="grid grid-cols-2 gap-6">
-                        <div class="glass p-8 rounded-3xl hover:bg-white transition-all cursor-pointer group shadow-sm card-glow">
-                            <i class="fas fa-envelope-open-text text-emerald-600 text-2xl mb-4 block group-hover:scale-110 transition-transform"></i>
-                            <h5 class="font-bold text-sm text-emerald-950 tracking-tight uppercase">Surat RT</h5>
-                        </div>
-                        <div class="glass p-8 rounded-3xl hover:bg-white transition-all cursor-pointer group shadow-sm card-glow">
-                            <i class="fas fa-receipt text-emerald-600 text-2xl mb-4 block group-hover:scale-110 transition-transform"></i>
-                            <h5 class="font-bold text-sm text-emerald-950 tracking-tight uppercase">Iuran</h5>
-                        </div>
-                        <div class="glass p-8 rounded-3xl hover:bg-white transition-all cursor-pointer group shadow-sm card-glow">
-                            <i class="fas fa-bullhorn text-emerald-600 text-2xl mb-4 block group-hover:scale-110 transition-transform"></i>
-                            <h5 class="font-bold text-sm text-emerald-950 tracking-tight uppercase">Laporan</h5>
-                        </div>
-                        <div class="glass p-8 rounded-3xl hover:bg-white transition-all cursor-pointer group shadow-sm card-glow">
-                            <i class="fas fa-circle-info text-emerald-600 text-2xl mb-4 block group-hover:scale-110 transition-transform"></i>
-                            <h5 class="font-bold text-sm text-emerald-950 tracking-tight uppercase">Warta</h5>
-                        </div>
-                    </div>
+            <div class="flex justify-between items-end mb-16 reveal">
+                <div>
+                    <h2 class="text-5xl font-extrabold text-emerald-950 tracking-tight leading-tight">Warta & <br><span class="text-emerald-600">Berita Warga.</span></h2>
+                    <p class="text-emerald-900/40 mt-4 font-medium italic">Informasi terkini seputar kegiatan dan pengumuman desa.</p>
                 </div>
+                <div class="hidden md:block">
+                    <button class="px-8 py-4 rounded-full bg-emerald-600 text-white font-bold hover:bg-emerald-700 transition-all shadow-lg shadow-emerald-200">Lihat Semua Berita</button>
+                </div>
+            </div>
 
-                <div class="flex-1 w-full reveal">
-                    <div class="glass p-12 rounded-[4.5rem] bg-white/50 shadow-2xl relative overflow-hidden text-left">
-                        <div class="absolute top-0 right-0 w-32 h-32 bg-emerald-500/5 rounded-full -mr-10 -mt-10"></div>
-                        <h4 class="text-2xl font-extrabold text-emerald-950 mb-10 border-b-4 border-emerald-100 pb-4 inline-block tracking-tight">Warta Terbaru</h4>
-                        <div class="space-y-10">
-                            <?php if(!empty($blogs)): ?>
-                                <?php foreach($blogs as $index => $b): 
-                                    $tgl = date('d', strtotime($b['created_at']));
-                                    $bln = date('M', strtotime($b['created_at']));
-                                    $bgClass = $index % 2 == 0 ? 'bg-emerald-600 text-white' : 'bg-emerald-100 text-emerald-600';
-                                ?>
-                                <div class="flex gap-8 group cursor-pointer items-center">
-                                    <div class="w-20 h-20 <?= $bgClass ?> rounded-[1.5rem] flex-shrink-0 flex flex-col items-center justify-center font-bold group-hover:rotate-3 transition-transform shadow-lg shadow-emerald-100">
-                                        <span class="text-2xl leading-none tracking-tight"><?= $tgl ?></span>
-                                        <span class="text-[9px] uppercase tracking-widest mt-1"><?= $bln ?></span>
-                                    </div>
-                                    <div>
-                                        <h6 class="font-bold text-lg text-emerald-950 group-hover:text-emerald-600 transition-colors tracking-tight line-clamp-2"><?= htmlspecialchars($b['judul']) ?></h6>
-                                        <p class="text-sm text-emerald-900/50 mt-1 font-medium italic leading-relaxed line-clamp-2"><?= strip_tags($b['konten']) ?></p>
-                                    </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 reveal">
+                <?php if(!empty($blogs)): ?>
+                    <?php foreach($blogs as $b): 
+                        $thumb = $b['thumbnail'] ?: 'https://images.unsplash.com/photo-1516245834210-c4c142787335?q=80&w=800';
+                        $is_dark = (crc32($b['judul']) % 2 == 0);
+                    ?>
+                    <div class="flex justify-center">
+                        <div class="card <?= $is_dark ? 'dark' : '' ?>">
+                            <div class="card-media-wrapper">
+                                <?php if($b['video_url']): ?>
+                                    <video src="<?= $b['video_url'] ?>" autoplay muted loop class="absolute inset-0 w-full h-full object-cover"></video>
+                                <?php else: ?>
+                                    <img src="<?= $thumb ?>" alt="<?= htmlspecialchars($b['judul']) ?>" class="w-full h-full object-cover">
+                                <?php endif; ?>
+                                
+                                <div class="card-title-overlay">
+                                    <h2><?= htmlspecialchars($b['judul']) ?></h2>
                                 </div>
-                                <?php endforeach; ?>
-                            <?php else: ?>
-                                <p class="text-emerald-900/50 italic">Belum ada pengumuman terbaru.</p>
-                            <?php endif; ?>
+
+                                <div class="absolute top-6 left-6 z-30">
+                                    <span class="px-3 py-1 rounded-full bg-white/20 backdrop-blur-md text-[9px] font-bold text-white uppercase tracking-widest border border-white/30">Berita</span>
+                                </div>
+                            </div>
+
+                            <section>
+                                <p class="line-clamp-3"><?= strip_tags($b['konten']) ?></p>
+                                <div>
+                                    <span class="tag"><?= date('d M Y', strtotime($b['created_at'])) ?></span>
+                                    <button onclick="openBlogModal('<?= htmlspecialchars(addslashes($b['judul'])) ?>', '<?= htmlspecialchars(addslashes(str_replace(["\r", "\n"], '', $b['konten']))) ?>', '<?= date('d M Y', strtotime($b['created_at'])) ?>', '<?= $thumb ?>', '<?= $b['video_url'] ?>', '<?= $b['youtube_url'] ?>')">Baca</button>
+                                </div>
+                            </section>
                         </div>
                     </div>
-                </div>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <div class="col-span-full text-center py-20 text-emerald-900/30 font-medium italic">Belum ada berita yang diterbitkan.</div>
+                <?php endif; ?>
             </div>
         </div>
     </section>
@@ -1128,6 +1436,63 @@ foreach($pengurus as $p) {
 
             initSlider();
         })();
+
+        // --- BLOG MODAL JS ---
+        function openBlogModal(title, content, date, thumb, video, youtube) {
+            const modal = document.getElementById('blog-modal');
+            const body = modal.querySelector('.modal-body');
+            
+            let mediaHtml = '';
+            if (youtube) {
+                const vidId = youtube.split('v=')[1]?.split('&')[0] || youtube.split('/').pop();
+                mediaHtml = `<div class="aspect-video w-full rounded-[2rem] overflow-hidden mb-8 shadow-2xl">
+                    <iframe class="w-full h-full" src="https://www.youtube.com/embed/${vidId}" frameborder="0" allowfullscreen></iframe>
+                </div>`;
+            } else if (video) {
+                mediaHtml = `<video src="${video}" controls class="w-full rounded-[2rem] mb-8 shadow-2xl"></video>`;
+            } else {
+                mediaHtml = `<img src="${thumb}" class="w-full h-auto rounded-[2rem] mb-8 shadow-2xl object-cover max-h-[500px]">`;
+            }
+
+            body.innerHTML = `
+                <div class="px-6 py-12 md:px-16 md:py-20">
+                    <div class="flex items-center space-x-4 mb-4">
+                        <span class="text-[10px] font-black uppercase tracking-[0.3em] text-emerald-600 px-3 py-1 bg-emerald-50 rounded-full border border-emerald-100">Warta Warga</span>
+                        <span class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">${date}</span>
+                    </div>
+                    <h1 class="text-3xl md:text-5xl font-extrabold text-emerald-950 mb-10 leading-tight">${title}</h1>
+                    ${mediaHtml}
+                    <div class="blog-content-area text-gray-600 text-lg leading-relaxed space-y-6 prose prose-emerald max-w-none">
+                        ${content}
+                    </div>
+                </div>
+            `;
+            
+            modal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeBlogModal() {
+            const modal = document.getElementById('blog-modal');
+            modal.classList.add('hidden');
+            document.body.style.overflow = 'auto';
+            // Clear content to stop video
+            setTimeout(() => { modal.querySelector('.modal-body').innerHTML = ''; }, 400);
+        }
+
+        // Close on ESC
+        window.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeBlogModal(); });
     </script>
+
+    <!-- Blog Modal Structure -->
+    <div id="blog-modal" class="fixed inset-0 z-[200] hidden flex items-center justify-center p-4 md:p-8">
+        <div class="absolute inset-0 bg-emerald-950/70 backdrop-blur-xl" onclick="closeBlogModal()"></div>
+        <button onclick="closeBlogModal()" class="absolute top-6 right-6 z-[210] w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-emerald-950 shadow-2xl hover:scale-110 active:scale-95 transition-transform">
+            <i class="fas fa-times text-xl"></i>
+        </button>
+        <div class="relative w-full max-w-5xl max-h-[90vh] bg-[#fdfaf3] rounded-[3rem] shadow-3xl overflow-y-auto reveal-modal modal-body">
+            <!-- Content will be injected here -->
+        </div>
+    </div>
 </body>
 </html>

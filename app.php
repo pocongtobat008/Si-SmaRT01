@@ -33,6 +33,7 @@ include 'views/layout/head.php';
         include 'views/pages/pembukuan.php';
         include 'views/pages/keamanan.php';
         include 'views/pages/info.php';
+        include 'views/pages/pasar.php';
         ?>
     </main>
     <!-- Include the footer section (closing tags and main JS script) -->

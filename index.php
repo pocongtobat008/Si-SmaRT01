@@ -22,6 +22,20 @@ $web_transparansi_file = $settingsData['web_transparansi_file'] ?? '';
 $query_blogs = "SELECT * FROM web_blogs ORDER BY created_at DESC LIMIT 6";
 $blogs = mysqli_query($conn, $query_blogs);
 
+// Ambil data Laporan Keamanan / Terbaru (Fallback jika tabel belum sesuai)
+$laporan_terbaru = [];
+try {
+    // Mencoba mengambil data riil dari tabel keamanan
+    $query_laporan = "SELECT * FROM laporan_keamanan ORDER BY waktu_kejadian DESC LIMIT 3";
+    $laporan_result = @mysqli_query($conn, $query_laporan);
+    
+    if($laporan_result && mysqli_num_rows($laporan_result) > 0) {
+        while ($row = mysqli_fetch_assoc($laporan_result)) {
+            $laporan_terbaru[] = $row;
+        }
+    }
+} catch (Exception $e) {}
+
 // Ambil data pengurus
 $query_pengurus = "SELECT * FROM web_pengurus ORDER BY id ASC";
 $pengurus_result = mysqli_query($conn, $query_pengurus);
@@ -128,6 +142,7 @@ $background_image_url = $settingsData['web_hero_image_1'] ?? 'https://images.uns
     include 'views/portal/organisasi.php';
     include 'views/portal/berita.php';
     include 'views/portal/transparansi.php';
+    include 'views/portal/laporan_terbaru.php';
     include 'views/portal/wisata.php';
     include 'views/portal/footer.php';
     include 'views/portal/modals.php';

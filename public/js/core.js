@@ -222,6 +222,7 @@ function showPage(pageId) {
         'pembukuan': ['Pembukuan', 'Neraca & trial balance'],
         'keamanan': ['Keamanan', 'Manajemen pengawasan'],
         'info': ['Informasi', 'Dokumen & kontak'],
+        'pasar': ['Menu Penjual', 'Kelola produk & etalase toko warga'],
         'rekonsiliasi': ['Rekonsiliasi', 'Audit iuran tahunan'],
         'laporan-iuran-warga': ['Tunggakan', 'Visualisasi iuran']
     };
@@ -252,6 +253,8 @@ function showPage(pageId) {
         if (typeof initKeamanan === 'function') initKeamanan();
     } else if (pageId === 'info') {
         if (typeof initInfo === 'function') initInfo();
+    } else if (pageId === 'pasar') {
+        if (typeof initPasar === 'function') initPasar();
     }
     
     // Scroll to top

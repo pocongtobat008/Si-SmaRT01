@@ -1,19 +1,11 @@
 <?php
 require_once '../../config/database.php';
 header('Content-Type: application/json');
-
 try {
-    $stmt = $pdo->query("SELECT * FROM laporan_keamanan ORDER BY waktu_kejadian DESC");
+    $stmt = $pdo->query("SELECT * FROM pasar_produk ORDER BY created_at DESC");
     $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    
-    // Format waktu untuk tampilan tabel
-    foreach ($data as &$row) {
-        $row['waktu_kejadian'] = date('Y-m-d H:i', strtotime($row['waktu_kejadian']));
-    }
-    
     echo json_encode(['status' => 'success', 'data' => $data]);
 } catch (Exception $e) {
-    // Jika tabel belum dibuat, kembalikan data kosong agar aplikasi tidak rusak
     if (strpos($e->getMessage(), 'Base table or view not found') !== false) {
         echo json_encode(['status' => 'success', 'data' => []]);
     } else {

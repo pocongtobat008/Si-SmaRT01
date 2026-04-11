@@ -27,6 +27,9 @@
         <button class="sub-nav-tab" style="flex: 1 1 auto; justify-content: center; white-space: nowrap;" onclick="switchInfoTab('info-penting', this)">
             <i data-lucide="info"></i> Info Penting
         </button>
+        <button id="tab-btn-info-users" class="sub-nav-tab" style="flex: 1 1 auto; justify-content: center; white-space: nowrap;" onclick="switchInfoTab('info-users', this); document.getElementById('page-title').innerText='Master User'; document.getElementById('page-subtitle').innerText='Manajemen Akses Sistem';">
+            <i data-lucide="user-cog"></i> Manajemen Akses
+        </button>
     </div>
 
     <!-- Tab Content: Pengaturan Umum (Visi, Misi, Alamat) -->
@@ -376,6 +379,66 @@
         </div>
     </div>
 
+    <!-- Tab Content: Manajemen Akses User Si-SmaRT (BARU) -->
+    <div id="info-users" class="info-tab-content hidden">
+        <div class="glass-card card-section">
+            <div class="section-header">
+                <div>
+                    <h4 class="section-title">Manajemen Akun Sistem</h4>
+                    <p class="text-secondary" style="font-size: 0.8rem;">Kelola administrator atau petugas yang berhak login ke dalam sistem Si-SmaRT.</p>
+                </div>
+                <button class="button-primary button-sm" onclick="openUserModal()"><i data-lucide="user-plus"></i> Tambah Pengguna</button>
+            </div>
+            <div class="table-responsive mt-4">
+                <table class="modern-table" style="width: 100%;">
+                    <thead>
+                        <tr>
+                            <th>Nama Lengkap</th>
+                            <th>Username</th>
+                            <th>Role / Hak Akses</th>
+                            <th class="text-right">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody id="cms-users-body">
+                        <!-- Diisi via JS -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+<!-- MODAL MANAJEMEN USER -->
+<div id="modal-cms-user" class="modal-overlay hidden" style="z-index: 10020 !important;">
+    <div class="glass-card" style="width: 100%; max-width: 400px; padding: 32px; position: relative; max-height: 90vh; overflow-y: auto;">
+        <button class="modal-close-btn" style="position: absolute; top: 16px; right: 16px;" onclick="closeInfoModal('modal-cms-user')"><i data-lucide="x"></i></button>
+        <h2 id="modal-user-title" class="section-title" style="margin-bottom: 8px;">Tambah Pengguna</h2>
+        <p class="text-secondary" style="font-size: 0.875rem; margin-bottom: 24px;">Buat kredensial login baru.</p>
+        
+        <input type="hidden" id="cms-user-id" value="0">
+        <div class="form-group" style="margin-bottom: 16px;">
+            <label class="card-label">Nama Lengkap</label>
+            <input type="text" id="cms-user-nama" class="input-field" style="margin-top: 8px;" placeholder="Nama Karyawan/Pengurus">
+        </div>
+        <div class="form-group" style="margin-bottom: 16px;">
+            <label class="card-label">Username Login</label>
+            <input type="text" id="cms-user-username" class="input-field" style="margin-top: 8px;" placeholder="cth: admin_budi">
+        </div>
+        <div class="form-group" style="margin-bottom: 16px;">
+            <label class="card-label">Password <span class="text-xs text-red-500 font-normal">(Kosongkan jika tidak ingin diubah)</span></label>
+            <input type="password" id="cms-user-password" class="input-field" style="margin-top: 8px;" placeholder="Ketik kata sandi baru...">
+        </div>
+        <div class="form-group" style="margin-bottom: 24px;">
+            <label class="card-label">Role Akses</label>
+            <select id="cms-user-role" class="input-field select-custom" style="margin-top: 8px;">
+                <option value="Admin">Super Admin (Akses Penuh)</option>
+                <option value="Bendahara">Bendahara (Keuangan)</option>
+                <option value="Keamanan">Petugas Keamanan</option>
+                <option value="Penjual">Penjual (UMKM Pasar)</option>
+            </select>
+        </div>
+        <button class="button-primary" style="width: 100%; justify-content: center;" onclick="saveCmsUser()"><i data-lucide="save" style="margin-right: 8px;"></i> Simpan Pengguna</button>
+    </div>
+</div>
 </div>
 
 <!-- MODAL MENU CMS -->
@@ -546,9 +609,15 @@
     #cms-pengurus-body td:nth-child(3)::before { content: "Nama Lengkap"; }
     #cms-pengurus-body td:nth-child(4)::before { content: "Jabatan"; }
 
+    #cms-users-body td::before { font-weight: 600; color: var(--text-secondary-color); text-align: left; flex-shrink: 0; }
+    #cms-users-body td:nth-child(1)::before { content: "Nama Lengkap"; }
+    #cms-users-body td:nth-child(2)::before { content: "Username"; }
+    #cms-users-body td:nth-child(3)::before { content: "Role"; }
+
     /* Penyesuaian Modal (Popup) di Layar Kecil */
     #modal-cms-menu .glass-card, 
-    #modal-cms-blog .glass-card {
+    #modal-cms-blog .glass-card,
+    #modal-cms-user .glass-card {
         padding: 24px 20px !important;
         max-height: 90dvh;
         overflow-y: auto;
@@ -708,3 +777,25 @@
     }
 }
 </style>
+<script>
+    // JS logic untuk Manajemen User di Info.php
+    document.addEventListener('DOMContentLoaded', () => { if(typeof loadCmsUsers !== 'undefined') loadCmsUsers(); else setTimeout(loadCmsUsers, 1000); });
+    
+    function loadCmsUsers() {
+        const tbody = document.getElementById('cms-users-body');
+        if(!tbody) return;
+        fetch('views/pages/get_users.php').then(r=>r.json()).then(res => {
+            if(res.status === 'success') {
+                let html = '';
+                res.data.forEach(u => {
+                    const badgeColor = u.role === 'Admin' ? 'bg-red-100 text-red-700' : (u.role === 'Bendahara' ? 'bg-emerald-100 text-emerald-700' : (u.role === 'Penjual' ? 'bg-orange-100 text-orange-700' : 'bg-blue-100 text-blue-700'));
+                    html += `<tr class="hover:bg-[var(--hover-bg)] transition-colors border-b border-[var(--border-color)] last:border-0"><td class="py-4 px-2 font-bold">${u.nama_lengkap}</td><td class="py-4 px-2 text-[var(--text-secondary-color)]">@${u.username}</td><td class="py-4 px-2"><span class="px-2 py-1 rounded text-xs font-bold ${badgeColor}">${u.role}</span></td><td class="py-4 px-2 text-right"><button onclick='editCmsUser(${JSON.stringify(u).replace(/'/g, "&#39;")})' class="p-2 text-blue-500 hover:bg-blue-50 rounded-lg mr-2"><i data-lucide="edit"></i></button><button onclick="deleteCmsUser(${u.id})" class="p-2 text-red-500 hover:bg-red-50 rounded-lg"><i data-lucide="trash-2"></i></button></td></tr>`;
+                }); tbody.innerHTML = html || '<tr><td colspan="4" class="text-center py-4">Belum ada user sistem</td></tr>'; lucide.createIcons();
+            }
+        });
+    }
+    function openUserModal() { document.getElementById('cms-user-id').value=0; document.getElementById('cms-user-nama').value=''; document.getElementById('cms-user-username').value=''; document.getElementById('cms-user-password').value=''; document.getElementById('modal-cms-user').classList.remove('hidden'); }
+    function editCmsUser(u) { document.getElementById('cms-user-id').value=u.id; document.getElementById('cms-user-nama').value=u.nama_lengkap; document.getElementById('cms-user-username').value=u.username; document.getElementById('cms-user-password').value=''; document.getElementById('cms-user-role').value=u.role; document.getElementById('modal-cms-user').classList.remove('hidden'); }
+    function saveCmsUser() { const fd = new FormData(); fd.append('id', document.getElementById('cms-user-id').value); fd.append('nama_lengkap', document.getElementById('cms-user-nama').value); fd.append('username', document.getElementById('cms-user-username').value); fd.append('password', document.getElementById('cms-user-password').value); fd.append('role', document.getElementById('cms-user-role').value); showLoading('Menyimpan...'); fetch('views/pages/save_user.php', { method: 'POST', body: fd }).then(r=>r.json()).then(res=>{ if(res.status==='success'){showToast('Tersimpan'); closeInfoModal('modal-cms-user'); loadCmsUsers();}else{showToast(res.message, 'error');} }); }
+    function deleteCmsUser(id) { if(confirm('Hapus pengguna ini permanen?')) { const fd = new FormData(); fd.append('id', id); fetch('views/pages/delete_user.php', {method:'POST', body: fd}).then(r=>r.json()).then(res=>{ if(res.status==='success'){showToast('Terhapus'); loadCmsUsers();} }); } }
+</script>

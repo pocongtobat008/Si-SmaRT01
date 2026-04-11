@@ -33,7 +33,7 @@
                 
                 <!-- TOMBOL MASUK SISTEM SI-SMART -->
                 <a href="app.php" class="px-8 py-3.5 bg-emerald-600 text-white rounded-2xl hover:bg-emerald-700 hover:shadow-2xl hover:shadow-emerald-100 transition-all shadow-lg font-bold">
-                    PORTAL WARGA
+                    SI - SMART
                 </a>
             </div>
 

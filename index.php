@@ -108,17 +108,6 @@ foreach($pengurus as $p) {
             font-family: 'Plus Jakarta Sans', sans-serif;
         }
 
-        /* Tekstur Grain Halus */
-        body::before {
-            content: "";
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-            opacity: 0.02;
-            pointer-events: none;
-            z-index: 50;
-        }
-
         /* Glassmorphism Refined */
         .glass {
             background: rgba(255, 255, 255, 0.45);
@@ -139,30 +128,6 @@ foreach($pengurus as $p) {
             background: linear-gradient(135deg, #059669 0%, #10b981 50%, #34d399 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-        }
-
-        /* Animasi Blobs */
-        .blob {
-            position: absolute;
-            width: 600px;
-            height: 600px;
-            background: radial-gradient(circle, rgba(5, 150, 105, 0.12) 0%, rgba(255, 255, 255, 0) 70%);
-            border-radius: 50%;
-            filter: blur(100px);
-            z-index: -1;
-            animation: morph 20s ease-in-out infinite;
-        }
-
-        @keyframes morph {
-            0%, 100% { border-radius: 42% 58% 70% 30% / 45% 45% 55% 55%; transform: translate(0, 0) rotate(0deg); }
-            34% { border-radius: 70% 30% 46% 54% / 30% 29% 71% 70%; transform: translate(10%, 5%) rotate(90deg); }
-            67% { border-radius: 100% 60% 60% 100% / 100% 100% 60% 60%; transform: translate(-5%, 10%) rotate(180deg); }
-        }
-
-        .float { animation: float 6s ease-in-out infinite; }
-        @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-20px); }
         }
 
         .reveal {
@@ -199,17 +164,6 @@ foreach($pengurus as $p) {
     <div class="fixed inset-0 z-0 pointer-events-none">
         <img src="https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&q=80&w=2000" class="absolute inset-0 w-full h-full object-cover opacity-[0.06] mix-blend-multiply" alt="Latar Belakang">
         <div class="absolute inset-0 bg-[#fdfaf3]/60 backdrop-blur-[1px]"></div>
-    </div>
-
-    <!-- Animasi Elemen Latar Belakang -->
-    <div class="fixed inset-0 overflow-hidden pointer-events-none z-0">
-        <div class="blob top-[-15%] left-[-10%]"></div>
-        <div class="blob bottom-[-10%] right-[-10%]" style="animation-delay: -5s; background: radial-gradient(circle, rgba(252, 211, 77, 0.1) 0%, rgba(255, 255, 255, 0) 70%);"></div>
-        
-        <!-- Elemen Daun Halus -->
-        <svg class="absolute top-60 right-20 opacity-10 float" style="width: 120px; animation-duration: 10s;" viewBox="0 0 24 24" fill="#059669">
-            <path d="M17,8C8,10 5.9,16.17 3.82,21.34L5.71,22L6.66,19.7C7.14,19.87 7.64,20 8,20C19,20 22,3 22,3C21,5 14,5.25 9,6.25C4,7.25 2,11.5 2,13.5C2,15.5 3.75,17.25 3.75,17.25C7,8 17,8 17,8Z" />
-        </svg>
     </div>
 
     <!-- Navbar -->

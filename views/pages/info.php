@@ -12,6 +12,12 @@
         <button class="sub-nav-tab" style="flex: 1 1 auto; justify-content: center; white-space: nowrap;" onclick="switchInfoTab('info-blog', this)">
             <i data-lucide="newspaper"></i> Blog & Artikel
         </button>
+        <button class="sub-nav-tab" style="flex: 1 1 auto; justify-content: center; white-space: nowrap;" onclick="switchInfoTab('info-slider', this)">
+            <i data-lucide="layers"></i> Slider Hero
+        </button>
+        <button class="sub-nav-tab" style="flex: 1 1 auto; justify-content: center; white-space: nowrap;" onclick="switchInfoTab('info-wisata', this)">
+            <i data-lucide="map-pin"></i> Wisata Sekitar
+        </button>
         <button class="sub-nav-tab" style="flex: 1 1 auto; justify-content: center; white-space: nowrap;" onclick="switchInfoTab('info-transparansi', this)">
             <i data-lucide="pie-chart"></i> Laporan Keuangan
         </button>
@@ -124,6 +130,86 @@
         </div>
         <div style="display: flex; justify-content: flex-end; margin-top: 16px;">
             <button class="button-primary" style="padding: 14px 32px;" onclick="saveWebSettings()"><i data-lucide="save" style="margin-right: 8px;"></i> Simpan Pengaturan Umum</button>
+        </div>
+    </div>
+    
+    <!-- Tab Content: Slider Hero (Parallax Slides) -->
+    <div id="info-slider" class="info-tab-content hidden">
+        <div class="glass-card card-section" style="margin-bottom: 24px;">
+            <div class="section-header" style="margin-bottom: 20px;">
+                <div>
+                    <h4 class="section-title"><i data-lucide="layers" style="display:inline; width:20px; margin-right:8px;" class="text-accent"></i> Kelola 3 Slide Parallax Slider</h4>
+                    <p class="text-secondary" style="font-size: 0.8rem;">Sesuaikan gambar dan teks untuk ketiga slide di halaman depan.</p>
+                </div>
+            </div>
+
+            <div class="grid-container-3-col" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;">
+                <?php for($i=1; $i<=3; $i++): ?>
+                <div class="glass-card p-4" style="background: var(--bg-color-soft); border-radius: 20px;">
+                    <h5 class="font-bold mb-3">Slide <?= $i ?></h5>
+                    <div class="form-group mb-3">
+                        <label class="card-label" style="display:flex; justify-content:space-between;">Gambar <span id="preview_web_slider_<?= $i ?>_image"></span></label>
+                        <input type="file" id="web_slider_<?= $i ?>_image_file" accept="image/*" class="input-field file-input-modern mt-1">
+                    </div>
+                    <div class="form-group mb-3">
+                        <label class="card-label">Judul (Title)</label>
+                        <input type="text" id="web_slider_<?= $i ?>_title" class="input-field mt-1" placeholder="Cth: Ekologi Desa">
+                    </div>
+                    <div class="form-group mb-3">
+                        <label class="card-label">Sub-Judul (Subtitle)</label>
+                        <input type="text" id="web_slider_<?= $i ?>_subtitle" class="input-field mt-1" placeholder="Cth: Keasrian Alam">
+                    </div>
+                    <div class="form-group">
+                        <label class="card-label">Deskripsi Singkat</label>
+                        <textarea id="web_slider_<?= $i ?>_description" class="input-field mt-1" style="min-height: 80px;"></textarea>
+                    </div>
+                </div>
+                <?php endfor; ?>
+            </div>
+
+            <div style="display: flex; justify-content: flex-end; margin-top: 24px;">
+                <button class="button-primary" style="padding: 14px 32px;" onclick="saveWebSettings()"><i data-lucide="save" style="margin-right: 8px;"></i> Simpan Pengaturan Slider</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tab Content: Wisata Sekitar -->
+    <div id="info-wisata" class="info-tab-content hidden">
+        <div class="glass-card card-section" style="margin-bottom: 24px;">
+            <div class="section-header" style="margin-bottom: 20px;">
+                <div>
+                    <h4 class="section-title"><i data-lucide="map-pin" style="display:inline; width:20px; margin-right:8px;" class="text-accent"></i> Kelola 2 Destinasi Wisata Sekitar</h4>
+                    <p class="text-secondary" style="font-size: 0.8rem;">Sesuaikan gambar dan info wisata alam di sekitar kawasan.</p>
+                </div>
+            </div>
+
+            <div class="grid-container-2-col" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px;">
+                <?php for($i=1; $i<=2; $i++): ?>
+                <div class="glass-card p-4" style="background: var(--bg-color-soft); border-radius: 20px;">
+                    <h5 class="font-bold mb-3">Wisata <?= $i ?></h5>
+                    <div class="form-group mb-3">
+                        <label class="card-label" style="display:flex; justify-content:space-between;">Gambar <span id="preview_web_wisata_<?= $i ?>_image"></span></label>
+                        <input type="file" id="web_wisata_<?= $i ?>_image_file" accept="image/*" class="input-field file-input-modern mt-1">
+                    </div>
+                    <div class="form-group mb-3">
+                        <label class="card-label">Nama Tempat</label>
+                        <input type="text" id="web_wisata_<?= $i ?>_title" class="input-field mt-1" placeholder="Cth: Mata Air Sodong">
+                    </div>
+                    <div class="form-group mb-3">
+                        <label class="card-label">Kategori</label>
+                        <input type="text" id="web_wisata_<?= $i ?>_category" class="input-field mt-1" placeholder="Cth: Ekologi">
+                    </div>
+                    <div class="form-group">
+                        <label class="card-label">Deskripsi</label>
+                        <textarea id="web_wisata_<?= $i ?>_description" class="input-field mt-1" style="min-height: 80px;"></textarea>
+                    </div>
+                </div>
+                <?php endfor; ?>
+            </div>
+
+            <div style="display: flex; justify-content: flex-end; margin-top: 24px;">
+                <button class="button-primary" style="padding: 14px 32px;" onclick="saveWebSettings()"><i data-lucide="save" style="margin-right: 8px;"></i> Simpan Pengaturan Wisata</button>
+            </div>
         </div>
     </div>
 
@@ -337,7 +423,8 @@
     .info-tab-content { padding-bottom: 60px; } /* Ruang scroll ekstra di mobile */
     
     /* Memaksa Grid menjadi 1 Kolom (Stack) di Layar HP */
-    #page-info .grid-container-2-col {
+    #page-info .grid-container-2-col,
+    #page-info .grid-container-3-col {
         display: flex !important;
         flex-direction: column !important;
         gap: 16px !important;

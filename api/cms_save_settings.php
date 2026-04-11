@@ -13,7 +13,22 @@ try {
         'web_hero_title' => $_POST['web_hero_title'] ?? '',
         'web_use_gallery' => $_POST['web_use_gallery'] ?? 'Ya',
         'web_transparansi_judul' => $_POST['web_transparansi_judul'] ?? '',
-        'web_transparansi_deskripsi' => $_POST['web_transparansi_deskripsi'] ?? ''
+        'web_transparansi_deskripsi' => $_POST['web_transparansi_deskripsi'] ?? '',
+        'web_slider_1_title' => $_POST['web_slider_1_title'] ?? '',
+        'web_slider_1_subtitle' => $_POST['web_slider_1_subtitle'] ?? '',
+        'web_slider_1_description' => $_POST['web_slider_1_description'] ?? '',
+        'web_slider_2_title' => $_POST['web_slider_2_title'] ?? '',
+        'web_slider_2_subtitle' => $_POST['web_slider_2_subtitle'] ?? '',
+        'web_slider_2_description' => $_POST['web_slider_2_description'] ?? '',
+        'web_slider_3_title' => $_POST['web_slider_3_title'] ?? '',
+        'web_slider_3_subtitle' => $_POST['web_slider_3_subtitle'] ?? '',
+        'web_slider_3_description' => $_POST['web_slider_3_description'] ?? '',
+        'web_wisata_1_title' => $_POST['web_wisata_1_title'] ?? '',
+        'web_wisata_1_category' => $_POST['web_wisata_1_category'] ?? '',
+        'web_wisata_1_description' => $_POST['web_wisata_1_description'] ?? '',
+        'web_wisata_2_title' => $_POST['web_wisata_2_title'] ?? '',
+        'web_wisata_2_category' => $_POST['web_wisata_2_category'] ?? '',
+        'web_wisata_2_description' => $_POST['web_wisata_2_description'] ?? '',
     ];
 
     $uploadDir = '../public/uploads/cms/';
@@ -34,6 +49,15 @@ try {
     if ($faviconPath = handleUpload($_FILES['web_favicon'] ?? null, 'favicon', $uploadDir)) $settings['web_favicon'] = $faviconPath;
     if ($heroPath = handleUpload($_FILES['web_hero_image'] ?? null, 'hero', $uploadDir)) $settings['web_hero_image'] = $heroPath;
     if ($transPath = handleUpload($_FILES['web_transparansi_file'] ?? null, 'transparansi', $uploadDir)) $settings['web_transparansi_file'] = $transPath;
+
+    // Handle Parallax Slider Uploads
+    if ($s1Path = handleUpload($_FILES['web_slider_1_image'] ?? null, 'slide1', $uploadDir)) $settings['web_slider_1_image'] = $s1Path;
+    if ($s2Path = handleUpload($_FILES['web_slider_2_image'] ?? null, 'slide2', $uploadDir)) $settings['web_slider_2_image'] = $s2Path;
+    if ($s3Path = handleUpload($_FILES['web_slider_3_image'] ?? null, 'slide3', $uploadDir)) $settings['web_slider_3_image'] = $s3Path;
+
+    // Handle Wisata Uploads
+    if ($w1Path = handleUpload($_FILES['web_wisata_1_image'] ?? null, 'wisata1', $uploadDir)) $settings['web_wisata_1_image'] = $w1Path;
+    if ($w2Path = handleUpload($_FILES['web_wisata_2_image'] ?? null, 'wisata2', $uploadDir)) $settings['web_wisata_2_image'] = $w2Path;
 
     if (isset($_FILES['web_slider_images'])) {
         $sliderPaths = [];

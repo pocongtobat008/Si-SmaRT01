@@ -1,145 +1,246 @@
+<?php
+// Ambil judul bersih (hanya simpan <br> jika ada)
+$raw_title = $settingsData['web_hero_title'] ?? "Kampung Impian <br> Kini Jadi Nyata.";
+$clean_title = strip_tags($raw_title, '<br>');
+?>
+<style>
+    /* Styling Dasar Stacking Cards */
+    .hero-stack-wrapper {
+        background-color: transparent;
+        color: #111;
+        font-family: 'Space Grotesk', sans-serif;
+    }
+
+    /* --- 1. Hero Section --- */
+    .hero-main {
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        position: relative;
+        z-index: 10;
+        padding: 0 20px;
+    }
+
+    .reveal-text {
+        font-size: 5vw;
+        line-height: 1.1;
+        text-align: center;
+        clip-path: polygon(0 100%, 100% 100%, 100% 100%, 0% 100%);
+        opacity: 0;
+        transform: translateY(50px);
+        animation: textReveal 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        color: #064e3b; /* emerald-950 */
+    }
+
+    .reveal-text span {
+        color: #10b981; /* emerald-500 */
+    }
+
+    /* --- 2. Stacking Cards Container --- */
+    .stack-area {
+        padding-bottom: 20vh;
+        max-width: 1100px;
+        margin: 0 auto;
+        position: relative;
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+
+    /* --- 3. The Card Styling --- */
+    .card-stack {
+        height: 450px;
+        position: sticky;
+        top: 15vh;
+        background: #111;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        border-radius: 40px;
+        padding: 40px;
+        margin-bottom: 15vh;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        overflow: hidden;
+        backdrop-filter: blur(20px);
+        box-shadow: 0 -20px 50px rgba(0, 0, 0, 0.5);
+        transform-origin: center top;
+        transition: transform 0.4s cubic-bezier(0.2, 1, 0.3, 1), filter 0.4s ease;
+        will-change: transform;
+    }
+
+    .card-stack:nth-child(1) { background: linear-gradient(145deg, #121212, #080808); }
+    .card-stack:nth-child(2) { background: linear-gradient(145deg, #1a1a1a, #0d0d0d); }
+    .card-stack:nth-child(3) { background: linear-gradient(145deg, #222222, #111111); }
+
+    .card-stack-content {
+        flex: 1.2;
+        padding-right: 40px;
+        z-index: 2;
+    }
+
+    .card-stack h2 {
+        font-size: 3.5rem;
+        margin-bottom: 15px;
+        text-transform: uppercase;
+        font-weight: 800;
+        line-height: 1;
+        letter-spacing: -2px;
+    }
+
+    .card-stack .card-num {
+        font-size: 1rem;
+        color: #10b981;
+        margin-bottom: 25px;
+        display: block;
+        font-weight: bold;
+        letter-spacing: 4px;
+    }
+
+    .card-stack p {
+        font-size: 1.2rem;
+        color: #94a3b8;
+        max-width: 450px;
+        line-height: 1.6;
+    }
+
+    .card-stack-img {
+        flex: 1;
+        height: 100%;
+        background: #000;
+        border-radius: 24px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .card-stack-img img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        opacity: 0.7;
+        transition: transform 0.8s cubic-bezier(0.2, 1, 0.3, 1);
+    }
+
+    .card-stack:hover .card-stack-img img {
+        transform: scale(1.1);
+        opacity: 1;
+    }
+
+    @keyframes textReveal {
+        to {
+            clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @media (max-width: 768px) {
+        .reveal-text { font-size: 3rem; }
+        .card-stack {
+            flex-direction: column;
+            height: auto;
+            min-height: 550px;
+            padding: 30px;
+            top: 10vh;
+            margin-bottom: 8vh;
+            border-radius: 30px;
+        }
+        .card-stack-content { padding-right: 0; margin-bottom: 30px; }
+        .card-stack h2 { font-size: 2.2rem; }
+        .card-stack-img { height: 280px; width: 100%; }
+    }
+</style>
+
+<div class="hero-stack-wrapper">
     <!-- Hero Section -->
-    <section class="relative min-h-[100svh] flex items-center pt-32 lg:pt-20 overflow-hidden border-b border-white/50 bg-transparent">
-        <div class="container mx-auto px-6 md:px-12 relative z-10 text-left">
-            <div class="grid lg:grid-cols-2 items-center gap-12 lg:gap-24 pb-16 lg:pb-0">
-                <div class="space-y-10">
-                    <div class="inline-flex items-center space-x-3 px-5 py-3 mt-4 md:mt-0 rounded-full bg-emerald-600/5 border border-emerald-600/10 text-emerald-700 text-[10px] font-bold tracking-[0.2em] uppercase glass">
-                        <span class="flex h-2 w-2 rounded-full bg-emerald-500 animate-ping"></span>
-                        <span>RT 001 Go-Digital</span>
-                    </div>
-                    
-                    <h1 class="text-5xl sm:text-6xl md:text-7xl lg:text-[5.5rem] font-extrabold leading-[1.1] tracking-tight">
-                        <?php 
-                        // Ambil judul bersih (hanya simpan <br> jika ada)
-                        $raw_title = $settingsData['web_hero_title'] ?? "Kampung Impian <br> Kini Jadi Nyata.";
-                        $clean_title = strip_tags($raw_title, '<br>');
-                        
-                        if(strpos($clean_title, '<br>') !== false) {
-                            // Jika ada baris baru, bagi otomatis
-                            $parts = explode('<br>', $clean_title);
-                            echo '<span class="text-emerald-950">' . trim($parts[0]) . '</span>';
-                            if(count($parts) > 1) {
-                                echo '<br><span class="text-emerald-500">' . trim(strip_tags($parts[1])) . '</span>';
-                            }
-                        } else {
-                            // Jika tidak ada <br>, bagi dua berdasarkan kata
-                            $words = explode(' ', trim($clean_title));
-                            $half = ceil(count($words) / 2);
-                            $top = implode(' ', array_slice($words, 0, $half));
-                            $bottom = implode(' ', array_slice($words, $half));
-                            
-                            echo '<span class="text-emerald-950">' . $top . '</span>';
-                            if($bottom) echo '<br><span class="text-emerald-500">' . $bottom . '</span>';
-                        }
-                        ?>
-                    </h1>
-                    
-                    <p class="text-lg md:text-xl text-emerald-900/50 leading-relaxed max-w-xl font-medium">
-                        <?= nl2br(htmlspecialchars($web_visi)) ?>
-                    </p>
-                    
-                    <div class="flex flex-wrap gap-6 pt-4">
-                        <a href="pasar.php" class="px-12 py-6 bg-emerald-600 text-white font-bold rounded-[2rem] flex items-center space-x-4 hover:bg-emerald-700 transition-all shadow-2xl shadow-emerald-100">
-                            <i class="fas fa-store text-xl"></i>
-                            <span>PASAR WARGA</span>
-                        </a>
-                        <a href="https://www.google.com/maps/place/Bimbel+Become/@-6.4617173,106.9727219,3a,73.9y,173.83h,88.65t/data=!3m7!1e1!3m5!1s0-jsU8IuF6zRD2dAo4a4pQ!2e0!6shttps:%2F%2Fstreetviewpixels-pa.googleapis.com%2Fv1%2Fthumbnail%3Fcb_client%3Dmaps_sv.tactile%26w%3D900%26h%3D600%26pitch%3D1.3543519995511133%26panoid%3D0-jsU8IuF6zRD2dAo4a4pQ%26yaw%3D173.82917027237332!7i16384!8i8192!4m6!3m5!1s0x2e69bf52d8d30d3b:0x94ee6f0e357a0db5!8m2!3d-6.4600501!4d106.9744559!16s%2Fg%2F11y2dtt465?entry=ttu&g_ep=EgoyMDI2MDQwNy4wIKXMDSoASAFQAw%3D%3D" target="_blank" class="px-12 py-6 glass text-emerald-900 font-bold rounded-[2rem] hover:bg-white transition-all flex items-center space-x-4 cursor-pointer">
-                            <i class="fas fa-play-circle text-emerald-600 text-xl"></i>
-                            <span>TUR KAWASAN</span>
-                        </a>
-                    </div>
+    <section class="hero-main">
+        <div class="inline-flex items-center space-x-3 px-5 py-3 mb-8 rounded-full bg-emerald-600/10 border border-emerald-600/20 text-emerald-400 text-[10px] font-bold tracking-[0.2em] uppercase backdrop-blur-md">
+            <span class="flex h-2 w-2 rounded-full bg-emerald-500 animate-ping"></span>
+            <span>RT 001 Go-Digital</span>
+        </div>
+        
+        <h1 class="reveal-text font-black">
+            <?= str_replace('<br>', '<br><span>', $clean_title) . '</span>' ?>
+        </h1>
+        
+        <p class="mt-8 text-lg md:text-xl text-emerald-900/60 leading-relaxed max-w-2xl text-center font-medium opacity-0 translate-y-10 animate-[textReveal_1s_ease_0.3s_forwards]">
+            <?= nl2br(htmlspecialchars($web_visi)) ?>
+        </p>
+        
+        <div class="flex flex-wrap justify-center gap-6 pt-12 opacity-0 translate-y-10 animate-[textReveal_1s_ease_0.6s_forwards]">
+            <a href="pasar.php" class="group relative px-10 py-5 bg-emerald-600 text-white font-bold rounded-2xl flex items-center space-x-4 hover:bg-emerald-500 transition-all shadow-xl shadow-emerald-900/20">
+                <i class="fa-solid fa-shop text-xl"></i>
+                <span class="tracking-tight uppercase">Pasar Warga</span>
+            </a>
+            <a href="https://www.google.com/maps/place/Bimbel+Become/@-6.4617173,106.9727219,3a,73.9y,173.83h,88.65t/data=!3m7!1e1!3m5!1s0-jsU8IuF6zRD2dAo4a4pQ!2e0!6shttps:%2F%2Fstreetviewpixels-pa.googleapis.com%2Fv1%2Fthumbnail%3Fcb_client%3Dmaps_sv.tactile%26w%3D900%26h%3D600%26pitch%3D1.3543519995511133%26panoid%3D0-jsU8IuF6zRD2dAo4a4pQ%26yaw%3D173.82917027237332!7i16384!8i8192!4m6!3m5!1s0x2e69bf52d8d30d3b:0x94ee6f0e357a0db5!8m2!3d-6.4600501!4d106.9744559!16s%2Fg%2F11y2dtt465?entry=ttu&g_ep=EgoyMDI2MDQwNy4wIKXMDSoASAFQAw%3D%3D" target="_blank" class="px-10 py-5 bg-white border border-emerald-100 text-emerald-900 font-bold rounded-2xl hover:bg-emerald-50 transition-all flex items-center space-x-4 shadow-sm">
+                <i class="fas fa-play-circle text-emerald-500 text-xl"></i>
+                <span>TUR KAWASAN</span>
+            </a>
+        </div>
 
-                </div>
-                
-                <!-- Hero Parallax Slider -->
-                <div class="relative mt-12 lg:mt-0 w-full">
-                    <div class="absolute -inset-10 bg-emerald-500/10 blur-[120px] rounded-full animate-pulse"></div>
-                    
-                    <div class="slider relative w-full h-[450px] lg:h-[600px] rounded-[3rem] lg:rounded-[5rem] overflow-hidden shadow-2xl bg-emerald-950/20">
-                        <button class="slider--btn slider--btn__prev">
-                            <svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
-                        </button>
-                        
-                        <div class="slides__wrapper">
-                            <div class="slides">
-                                <!-- Slide 1 -->
-                                <div class="slide" data-current>
-                                    <div class="slide__inner">
-                                        <div class="slide--image__wrapper">
-                                            <img class="slide--image" src="<?= $slides[1]['image'] ?>" />
-                                        </div>
-                                    </div>
-                                    <div class="slide__bg" style="--bg: url('<?= $slides[1]['image'] ?>')" data-current></div>
-                                </div>
-                                <!-- Slide 2 -->
-                                <div class="slide" data-next>
-                                    <div class="slide__inner">
-                                        <div class="slide--image__wrapper">
-                                            <img class="slide--image" src="<?= $slides[2]['image'] ?>" />
-                                        </div>
-                                    </div>
-                                    <div class="slide__bg" style="--bg: url('<?= $slides[2]['image'] ?>')" data-next></div>
-                                </div>
-                                <!-- Slide 3 -->
-                                <div class="slide" data-previous>
-                                    <div class="slide__inner">
-                                        <div class="slide--image__wrapper">
-                                            <img class="slide--image" src="<?= $slides[3]['image'] ?>" />
-                                        </div>
-                                    </div>
-                                    <div class="slide__bg" style="--bg: url('<?= $slides[3]['image'] ?>')" data-previous></div>
-                                </div>
-                            </div>
-                            
-                            <div class="slides--infos">
-                                <!-- Info 1 -->
-                                <div class="slide-info" data-current>
-                                    <div class="slide-info__inner">
-                                        <div class="slide-info--text__wrapper">
-                                            <div class="slide-info--text" data-title><span><?= $slides[1]['title'] ?></span></div>
-                                            <div class="slide-info--text" data-subtitle><span><?= $slides[1]['subtitle'] ?></span></div>
-                                            <div class="slide-info--text" data-description><span><?= $slides[1]['description'] ?></span></div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- Info 2 -->
-                                <div class="slide-info" data-next>
-                                    <div class="slide-info__inner">
-                                        <div class="slide-info--text__wrapper">
-                                            <div class="slide-info--text" data-title><span><?= $slides[2]['title'] ?></span></div>
-                                            <div class="slide-info--text" data-subtitle><span><?= $slides[2]['subtitle'] ?></span></div>
-                                            <div class="slide-info--text" data-description><span><?= $slides[2]['description'] ?></span></div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- Info 3 -->
-                                <div class="slide-info" data-previous>
-                                    <div class="slide-info__inner">
-                                        <div class="slide-info--text__wrapper">
-                                            <div class="slide-info--text" data-title><span><?= $slides[3]['title'] ?></span></div>
-                                            <div class="slide-info--text" data-subtitle><span><?= $slides[3]['subtitle'] ?></span></div>
-                                            <div class="slide-info--text" data-description><span><?= $slides[3]['description'] ?></span></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <button class="slider--btn slider--btn__next">
-                            <svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
-                        </button>
-                    </div>
-
-                    <div class="absolute -bottom-6 left-4 right-4 lg:right-auto lg:-bottom-10 lg:-left-10 glass p-6 lg:p-10 rounded-[2.5rem] lg:rounded-[3.5rem] z-[120] shadow-2xl max-w-[320px] mx-auto lg:mx-0">
-                        <div class="flex items-center space-x-4 mb-4">
-                            <div class="w-10 h-10 bg-yellow-400 rounded-full flex items-center justify-center text-emerald-950">
-                                <i class="fas fa-quote-left text-xs"></i>
-                            </div>
-                            <span class="font-bold text-sm text-emerald-900">Suasana Warga</span>
-                        </div>
-                        <p class="text-sm text-emerald-900/60 leading-relaxed font-medium italic">"View bukit & sawah di sini luar biasa, ekonomi warganya juga hidup sekali."</p>
-                    </div>
-                </div>
-            </div>
+        <div class="absolute bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-40 text-emerald-900">
+            <span class="text-[10px] uppercase tracking-[0.3em] font-bold">Scroll Down</span>
+            <div class="w-px h-12 bg-gradient-to-b from-emerald-500 to-transparent"></div>
         </div>
     </section>
+
+    <!-- Stacking Cards area -->
+    <div class="stack-area">
+        <?php foreach($slides as $i => $s): ?>
+        <div class="card-stack js-card">
+            <div class="card-stack-content">
+                <span class="card-num">SCENE 0<?= $i ?></span>
+                <h2 class="text-white"><?= htmlspecialchars($s['title']) ?></h2>
+                <p><?= htmlspecialchars($s['description']) ?></p>
+            </div>
+            <div class="card-stack-img">
+                <img src="<?= htmlspecialchars($s['image']) ?>" alt="<?= htmlspecialchars($s['title']) ?>">
+            </div>
+        </div>
+        <?php endforeach; ?>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const cards = document.querySelectorAll('.js-card');
+        
+        const handleScroll = () => {
+            const viewportHeight = window.innerHeight;
+            const isMobile = window.innerWidth <= 768;
+            const stickyTopOffset = isMobile ? viewportHeight * 0.10 : viewportHeight * 0.15;
+
+            cards.forEach((card, index) => {
+                const nextCard = cards[index + 1];
+
+                if (nextCard) {
+                    const nextRect = nextCard.getBoundingClientRect();
+                    const distance = nextRect.top - stickyTopOffset;
+
+                    if (distance < viewportHeight && distance > 0) {
+                        const maxShrink = isMobile ? 0.95 : 0.90;
+                        const factor = (1 - maxShrink) / viewportHeight;
+                        const scale = 1 - ((viewportHeight - distance) * factor);
+                        
+                        const finalScale = Math.max(maxShrink, Math.min(1, scale));
+                        const brightness = Math.max(0.6, Math.min(1, scale));
+
+                        card.style.transform = `scale(${finalScale})`;
+                        card.style.filter = `brightness(${brightness})`;
+                    } else if (distance <= 0) {
+                        const maxShrink = isMobile ? 0.95 : 0.90;
+                        card.style.transform = `scale(${maxShrink})`;
+                        card.style.filter = `brightness(0.6)`;
+                    } else {
+                        card.style.transform = `scale(1)`;
+                        card.style.filter = `brightness(1)`;
+                    }
+                }
+            });
+        };
+
+        window.addEventListener('scroll', handleScroll);
+        // Trigger once to set initial state
+        handleScroll();
+    });
+</script>

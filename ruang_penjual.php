@@ -28,12 +28,20 @@ $penjualData = $stmtPenjual->fetch(PDO::FETCH_ASSOC);
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
+        /* Mencegah FOUC */
+        html { visibility: hidden; opacity: 0; transition: opacity 0.5s ease; }
+        html.js-loaded { visibility: visible; opacity: 1; }
+        
         body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f8fafc; -webkit-tap-highlight-color: transparent; }
         .glass { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.3); }
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .animate-float { animation: float 3s ease-in-out infinite; }
         @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
     </style>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => { document.documentElement.classList.add("js-loaded"); });
+        setTimeout(() => document.documentElement.classList.add("js-loaded"), 2000);
+    </script>
 </head>
 <body class="bg-slate-50 min-h-screen pb-24">
     

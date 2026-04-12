@@ -89,6 +89,10 @@ $bg_overlay = $settings['web_hero_image_1'] ?? 'https://images.unsplash.com/phot
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
     <!-- Swiper CSS untuk Slider Promosi -->
     <style>
+        /* Mencegah FOUC (Flash of Unstyled Content) */
+        html { visibility: hidden; opacity: 0; transition: opacity 0.5s ease; }
+        html.js-loaded { visibility: visible; opacity: 1; }
+        
         body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: rgba(248, 250, 252, 0.85); }
         .hide-scroll::-webkit-scrollbar { display: none; }
         .hide-scroll { -ms-overflow-style: none; scrollbar-width: none; }
@@ -261,6 +265,10 @@ $bg_overlay = $settings['web_hero_image_1'] ?? 'https://images.unsplash.com/phot
             .card-stack-img-pasar { height: 180px; width: 100%; }
         }
     </style>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => { document.documentElement.classList.add("js-loaded"); });
+        setTimeout(() => document.documentElement.classList.add("js-loaded"), 2000); // Fallback
+    </script>
 </head>
 <body class="pb-24 selection:bg-emerald-200">
     <div class="background-overlay"></div>

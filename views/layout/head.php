@@ -11,13 +11,24 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet"> <!-- Font Inter -->
     <!-- Modular CSS (split by function) -->
-    <link rel="stylesheet" href="public/css/animations.css?v=<?= time() ?>">
-    <link rel="stylesheet" href="public/css/core.css?v=<?= time() ?>">
-    <link rel="stylesheet" href="public/css/layout.css?v=<?= time() ?>">
-    <link rel="stylesheet" href="public/css/components.css?v=<?= time() ?>">
-    <link rel="stylesheet" href="public/css/workspace.css?v=<?= time() ?>">
-    <link rel="stylesheet" href="public/css/warga.css?v=<?= time() ?>">
-    <link rel="stylesheet" href="public/css/agenda.css?v=<?= time() ?>">
-    <link rel="stylesheet" href="public/css/gallery.css?v=<?= time() ?>">
-    <link rel="stylesheet" href="public/css/rekonsiliasi.css?v=<?= time() ?>">
+    <?php $v = '1.0.1'; // Hapus time() agar browser bisa meng-cache CSS dengan baik ?>
+    <link rel="stylesheet" href="public/css/animations.css?v=<?= $v ?>">
+    <link rel="stylesheet" href="public/css/core.css?v=<?= $v ?>">
+    <link rel="stylesheet" href="public/css/layout.css?v=<?= $v ?>">
+    <link rel="stylesheet" href="public/css/components.css?v=<?= $v ?>">
+    <link rel="stylesheet" href="public/css/workspace.css?v=<?= $v ?>">
+    <link rel="stylesheet" href="public/css/warga.css?v=<?= $v ?>">
+    <link rel="stylesheet" href="public/css/agenda.css?v=<?= $v ?>">
+    <link rel="stylesheet" href="public/css/gallery.css?v=<?= $v ?>">
+    <link rel="stylesheet" href="public/css/rekonsiliasi.css?v=<?= $v ?>">
+
+    <!-- FOUC Prevention untuk Tailwind CDN -->
+    <style>
+        html { visibility: hidden; opacity: 0; transition: opacity 0.5s ease; }
+        html.js-loaded { visibility: visible; opacity: 1; }
+    </style>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => { document.documentElement.classList.add("js-loaded"); });
+        setTimeout(() => document.documentElement.classList.add("js-loaded"), 2000); // Fallback
+    </script>
 </head>

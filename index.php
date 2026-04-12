@@ -55,22 +55,22 @@ while ($row = mysqli_fetch_assoc($menus_result)) {
 // Slider Data (Local Fallback)
 $slides = [
     1 => [
-        'image' => $settingsData['web_hero_image_1'] ?? 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?q=80&w=1600',
-        'title' => $settingsData['web_hero_slide_1_title'] ?? 'Panorama Alam',
-        'subtitle' => $settingsData['web_hero_slide_1_subtitle'] ?? 'Kawasan Hijau & Asri',
-        'description' => $settingsData['web_hero_slide_1_desc'] ?? 'Lingkungan yang terjaga kelestariannya untuk kenyamanan bersama.'
+        'image' => $settingsData['web_slider_1_image'] ?? 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?q=80&w=1600',
+        'title' => $settingsData['web_slider_1_title'] ?? 'Panorama Alam',
+        'subtitle' => $settingsData['web_slider_1_subtitle'] ?? 'Kawasan Hijau & Asri',
+        'description' => $settingsData['web_slider_1_description'] ?? 'Lingkungan yang terjaga kelestariannya untuk kenyamanan bersama.'
     ],
     2 => [
-        'image' => $settingsData['web_hero_image_2'] ?? 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?q=80&w=1600',
-        'title' => $settingsData['web_hero_slide_2_title'] ?? 'Sinergi Warga',
-        'subtitle' => $settingsData['web_hero_slide_2_subtitle'] ?? 'Gotong Royong Modern',
-        'description' => $settingsData['web_hero_slide_2_desc'] ?? 'Membangun kebersamaan melalui kolaborasi digital yang transparan.'
+        'image' => $settingsData['web_slider_2_image'] ?? 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?q=80&w=1600',
+        'title' => $settingsData['web_slider_2_title'] ?? 'Sinergi Warga',
+        'subtitle' => $settingsData['web_slider_2_subtitle'] ?? 'Gotong Royong Modern',
+        'description' => $settingsData['web_slider_2_description'] ?? 'Membangun kebersamaan melalui kolaborasi digital yang transparan.'
     ],
     3 => [
-        'image' => $settingsData['web_hero_image_3'] ?? 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=1600',
-        'title' => $settingsData['web_hero_slide_3_title'] ?? 'Layanan Cepat',
-        'subtitle' => $settingsData['web_hero_slide_3_subtitle'] ?? 'Akses Kapan Saja',
-        'description' => $settingsData['web_hero_slide_3_desc'] ?? 'Memudahkan urusan warga dengan sistem informasi terpadu.'
+        'image' => $settingsData['web_slider_3_image'] ?? 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=1600',
+        'title' => $settingsData['web_slider_3_title'] ?? 'Layanan Cepat',
+        'subtitle' => $settingsData['web_slider_3_subtitle'] ?? 'Akses Kapan Saja',
+        'description' => $settingsData['web_slider_3_description'] ?? 'Memudahkan urusan warga dengan sistem informasi terpadu.'
     ]
 ];
 
@@ -80,13 +80,13 @@ $wisata = [
         'image' => $settingsData['web_wisata_1_image'] ?? 'https://images.unsplash.com/photo-1501785888041-af3ef285b470?q=80&w=1200',
         'title' => $settingsData['web_wisata_1_title'] ?? 'Danau Biru Pesona',
         'category' => $settingsData['web_wisata_1_category'] ?? 'WISATA ALAM',
-        'description' => $settingsData['web_wisata_1_desc'] ?? 'Nikmati ketenangan air danau yang jernih dengan latar bukit asri.'
+        'description' => $settingsData['web_wisata_1_description'] ?? 'Nikmati ketenangan air danau yang jernih dengan latar bukit asri.'
     ],
     2 => [
         'image' => $settingsData['web_wisata_2_image'] ?? 'https://images.unsplash.com/photo-1470770841072-f978cf4d019e?q=80&w=1200',
         'title' => $settingsData['web_wisata_2_title'] ?? 'Lembah Hijau RT01',
         'category' => $settingsData['web_wisata_2_category'] ?? 'WISATA KELUARGA',
-        'description' => $settingsData['web_wisata_2_desc'] ?? 'Hamparan sawah dan taman bermain untuk keceriaan keluarga.'
+        'description' => $settingsData['web_wisata_2_description'] ?? 'Hamparan sawah dan taman bermain untuk keceriaan keluarga.'
     ]
 ];
 ?>
@@ -127,7 +127,15 @@ $background_image_url = $settingsData['web_hero_image_1'] ?? 'https://images.uns
             filter: grayscale(10%) blur(2px); /* Efek samar */
             opacity: 0.1; /* Efek semi transparan */
         }
+        
+        /* Mencegah FOUC (Flash of Unstyled Content) akibat Tailwind CDN */
+        html { visibility: hidden; opacity: 0; transition: opacity 0.5s ease; }
+        html.js-loaded { visibility: visible; opacity: 1; }
     </style>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => { document.documentElement.classList.add("js-loaded"); });
+        setTimeout(() => document.documentElement.classList.add("js-loaded"), 2000); // Fallback
+    </script>
 </head>
 <body class="selection:bg-emerald-100 selection:text-emerald-900">
     <div class="background-overlay"></div>

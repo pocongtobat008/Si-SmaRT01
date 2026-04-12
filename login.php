@@ -46,6 +46,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        /* Mencegah FOUC */
+        html { visibility: hidden; opacity: 0; transition: opacity 0.5s ease; }
+        html.js-loaded { visibility: visible; opacity: 1; }
+
         body {
             font-family: 'Plus+Jakarta+Sans', sans-serif;
             background: #f8fafc;
@@ -82,6 +86,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             box-shadow: 0 10px 20px -5px rgba(16, 185, 129, 0.2);
         }
     </style>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => { document.documentElement.classList.add("js-loaded"); });
+        setTimeout(() => document.documentElement.classList.add("js-loaded"), 2000);
+    </script>
 </head>
 <body class="min-h-screen flex items-center justify-center p-6">
 

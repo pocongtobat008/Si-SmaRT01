@@ -916,3 +916,11 @@
 @media (max-width: 767px) {
     .hide-text-mobile { display: none !important; }
 }
+
+/* --- Global Fix untuk Pop Up Toast & SweetAlert agar selalu di depan --- */
+.swal2-container, 
+#toast-container, 
+.toast-box, 
+.toast {
+    z-index: 999999 !important;
+}

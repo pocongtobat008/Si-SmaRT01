@@ -15,6 +15,31 @@ try {
     if (!$conn) {
         throw new Exception("MySQLi Connection Failed: " . mysqli_connect_error());
     }
+    // Auto-Initialization logic for Login System
+    $pdo->exec("CREATE TABLE IF NOT EXISTS web_users (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        username VARCHAR(50) UNIQUE NOT NULL,
+        password VARCHAR(255) NOT NULL,
+        nama_lengkap VARCHAR(100),
+        role ENUM('admin', 'warga', 'bendahara') DEFAULT 'warga',
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    )");
+
+    // Create or Reset default admin
+    $defaultPassword = password_hash('admin', PASSWORD_DEFAULT);
+    $stmt = $pdo->prepare("SELECT id FROM web_users WHERE username = 'admin'");
+    $stmt->execute();
+    $admin = $stmt->fetch();
+
+    if (!$admin) {
+        $stmt = $pdo->prepare("INSERT INTO web_users (username, password, nama_lengkap, role) VALUES ('admin', ?, 'Administrator', 'admin')");
+        $stmt->execute([$defaultPassword]);
+    } else {
+        // Force reset password to 'admin' just in case the manual SQL used a dummy hash
+        $stmt = $pdo->prepare("UPDATE web_users SET password = ? WHERE username = 'admin'");
+        $stmt->execute([$defaultPassword]);
+    }
+
 } catch(Exception $e) {
     die("Koneksi Database Gagal: " . $e->getMessage());
 }

@@ -65,7 +65,7 @@ window.switchInfoTab = function (tabId, btnElement) {
         el.classList.add('hidden');
         el.classList.remove('active-tab');
     });
-    document.querySelectorAll('#page-info .sub-nav-tab').forEach(el => el.classList.remove('active'));
+    document.querySelectorAll('#page-info .info-tab-btn').forEach(el => el.classList.remove('active'));
 
     const target = document.getElementById(tabId);
     if (target) {

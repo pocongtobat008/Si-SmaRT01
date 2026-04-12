@@ -73,9 +73,9 @@
         </div>
 
         <!-- Grup Informasi & Layanan -->
-        <button onclick="toggleSubmenu('submenu-info')" id="nav-group-info" class="nav-group-toggle" title="Menu Informasi">
+        <button onclick="toggleSubmenu('submenu-info')" id="nav-group-info" class="nav-group-toggle" title="Menu CMS">
             <i data-lucide="info"></i>
-            <span>Info</span>
+            <span>CMS</span>
             <i data-lucide="chevron-down" class="submenu-icon"></i>
         </button>
         <div id="submenu-info" class="submenu-items hidden">
@@ -83,23 +83,14 @@
                 <i data-lucide="shield-check"></i>
                 <span>Keamanan</span>
             </button>
-            <button onclick="showPage('info')" id="nav-info" title="Informasi Umum">
+            <button onclick="showPage('info')" id="nav-info" title="Pengaturan CMS">
                 <i data-lucide="megaphone"></i>
-                <span>Informasi</span>
+                <span>Pengaturan CMS</span>
             </button>
-            <button onclick="showPage('info'); setTimeout(() => { const btn = document.getElementById('tab-btn-info-users'); if(btn) btn.click(); document.getElementById('page-title').innerText='Master User'; document.getElementById('page-subtitle').innerText='Manajemen Akses Sistem'; }, 100);" id="nav-info-users" title="Manajemen Akses User">
+            <button onclick="showPage('users')" id="nav-users" title="Manajemen Akses User">
                 <i data-lucide="user-cog"></i>
                 <span>Master User</span>
             </button>
-        </div>
-
-        <!-- Grup Menu Penjual (Khusus UMKM & Penjual) -->
-        <button onclick="toggleSubmenu('submenu-pasar')" id="nav-group-pasar" class="nav-group-toggle" title="Menu Toko Warga">
-            <i data-lucide="store"></i>
-            <span>Menu Penjual</span>
-            <i data-lucide="chevron-down" class="submenu-icon"></i>
-        </button>
-        <div id="submenu-pasar" class="submenu-items hidden">
             <button onclick="showPage('pasar')" id="nav-pasar" title="Kelola Produk & Toko">
                 <i data-lucide="shopping-bag"></i>
                 <span>Kelola Produk</span>

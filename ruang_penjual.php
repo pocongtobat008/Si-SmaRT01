@@ -1,10 +1,21 @@
 <?php
+session_start();
+// Jika belum login, lempar ke login_penjual.php
+if (!isset($_SESSION['penjual_id'])) {
+    header("Location: login_penjual.php");
+    exit();
+}
 require_once 'config/database.php';
 
 // Ambil setting untuk info RT
 $stmtSet = $pdo->query("SELECT setting_key, setting_value FROM web_settings");
 $settings = $stmtSet->fetchAll(PDO::FETCH_KEY_PAIR);
 $web_nama = $settings['web_nama'] ?? 'Portal Warga';
+
+// Ambil data penjual
+$stmtPenjual = $pdo->prepare("SELECT * FROM pasar_penjual WHERE id = ?");
+$stmtPenjual->execute([$_SESSION['penjual_id']]);
+$penjualData = $stmtPenjual->fetch(PDO::FETCH_ASSOC);
 ?>
 <!DOCTYPE html>
 <html lang="id">
@@ -37,13 +48,18 @@ $web_nama = $settings['web_nama'] ?? 'Portal Warga';
                     <h1 class="text-lg font-extrabold text-slate-800 leading-tight">Ruang Penjual</h1>
                     <div class="flex items-center gap-1.5">
                         <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
-                        <p class="text-[10px] uppercase tracking-widest text-slate-400 font-bold">Dashboard Mandiri</p>
+                        <p class="text-[10px] uppercase tracking-widest text-slate-400 font-bold"><?= htmlspecialchars($_SESSION['penjual_nama_toko'] ?? 'Toko Saya') ?></p>
                     </div>
                 </div>
             </div>
-            <button onclick="openProfileModal()" class="w-10 h-10 bg-white shadow-sm border border-slate-100 text-slate-600 rounded-2xl flex items-center justify-center hover:bg-emerald-50 hover:text-emerald-600 transition-all">
-                <i class="fas fa-store"></i>
-            </button>
+            <div class="flex items-center gap-2">
+                <button onclick="openProfileModal()" class="w-10 h-10 bg-white shadow-sm border border-slate-100 text-slate-600 rounded-2xl flex items-center justify-center hover:bg-emerald-50 hover:text-emerald-600 transition-all">
+                    <i class="fas fa-store"></i>
+                </button>
+                <a href="logout_penjual.php" class="w-10 h-10 bg-red-50 border border-red-100 text-red-500 rounded-2xl flex items-center justify-center hover:bg-red-100 hover:text-red-600 transition-all">
+                    <i class="fas fa-sign-out-alt"></i>
+                </a>
+            </div>
         </div>
     </nav>
 
@@ -51,7 +67,7 @@ $web_nama = $settings['web_nama'] ?? 'Portal Warga';
         <!-- Welcoming Section -->
         <div class="mb-8 p-6 bg-gradient-to-br from-emerald-600 to-teal-700 rounded-[2.5rem] text-white shadow-2xl shadow-emerald-200 relative overflow-hidden">
             <div class="relative z-10">
-                <h2 class="text-2xl font-black mb-1">Halo, Penjual! 👋</h2>
+                <h2 class="text-2xl font-black mb-1">Halo, <?= htmlspecialchars($penjualData['nama_pemilik'] ?? 'Penjual') ?>! 👋</h2>
                 <p class="text-emerald-100 text-sm font-medium opacity-90">Kelola dagangan Anda dengan mudah dari genggaman.</p>
                 <div class="mt-6 flex gap-4">
                     <div class="bg-white/10 backdrop-blur-md px-4 py-3 rounded-2xl border border-white/10 flex-1">
@@ -79,20 +95,17 @@ $web_nama = $settings['web_nama'] ?? 'Portal Warga';
         </div>
 
         <!-- Product Table Responsive -->
-        <div id="productContainer" class="grid grid-cols-1 gap-4">
-            <!-- Data will be loaded as modern cards for mobile -->
+        <div id="productContainer" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
+            <!-- Data will be loaded here -->
         </div>
 
         <!-- Pagination Controls -->
         <div id="paginationContainer" class="mt-8 flex justify-center items-center gap-2"></div>
     </main>
 
-    <!-- Modal Form (Modern Slide-up for Mobile) -->
-    <div id="productModal" class="fixed inset-0 z-[60] hidden flex-col justify-end sm:justify-center p-0 sm:p-4 bg-slate-900/40 backdrop-blur-md transition-all duration-300 overflow-hidden">
-        <div class="bg-white w-full max-w-lg rounded-t-[3rem] sm:rounded-[3rem] shadow-2xl flex flex-col max-h-[92vh] sm:max-h-[85vh] animate-in slide-in-from-bottom duration-500">
-            <!-- Modal Handle (Mobile only) -->
-            <div class="w-12 h-1.5 bg-slate-200 rounded-full mx-auto mt-4 mb-2 sm:hidden"></div>
-            
+    <!-- Modal Form -->
+    <div id="productModal" class="fixed inset-0 z-[60] hidden items-center justify-center p-4 sm:p-6 bg-slate-900/40 backdrop-blur-md transition-all duration-300 overflow-hidden">
+        <div class="bg-white w-full max-w-lg m-auto rounded-[3rem] shadow-2xl flex flex-col max-h-[92vh] sm:max-h-[85vh] animate-in slide-in-from-bottom duration-500">
             <div class="p-8 border-b border-slate-50 flex items-center justify-between">
                 <div>
                     <h3 id="modalTitle" class="text-xl font-black text-slate-800">Tambah Dagangan</h3>
@@ -107,7 +120,7 @@ $web_nama = $settings['web_nama'] ?? 'Portal Warga';
                 <!-- Image Upload Multi -->
                 <div>
                     <label class="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-3 ml-1">Foto Dagangan (Bisa > 1)</label>
-                    <div id="imagePreviewContainer" class="flex flex-wrap gap-3 mb-4">
+                    <div id="imagePreviewContainer" class="flex flex-wrap justify-center sm:justify-start gap-4 mb-4">
                         <!-- Previews will go here -->
                         <label class="w-24 h-24 rounded-3xl border-2 border-dashed border-slate-200 flex flex-col items-center justify-center text-slate-400 hover:bg-emerald-50 hover:border-emerald-200 hover:text-emerald-500 transition-all cursor-pointer bg-slate-50 relative group">
                             <input type="file" id="photoInput" multiple accept="image/*" capture="environment" class="hidden" onchange="handlePhotoSelect(event)">
@@ -196,6 +209,14 @@ $web_nama = $settings['web_nama'] ?? 'Portal Warga';
                 </button>
             </div>
             <form id="profileForm" class="p-8 space-y-5">
+                <div class="flex items-center gap-4 mb-2">
+                    <img id="profLogoPreview" src="https://ui-avatars.com/api/?name=Toko&background=10b981&color=fff" class="w-16 h-16 rounded-full object-cover shadow-md border border-slate-100 shrink-0">
+                    <div class="flex-1">
+                        <label class="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2 ml-1">Logo / Foto Toko</label>
+                        <input type="file" name="logo" accept="image/*" class="w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:font-bold file:bg-emerald-50 file:text-emerald-600 hover:file:bg-emerald-100 cursor-pointer" onchange="previewProfileLogo(event)">
+                    </div>
+                </div>
+
                 <div>
                     <label class="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2 ml-1">Nama Toko / Brand</label>
                     <input type="text" name="nama_toko" id="profNama" required placeholder="Contoh: Toko Berkah" class="w-full px-6 py-4 bg-slate-50 border border-slate-100 rounded-2xl focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500 transition-all outline-none text-sm font-semibold">
@@ -217,36 +238,37 @@ $web_nama = $settings['web_nama'] ?? 'Portal Warga';
 
     <script>
         let allProducts = [];
-        let storeProfile = { nama_toko: '', no_wa: '' };
+        let storeProfile = <?= json_encode($penjualData) ?>;
         let selectedPhotos = []; // Array of Blobs/Files
         let existingPhotos = []; // Array of URLs
+
+        function previewProfileLogo(e) {
+            const file = e.target.files[0];
+            if(file) {
+                const reader = new FileReader();
+                reader.onload = (ev) => document.getElementById('profLogoPreview').src = ev.target.result;
+                reader.readAsDataURL(file);
+            }
+        }
 
         let currentPage = 1;
         const itemsPerPage = 25;
 
         async function init() {
-            await loadProfile();
             await loadProducts();
-        }
-
-        async function loadProfile() {
-            try {
-                const resp = await fetch('views/pages/get_profil.php');
-                const res = await resp.json();
-                if(res.status === 'success' && res.data) {
-                    storeProfile = res.data;
-                    document.getElementById('profNama').value = storeProfile.nama_toko || '';
-                    document.getElementById('profWA').value = storeProfile.no_wa || '';
-                    document.getElementById('profAlamat').value = storeProfile.alamat || '';
-                }
-            } catch (e) { console.error(e); }
+            document.getElementById('profNama').value = storeProfile.nama_toko || '';
+            document.getElementById('profWA').value = storeProfile.no_wa || '';
+            document.getElementById('profAlamat').value = storeProfile.alamat || '';
+            
+            const initialName = encodeURIComponent(storeProfile.nama_toko || 'Toko');
+            document.getElementById('profLogoPreview').src = storeProfile.logo ? storeProfile.logo : `https://ui-avatars.com/api/?name=${initialName}&background=10b981&color=fff`;
         }
 
         async function loadProducts(page = 1) {
             currentPage = page;
             const offset = (page - 1) * itemsPerPage;
             try {
-                const resp = await fetch(`views/pages/get_produk.php?limit=${itemsPerPage}&offset=${offset}`);
+                const resp = await fetch(`views/pages/get_produk.php?limit=${itemsPerPage}&offset=${offset}&penjual_nama=${encodeURIComponent(storeProfile.nama_toko)}`);
                 const res = await resp.json();
                 if(res.status === 'success') {
                     allProducts = res.data;
@@ -289,7 +311,7 @@ $web_nama = $settings['web_nama'] ?? 'Portal Warga';
         function renderCards(data) {
             const container = document.getElementById('productContainer');
             if(data.length === 0) {
-                container.innerHTML = `<div class="text-center py-20 text-slate-400 italic bg-white rounded-3xl border border-slate-100">Belum ada dagangan.</div>`;
+                container.innerHTML = `<div class="col-span-full text-center py-20 text-slate-400 font-medium bg-white rounded-[2rem] border border-slate-100 shadow-sm flex flex-col items-center justify-center gap-3"><i class="fas fa-box-open text-4xl text-slate-200"></i> Belum ada dagangan.</div>`;
                 return;
             }
 
@@ -301,7 +323,7 @@ $web_nama = $settings['web_nama'] ?? 'Portal Warga';
                 return `
                 <div class="bg-white p-4 rounded-[2rem] border border-slate-100 shadow-sm flex items-center gap-4 group hover:shadow-xl hover:shadow-emerald-500/5 transition-all">
                     <div class="w-20 h-20 rounded-2xl overflow-hidden bg-slate-50 border border-slate-100 shrink-0">
-                        <img src="${mainPhoto}" class="w-full h-full object-cover">
+                        <img src="${mainPhoto}" class="w-full h-full object-cover object-center">
                     </div>
                     <div class="flex-1 min-w-0">
                         <h4 class="font-extrabold text-slate-800 text-sm mb-0.5 truncate">${p.nama_produk}</h4>
@@ -490,12 +512,12 @@ $web_nama = $settings['web_nama'] ?? 'Portal Warga';
         async function saveProfile() {
             const fd = new FormData(document.getElementById('profileForm'));
             try {
-                const resp = await fetch('views/pages/save_profil.php', { method: 'POST', body: fd });
+                const resp = await fetch('views/pages/update_toko.php', { method: 'POST', body: fd });
                 const res = await resp.json();
                 if(res.status === 'success') {
                     Swal.fire({ icon: 'success', title: 'Berhasil!', text: res.message, timer: 1500, showConfirmButton: false, borderRadius: '2rem' });
                     closeProfileModal();
-                    await loadProfile();
+                    window.location.reload();
                 }
             } catch (e) { /* error silent */ }
         }

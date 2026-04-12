@@ -35,7 +35,7 @@ function applyTheme(theme) {
  */
 function toggleTheme() {
     // Default to light if no theme is saved, or if the saved theme is invalid
-    const currentTheme = localStorage.getItem('theme') || 'light-theme'; 
+    const currentTheme = localStorage.getItem('theme') || 'light-theme';
     const newTheme = currentTheme === 'dark-theme' ? 'light-theme' : 'dark-theme';
     applyTheme(newTheme);
 }
@@ -59,7 +59,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (themeToggleButton) {
         themeToggleButton.addEventListener('click', toggleTheme);
     }
-}); 
+});
 
 /**
  * Toggles the collapsed state of the sidebar (for desktop).
@@ -145,16 +145,10 @@ document.addEventListener('DOMContentLoaded', () => {
         sidebarOverlay.addEventListener('click', closeMobileSidebar);
     }
 
-    // Modal sidebar toggle
-    const modalSidebarToggle = document.getElementById('modal-sidebar-toggle');
-    if (modalSidebarToggle) {
-        modalSidebarToggle.addEventListener('click', toggleModalSidebar);
-    }
-
     // Mengembalikan pengguna ke halaman terakhir setelah reload
     const activePage = localStorage.getItem('activePage') || 'dashboard';
     setTimeout(() => showPage(activePage), 50); // Sedikit delay agar DOM siap
-    loadAllBloks();
+    if (typeof loadAllBloks === 'function') loadAllBloks();
 });
 
 function showPage(pageId) {
@@ -167,31 +161,38 @@ function showPage(pageId) {
     }
 
     // Hide all pages
-    document.querySelectorAll('.page-content').forEach(p => p.classList.add('hidden'));
+    document.querySelectorAll('.page-content').forEach(p => {
+        p.classList.add('hidden');
+        p.style.display = 'none';
+    });
+
     // Remove active state from nav
-    document.querySelectorAll('nav button').forEach(b => b.classList.remove('active-tab'));
-    
+    document.querySelectorAll('#sidebar .sidebar-nav button').forEach(b => b.classList.remove('active-tab'));
+
     // Show requested page
     const targetPage = document.getElementById('page-' + pageId);
+    if (!targetPage) return;
+
     targetPage.classList.remove('hidden');
-    
+    targetPage.style.display = 'block';
+
     // Trigger fade-in animation
     targetPage.classList.remove('page-enter', 'stagger-ready');
-    void targetPage.offsetWidth; // Trigger DOM reflow to restart animation
+    void targetPage.offsetWidth;
     targetPage.classList.add('page-enter', 'stagger-ready');
 
     // Set active state to nav
     const activeNav = document.getElementById('nav-' + pageId);
     if (activeNav) {
         activeNav.classList.add('active-tab');
-        
-        // Buka submenu secara otomatis jika item yang diklik ada di dalam submenu
+
+        // Handle Submenus (Buka parent submenu jika item di dalamnya terpilih)
         const parentSubmenu = activeNav.closest('.submenu-items');
         if (parentSubmenu) {
             const toggleBtn = document.getElementById(parentSubmenu.id.replace('submenu-', 'nav-group-'));
-            
-            if (window.innerWidth >= 768) {
-                // Di Desktop: Biarkan submenu tetap terbuka (Accordion style)
+
+            if (window.innerWidth >= 1024) {
+                // Di PC: Pastikan submenu terbuka
                 parentSubmenu.classList.remove('hidden');
                 parentSubmenu.classList.add('active');
                 if (toggleBtn) {
@@ -221,20 +222,23 @@ function showPage(pageId) {
         'pos-keuangan': ['Pos Anggaran', 'Kelola pengeluaran'],
         'pembukuan': ['Pembukuan', 'Neraca & trial balance'],
         'keamanan': ['Keamanan', 'Manajemen pengawasan'],
-        'info': ['Informasi', 'Dokumen & kontak'],
+        'info': ['CMS Website', 'Kelola konten website publik'],
         'pasar': ['Menu Penjual', 'Kelola produk & etalase toko warga'],
         'rekonsiliasi': ['Rekonsiliasi', 'Audit iuran tahunan'],
-        'laporan-iuran-warga': ['Tunggakan', 'Visualisasi iuran']
+        'laporan-iuran-warga': ['Tunggakan', 'Visualisasi iuran'],
+        'users': ['Master User', 'Manajemen akun & akses']
     };
 
-    document.getElementById('page-title').innerText = titles[pageId][0];
-    document.getElementById('page-subtitle').innerText = titles[pageId][1];
+    if (titles[pageId]) {
+        if (document.getElementById('page-title')) document.getElementById('page-title').innerText = titles[pageId][0];
+        if (document.getElementById('page-subtitle')) document.getElementById('page-subtitle').innerText = titles[pageId][1];
+    }
 
     // Re-render icons for dynamic content if any
-    lucide.createIcons();
+    if (typeof lucide !== 'undefined') lucide.createIcons();
 
     if (pageId === 'global-warga') {
-        loadGlobalWarga();
+        if (typeof loadGlobalWarga === 'function') loadGlobalWarga();
     } else if (pageId === 'laporan-iuran-blok') {
         initLaporanIuranBlok();
     } else if (pageId === 'rekonsiliasi') {
@@ -253,12 +257,15 @@ function showPage(pageId) {
         if (typeof initKeamanan === 'function') initKeamanan();
     } else if (pageId === 'info') {
         if (typeof initInfo === 'function') initInfo();
+    } else if (pageId === 'users') {
+        if (typeof loadCmsUsers === 'function') loadCmsUsers();
     } else if (pageId === 'pasar') {
+        if (typeof initPasarPage === 'function') initPasarPage();
         if (typeof initPasar === 'function') initPasar();
     }
-    
+
     // Scroll to top
-    window.scrollTo(0,0);
+    window.scrollTo(0, 0);
 }
 
 // Fungsi pembantu untuk mendapatkan format YYYY-MM-DD sesuai zona waktu komputer Anda
@@ -271,7 +278,7 @@ function getLocalDateString() {
 }
 
 // Handle Interactive Elements
-document.addEventListener('click', function(e) {
+document.addEventListener('click', function (e) {
     const target = e.target.closest('button, .ripple');
     if (!target) return;
 
@@ -283,8 +290,8 @@ document.addEventListener('click', function(e) {
     const rect = target.getBoundingClientRect();
     const size = Math.max(rect.width, rect.height);
     ripple.style.width = ripple.style.height = `${size}px`;
-    ripple.style.left = `${e.clientX - rect.left - size/2}px`;
-    ripple.style.top = `${e.clientY - rect.top - size/2}px`;
+    ripple.style.left = `${e.clientX - rect.left - size / 2}px`;
+    ripple.style.top = `${e.clientY - rect.top - size / 2}px`;
 
     setTimeout(() => ripple.remove(), 600);
 
@@ -294,7 +301,7 @@ document.addEventListener('click', function(e) {
     }
 });
 
-window.showToast = function(title, icon = 'success') {
+window.showToast = function (title, icon = 'success') {
     if (typeof Swal !== 'undefined') {
         Swal.fire({
             toast: true,
@@ -317,7 +324,7 @@ window.showToast = function(title, icon = 'success') {
     }
 };
 
-window.showLoading = function(title = 'Memuat...') {
+window.showLoading = function (title = 'Memuat...') {
     if (typeof Swal !== 'undefined') {
         return Swal.fire({
             title: title,

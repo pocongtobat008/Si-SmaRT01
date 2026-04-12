@@ -1,5 +1,12 @@
 <?php
 // app.php - Main entry point untuk aplikasi Si-SmaRT
+session_start();
+
+// Jika belum login, lempar ke login.php
+if (!isset($_SESSION['user_id'])) {
+    header("Location: login.php");
+    exit();
+}
 
 // Load Database Connection
 require_once 'config/database.php';
@@ -33,6 +40,7 @@ include 'views/layout/head.php';
         include 'views/pages/pembukuan.php';
         include 'views/pages/keamanan.php';
         include 'views/pages/info.php';
+        include 'views/pages/users.php';
         include 'views/pages/pasar.php';
         ?>
     </main>

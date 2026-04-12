@@ -104,8 +104,8 @@ $bg_overlay = $settings['web_hero_image_1'] ?? 'https://images.unsplash.com/phot
         /* Custom Swiper Pagination */
         .swiper-pagination-bullet-active { background-color: #10b981 !important; }
 
-        /* Desain Kartu Produk Sesuai Permintaan */
-        .product-card {
+        /* Premium Product Card CSS */
+        .card-baru {
             --bg: #fff;
             --title-color: #fff;
             --title-color-hover: #1e293b;
@@ -113,220 +113,92 @@ $bg_overlay = $settings['web_hero_image_1'] ?? 'https://images.unsplash.com/phot
             --button-color: #10b981;
             --button-color-hover: #059669;
             background: var(--bg);
-            border-radius: 1.5rem;
+            border-radius: 2rem;
             padding: 0.5rem;
             width: 100%;
-            height: 320px; /* Tinggi dinamis responsif */
-            overflow: hidden;
+            height: 380px;
+            overflow: clip;
             position: relative;
+            font-family: 'Plus Jakarta Sans', sans-serif;
             box-shadow: 0 4px 15px rgba(0,0,0,0.03);
-            transition: all 0.4s ease;
             border: 1px solid #f1f5f9;
         }
-
-        @media (min-width: 768px) {
-            .product-card { height: 380px; }
-        }
-
-        /* Mobile specific adjustments to ensure it looks modern */
         @media (max-width: 640px) {
-            .product-card {
-                height: 280px;
-                border-radius: 1.25rem;
-            }
-            .product-card .img-overlay h2 {
-                font-size: 0.9rem;
-            }
-            .product-card .img-overlay .price {
-                font-size: 1rem;
-            }
-            .product-card .btn-buy {
-                padding: 0.5rem 0.8rem 0.5rem 1.8rem;
-                font-size: 0.75rem;
-            }
+            .card-baru { height: 290px; border-radius: 1.5rem; }
+            .card-baru > section h2 { font-size: 1rem !important; }
+            .card-baru > section > div button { padding: 0.6rem 1rem 0.6rem 2rem !important; font-size: 0.8rem !important; width: auto !important; }
+        }
+        .card-baru::before {
+            content: ""; position: absolute; width: calc(100% - 1rem); height: 40%;
+            bottom: 0.5rem; left: 0.5rem;
+            mask: linear-gradient(#0000, #000f 80%); -webkit-mask: linear-gradient(#0000, #000f 80%);
+            backdrop-filter: blur(1rem); -webkit-backdrop-filter: blur(1rem);
+            border-radius: 0 0 1.5rem 1.5rem; translate: 0 0; transition: translate 0.3s ease; z-index: 1;
+        }
+        .card-baru > .img-container {
+            max-width: 100%; aspect-ratio: 4 / 5; border-radius: 1.5rem; display: block;
+            transition: aspect-ratio 0.3s ease; width: 100%; height: auto; overflow: hidden; position: relative;
+        }
+        .card-baru > section {
+            margin: 1rem; height: calc(40% - 1rem); display: flex; flex-direction: column;
+            position: absolute; bottom: 0; left: 0; right: 0; z-index: 2;
+        }
+        .card-baru > section h2 {
+            margin: 0; margin-block-end: 1rem; font-size: 1.25rem; font-weight: 800; opacity: 0;
+            translate: 0 -200%; color: var(--title-color);
+            transition: color 0.5s ease, margin-block-end 0.3s ease, opacity 0.8s ease, translate 0.3s ease;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.6); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        }
+        .card-baru > section p {
+            font-size: 0.85rem; line-height: 1.3; color: var(--text-color); opacity: 0; margin: 0;
+            translate: 0 100%; transition: margin-block-end 0.3s ease, opacity 0.8s ease 0.1s, translate 0.3s ease 0.1s;
+            display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+        }
+        .card-baru > section > div {
+            flex: 1; align-items: flex-end; display: flex; justify-content: space-between; opacity: 0;
+            transition: translate 0.3s ease 0.2s, opacity 0.8s ease 0.2s;
+        }
+        .card-baru > section > div .tag { color: var(--title-color-hover); font-weight: 900; font-size: 1.1rem; }
+        
+        /* Modern Elegant Buy Button */
+        .btn-beli-modern {
+            display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+            padding: 0.6rem 1.2rem; background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: #fff !important; font-size: 0.85rem; font-weight: 800; border-radius: 99px;
+            text-decoration: none; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.2); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            translate: 0.5rem;
+        }
+        .btn-beli-modern:hover {
+            transform: translateY(-2px) scale(1.03); box-shadow: 0 8px 25px rgba(16, 185, 129, 0.4);
+            background: linear-gradient(135deg, #059669 0%, #047857 100%);
+        }
+        .btn-beli-modern.clicked {
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3); transform: scale(0.95);
         }
 
-        /* Glassmorphism bottom overlay */
-        .product-card::before {
-            content: "";
-            position: absolute;
-            width: calc(100% - 1rem);
-            height: 45%;
-            bottom: 0.5rem;
-            left: 0.5rem;
-            background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
-            backdrop-filter: blur(2px);
-            border-radius: 0 0 1rem 1rem;
-            transition: transform 0.4s ease, opacity 0.4s ease;
-            z-index: 1;
-        }
-
-        /* Glassmorphism Badge */
-        .glass-badge {
-            background: rgba(255, 255, 255, 0.25);
-            backdrop-filter: blur(10px) saturate(180%);
-            -webkit-backdrop-filter: blur(10px) saturate(180%);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            border-radius: 12px;
-            color: #fff;
-            font-size: 10px;
-            font-weight: 800;
-            padding: 4px 10px;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
-        }
-
-        .productSwiper img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            object-position: 50% 50%;
-            border-radius: 1rem;
-            display: block;
-            transition: transform 0.4s ease;
-        }
+        .card-baru:hover::before, .card-baru:focus-within::before { translate: 0 100%; }
+        .card-baru:hover > .img-container, .card-baru:focus-within > .img-container { aspect-ratio: 1 / 1; height: 50%; }
+        .card-baru:hover > section h2, .card-baru:focus-within > section h2,
+        .card-baru:hover > section p, .card-baru:focus-within > section p { translate: 0 0; margin-block-end: 0.5rem; opacity: 1; }
+        .card-baru:hover > section h2, .card-baru:focus-within > section h2 { color: var(--title-color-hover); text-shadow: none; }
+        .card-baru:hover > section > div, .card-baru:focus-within > section > div { translate: 0 0; opacity: 1; }
 
         /* Swiper Product Custom */
         .productSwiper { width: 100%; height: 100%; border-radius: 1rem; }
+        .productSwiper img { width: 100%; height: 100%; object-fit: cover; border-radius: 1rem; display: block; transition: transform 0.4s ease; }
         .productSwiper .swiper-pagination-fraction {
-            bottom: unset !important;
-            top: 15px !important;
-            left: 50% !important;
-            transform: translateX(-50%);
-            width: auto !important;
-            background: rgba(0, 0, 0, 0.3);
-            backdrop-filter: blur(8px);
-            border: 1px solid rgba(255,255,255,0.1);
-            color: white;
-            font-size: 9px;
-            font-weight: 900;
-            padding: 4px 12px;
-            border-radius: 20px;
-            z-index: 20;
+            bottom: unset !important; top: 15px !important; left: 50% !important; transform: translateX(-50%);
+            width: auto !important; background: rgba(0, 0, 0, 0.3); backdrop-filter: blur(8px);
+            border: 1px solid rgba(255,255,255,0.1); color: white; font-size: 9px; font-weight: 900;
+            padding: 4px 12px; border-radius: 20px; z-index: 20;
         }
-
-        /* Teks Nama & Harga di Dalam Foto Utama */
-        .product-card .img-overlay {
-            position: absolute;
-            bottom: 1.5rem;
-            left: 1.25rem;
-            right: 1.25rem;
-            z-index: 2;
-            transition: transform 0.4s ease, opacity 0.4s ease;
-            pointer-events: none;
+        /* Glassmorphism Badge */
+        .glass-badge {
+            background: rgba(255, 255, 255, 0.25); backdrop-filter: blur(10px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.3); border-radius: 12px; color: #fff;
+            font-size: 10px; font-weight: 800; padding: 4px 10px; text-shadow: 0 2px 4px rgba(0,0,0,0.2);
         }
-
-        .product-card .img-overlay h2 {
-            margin: 0;
-            font-size: 1.1rem;
-            font-weight: 800;
-            color: var(--title-color);
-            line-height: 1.3;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.8);
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-        }
-
-        .product-card .img-overlay .price {
-            display: inline-block;
-            margin-top: 0.25rem;
-            font-size: 1.15rem;
-            font-weight: 900;
-            color: #34d399; /* Emerald 400 */
-            text-shadow: 0 2px 4px rgba(0,0,0,0.8);
-        }
-
-        /* Bagian Informasi yang Muncul Saat Hover */
-        .product-card > section {
-            position: absolute;
-            bottom: 0; left: 0; right: 0;
-            height: 45%;
-            padding: 1rem 1.25rem;
-            display: flex;
-            flex-direction: column;
-            z-index: 3;
-            opacity: 0;
-            transform: translateY(20px);
-            transition: transform 0.4s ease, opacity 0.4s ease;
-            pointer-events: none;
-        }
-
-        .product-card > section p {
-            font-size: 0.8rem;
-            line-height: 1.4;
-            color: var(--text-color);
-            margin: 0 0 auto 0;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-        }
-
-        .product-card > section .card-actions {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-end;
-            margin-top: 0.5rem;
-        }
-
-        .product-card .tag {
-            font-size: 0.65rem;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            color: var(--button-color-hover);
-            background: rgba(16, 185, 129, 0.1);
-            padding: 4px 8px;
-            border-radius: 6px;
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-        }
-
-        /* Tombol Beli (+ Plus to Checkmark Morphing) */
-        .product-card .btn-buy {
-            border: none;
-            border-radius: 1.25rem 1.25rem 1.5rem 1.25rem;
-            font-size: 0.8rem;
-            font-weight: bold;
-            padding: 0.6rem 1.2rem 0.6rem 2rem;
-            background: var(--button-color);
-            color: #fff;
-            cursor: pointer;
-            position: relative;
-            transition: all 0.33s ease;
-            box-shadow: 0 4px 10px rgba(16, 185, 129, 0.3);
-            text-decoration: none;
-            pointer-events: auto;
-        }
-
-        .product-card .btn-buy::before,
-        .product-card .btn-buy::after {
-            content: "";
-            background: #fff;
-            position: absolute;
-            border-radius: 1rem;
-            transition: all 0.25s ease-out;
-        }
-
-        .product-card .btn-buy::before { width: 0.75rem; height: 0.1rem; top: 50%; left: 0.9rem; }
-        .product-card .btn-buy::after { width: 0.75rem; height: 0.1rem; top: 50%; left: 0.9rem; rotate: 90deg; }
-
-        .product-card .btn-buy:hover { background: var(--button-color-hover); transform: scale(1.05); }
-        
-        .product-card .btn-buy.added { background: var(--button-color-hover); }
-        .product-card .btn-buy.added::before { width: 0.4rem; top: 50%; left: 0.8rem; rotate: 45deg; translate: 0 2px; }
-        .product-card .btn-buy.added::after { width: 0.7rem; top: 52%; left: 1.0rem; rotate: -45deg; translate: 0 -1px; }
-
-        /* HOVER DYNAMICS */
-        .product-card:hover {
-            box-shadow: 0 20px 25px -5px rgba(16, 185, 129, 0.15);
-            border-color: #10b981;
-        }
-        .product-card:hover::before { transform: translateY(100%); opacity: 0; }
-        .product-card:hover .img-overlay { transform: translateY(-20px); opacity: 0; }
-        .product-card:hover > section { transform: translateY(0); opacity: 1; pointer-events: auto; }
 
         /* --- STACKING CARDS CSS FOR PASAR --- */
         .stack-area-pasar {
@@ -406,7 +278,7 @@ $bg_overlay = $settings['web_hero_image_1'] ?? 'https://images.unsplash.com/phot
                         <p class="text-[10px] md:text-xs uppercase tracking-widest text-emerald-600 font-bold">Dari Warga, Untuk Warga</p>
                     </div>
                     <div class="flex items-center gap-2">
-                        <a href="ruang_penjual.php" class="px-4 py-2.5 bg-emerald-600 text-white rounded-xl font-bold text-[10px] md:text-sm hover:bg-emerald-700 transition-all flex items-center gap-2 shadow-lg shadow-emerald-200 border border-emerald-500">
+                        <a href="login_penjual.php" class="px-4 py-2.5 bg-emerald-600 text-white rounded-xl font-bold text-[10px] md:text-sm hover:bg-emerald-700 transition-all flex items-center gap-2 shadow-lg shadow-emerald-200 border border-emerald-500">
                             <i class="fa-solid fa-shop"></i> <span class="block">Ruang Penjual</span>
                         </a>
                         <a href="app.php" class="w-10 h-10 md:w-auto md:px-4 md:py-2.5 bg-slate-100 text-slate-600 rounded-xl font-bold text-xs md:text-sm hover:bg-slate-200 transition-colors flex items-center justify-center md:gap-2 border border-slate-200">
@@ -519,7 +391,7 @@ $bg_overlay = $settings['web_hero_image_1'] ?? 'https://images.unsplash.com/phot
                     $foto = !empty($photos) ? $photos[0] : 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=400&q=80';
                 ?>
                 <!-- Product Card Premium -->
-                <div class="product-card group">
+                <div class="card-baru group">
                     <div class="img-container relative h-full">
                         <div class="swiper productSwiper">
                             <div class="swiper-wrapper">
@@ -536,36 +408,45 @@ $bg_overlay = $settings['web_hero_image_1'] ?? 'https://images.unsplash.com/phot
                             <?php endif; ?>
                         </div>
                         
-                        <!-- Badge Status -->
-                        <?php if($p['status'] == 'Habis'): ?>
-                            <div class="absolute top-4 left-4 z-[10] bg-red-500/80 backdrop-blur-md text-white text-[9px] font-black uppercase tracking-widest px-3 py-1.5 rounded-lg shadow-md">Stok Habis</div>
-                        <?php endif; ?>
+                        <!-- Gradient Overlay untuk memperjelas teks -->
+                        <div class="absolute inset-0 bg-gradient-to-b from-slate-900/60 via-transparent to-slate-900/90 z-[5] pointer-events-none transition-opacity duration-400 group-hover:opacity-0"></div>
 
-                        <div class="absolute top-4 right-4 z-[10]">
-                             <a href="toko.php?penjual=<?= urlencode($p['penjual_nama']) ?>" class="glass-badge hover:bg-emerald-600 hover:text-white transition-all">
-                                Lihat Toko
-                             </a>
+                        <!-- Top Information (Toko & Badge) - Tetap tampil saat hover agar bisa diklik -->
+                        <div class="absolute top-4 left-4 right-4 z-[10] flex justify-between items-start">
+                            <div class="flex flex-col gap-2">
+                                <a href="toko.php?penjual=<?= urlencode($p['penjual_nama']) ?>" class="flex items-center gap-1.5 px-3 py-1.5 bg-white/20 backdrop-blur-md rounded-full border border-white/30 text-white hover:bg-emerald-500 hover:border-emerald-400 transition-all shadow-sm w-max" title="Kunjungi Toko">
+                                    <i class="fas fa-store text-[10px]"></i>
+                                    <span class="text-[10px] font-bold tracking-wide truncate max-w-[120px]"><?= htmlspecialchars($p['penjual_nama']) ?></span>
+                                </a>
+                                <?php if($p['status'] == 'Habis'): ?>
+                                    <span class="bg-red-500/90 backdrop-blur-md text-white text-[9px] font-black uppercase tracking-widest px-3 py-1.5 rounded-lg shadow-md w-max">Stok Habis</span>
+                                <?php endif; ?>
+                            </div>
+                            <span class="glass-badge shadow-sm">
+                                <?= htmlspecialchars($p['kategori']) ?>
+                            </span>
                         </div>
 
-                        <!-- Overlay Teks dalam Foto Utama -->
-                        <div class="img-overlay">
-                            <h2><?= htmlspecialchars($p['nama_produk']) ?></h2>
-                            <span class="price">Rp <?= number_format($p['harga'],0,',','.') ?></span>
+                        <!-- Bottom Information (Nama Produk & Harga) - Hilang saat hover -->
+                        <div class="absolute bottom-5 left-5 right-5 z-[10] transition-all duration-400 group-hover:translate-y-4 group-hover:opacity-0 pointer-events-none">
+                            <h2 class="text-lg md:text-xl font-black text-white leading-tight mb-1 drop-shadow-md line-clamp-2"><?= htmlspecialchars($p['nama_produk']) ?></h2>
+                            <span class="text-emerald-400 font-black text-lg drop-shadow-md">Rp <?= number_format($p['harga'],0,',','.') ?></span>
                         </div>
                     </div>
 
                     <!-- Bagian Detail yang Menggeser dari Bawah Saat Hover -->
                     <section>
+                        <h2><?= htmlspecialchars($p['nama_produk']) ?></h2>
                         <p class="line-clamp-3"><?= htmlspecialchars($p['deskripsi'] ?: 'Tidak ada deskripsi produk.') ?></p>
                         
-                        <div class="card-actions">
-                            <div class="flex flex-col gap-1 overflow-hidden">
-                                <div><span class="tag"><i class="fas fa-tags text-[9px]"></i> <?= htmlspecialchars($p['kategori']) ?></span></div>
-                                <span class="text-[0.65rem] font-bold text-slate-500 truncate"><i class="fas fa-store text-emerald-500 mr-1"></i> <?= htmlspecialchars($p['penjual_nama']) ?></span>
+                        <div>
+                            <div class="flex flex-col gap-0.5 overflow-hidden">
+                                <span class="tag whitespace-nowrap">Rp <?= number_format($p['harga'],0,',','.') ?></span>
+                                <span class="text-[0.65rem] font-bold text-slate-500 truncate mt-1"><i class="fas fa-store text-emerald-500 mr-1"></i> <?= htmlspecialchars($p['penjual_nama']) ?></span>
                             </div>
                             
-                            <a href="https://wa.me/<?= $wa ?>?text=<?= $msg ?>" target="_blank" class="btn-buy" onclick="trackAlgoritmaBeli(<?= $p['id'] ?>); this.classList.add('added'); setTimeout(() => this.classList.remove('added'), 2000)">
-                                Beli
+                            <a href="https://wa.me/<?= $wa ?>?text=<?= $msg ?>" target="_blank" class="btn-beli-modern" onclick="trackAlgoritmaBeli(<?= $p['id'] ?>); this.classList.add('clicked'); setTimeout(() => this.classList.remove('clicked'), 2000)">
+                                <i class="fab fa-whatsapp text-lg"></i> Beli
                             </a>
                         </div>
                     </section>

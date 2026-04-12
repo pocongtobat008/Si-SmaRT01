@@ -167,8 +167,8 @@ $web_nama = $settings['web_nama'] ?? 'Portal Warga';
                                 </div>
                                 <a href="https://wa.me/<?= preg_replace('/[^0-9]/', '', $p['no_wa']) ?>?text=Halo%20saya%20tertarik%20dengan%20<?= urlencode($p['nama_produk']) ?>" 
                                    target="_blank" 
-                                   class="w-full py-4 bg-emerald-600 text-white rounded-2xl flex items-center justify-center gap-2 text-xs font-black shadow-lg shadow-emerald-100 group-hover:bg-emerald-700 transition-all">
-                                    <i class="fab fa-whatsapp"></i> Pesan
+                                   class="w-full py-3.5 bg-gradient-to-r from-emerald-500 to-teal-600 text-white rounded-[1.25rem] flex items-center justify-center gap-2 text-sm font-extrabold shadow-xl shadow-emerald-200 hover:shadow-emerald-300 hover:from-emerald-600 hover:to-teal-700 hover:-translate-y-1 transition-all duration-300 border border-emerald-400/30">
+                                    <i class="fab fa-whatsapp text-lg"></i> Pesan Sekarang
                                 </a>
                             </div>
                         </div>

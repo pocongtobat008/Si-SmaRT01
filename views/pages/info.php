@@ -1,36 +1,109 @@
 <!-- Page: Informasi & CMS Website -->
 <div id="page-info" class="page-content hidden page-section">
     
-    <!-- Sub Navigation Tabs -->
-    <div class="sub-nav-tabs" style="margin-bottom: 24px; display: flex; flex-wrap: wrap; gap: 8px;">
-        <button class="sub-nav-tab active" style="flex: 1 1 auto; justify-content: center; white-space: nowrap;" onclick="switchInfoTab('info-umum', this)">
-            <i data-lucide="settings"></i> Pengaturan Umum
-        </button>
-        <button class="sub-nav-tab" style="flex: 1 1 auto; justify-content: center; white-space: nowrap;" onclick="switchInfoTab('info-menu', this)">
-            <i data-lucide="menu"></i> Menu Frontend
-        </button>
-        <button class="sub-nav-tab" style="flex: 1 1 auto; justify-content: center; white-space: nowrap;" onclick="switchInfoTab('info-blog', this)">
-            <i data-lucide="newspaper"></i> Blog & Artikel
-        </button>
-        <button class="sub-nav-tab" style="flex: 1 1 auto; justify-content: center; white-space: nowrap;" onclick="switchInfoTab('info-slider', this)">
-            <i data-lucide="layers"></i> Slider Hero
-        </button>
-        <button class="sub-nav-tab" style="flex: 1 1 auto; justify-content: center; white-space: nowrap;" onclick="switchInfoTab('info-wisata', this)">
-            <i data-lucide="map-pin"></i> Wisata Sekitar
-        </button>
-        <button class="sub-nav-tab" style="flex: 1 1 auto; justify-content: center; white-space: nowrap;" onclick="switchInfoTab('info-transparansi', this)">
-            <i data-lucide="pie-chart"></i> Laporan Keuangan
-        </button>
-        <button class="sub-nav-tab" style="flex: 1 1 auto; justify-content: center; white-space: nowrap;" onclick="switchInfoTab('info-struktur', this)">
-            <i data-lucide="users"></i> Struktur Organisasi
-        </button>
-        <button class="sub-nav-tab" style="flex: 1 1 auto; justify-content: center; white-space: nowrap;" onclick="switchInfoTab('info-penting', this)">
-            <i data-lucide="info"></i> Info Penting
-        </button>
-        <button id="tab-btn-info-users" class="sub-nav-tab" style="flex: 1 1 auto; justify-content: center; white-space: nowrap;" onclick="switchInfoTab('info-users', this); document.getElementById('page-title').innerText='Master User'; document.getElementById('page-subtitle').innerText='Manajemen Akses Sistem';">
-            <i data-lucide="user-cog"></i> Manajemen Akses
-        </button>
+    <!-- Modern Header for Page -->
+    <div class="page-header-premium mb-8">
+        <h2 id="page-title" class="text-3xl font-bold text-slate-900 font-space">CMS Website</h2>
+        <p id="page-subtitle" class="text-slate-500 font-medium">Kelola konten dan informasi publik website Si-SmaRT</p>
     </div>
+
+    <style>
+        .info-layout-wrapper {
+            display: grid;
+            grid-template-columns: 280px minmax(0, 1fr);
+            gap: 32px;
+            align-items: start;
+        }
+        .info-sidebar-tabs {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            position: sticky;
+            top: 24px;
+        }
+        .info-tab-btn {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 20px;
+            border-radius: 16px;
+            background: transparent;
+            color: #64748b;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+            text-align: left;
+            cursor: pointer;
+        }
+        .info-tab-btn:hover {
+            background: rgba(16, 185, 129, 0.05);
+            color: #10b981;
+        }
+        .info-tab-btn.active {
+            background: #fff;
+            color: #10b981;
+            border-color: rgba(16, 185, 129, 0.1);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
+        }
+        .info-tab-btn i {
+            width: 20px;
+            height: 20px;
+        }
+
+        @media (max-width: 1024px) {
+            .info-layout-wrapper {
+                grid-template-columns: 1fr;
+            }
+            .info-sidebar-tabs {
+                flex-direction: row;
+                overflow-x: auto;
+                padding-bottom: 12px;
+                position: static;
+                border-bottom: 1px solid #e2e8f0;
+                margin-bottom: 24px;
+                white-space: nowrap;
+                -ms-overflow-style: none;
+                scrollbar-width: none;
+            }
+            .info-sidebar-tabs::-webkit-scrollbar { display: none; }
+            .info-tab-btn {
+                padding: 10px 20px;
+                font-size: 0.875rem;
+            }
+        }
+    </style>
+
+    <div class="info-layout-wrapper">
+        <!-- Vertical Tabs Sidebar -->
+        <div class="info-sidebar-tabs">
+            <button class="info-tab-btn active" onclick="switchInfoTab('info-umum', this)">
+                <i data-lucide="settings"></i> <span>Pengaturan Umum</span>
+            </button>
+            <button class="info-tab-btn" onclick="switchInfoTab('info-menu', this)">
+                <i data-lucide="menu"></i> <span>Menu Frontend</span>
+            </button>
+            <button class="info-tab-btn" onclick="switchInfoTab('info-blog', this)">
+                <i data-lucide="newspaper"></i> <span>Blog & Artikel</span>
+            </button>
+            <button class="info-tab-btn" onclick="switchInfoTab('info-slider', this)">
+                <i data-lucide="layers"></i> <span>Slider Hero</span>
+            </button>
+            <button class="info-tab-btn" onclick="switchInfoTab('info-wisata', this)">
+                <i data-lucide="map-pin"></i> <span>Wisata Sekitar</span>
+            </button>
+            <button class="info-tab-btn" onclick="switchInfoTab('info-transparansi', this)">
+                <i data-lucide="pie-chart"></i> <span>Laporan Keuangan</span>
+            </button>
+            <button class="info-tab-btn" onclick="switchInfoTab('info-struktur', this)">
+                <i data-lucide="users"></i> <span>Struktur Organisasi</span>
+            </button>
+            <button class="info-tab-btn" onclick="switchInfoTab('info-penting', this)">
+                <i data-lucide="alert-circle"></i> <span>Info Penting</span>
+            </button>
+        </div>
+
+        <div class="info-main-content">
+            <!-- Isi Tab Akan Dimuat di Sini (Konten di bawah tetap ada) -->
 
     <!-- Tab Content: Pengaturan Umum (Visi, Misi, Alamat) -->
     <div id="info-umum" class="info-tab-content active-tab">
@@ -330,116 +403,70 @@
 
     <!-- Tab Content: Informasi Penting Warga -->
     <div id="info-penting" class="info-tab-content hidden">
-        <div class="glass-card card-section" style="margin-bottom: 24px;">
-            <div class="section-header" style="margin-bottom: 24px;">
-                <h4 class="section-title"><i data-lucide="info" style="display:inline; width:20px; margin-right:8px;" class="text-accent"></i> Kelola Informasi Penting Warga</h4>
-                <p class="text-secondary" style="font-size: 0.8rem;">Sesuaikan 4 kartu informasi cepat (Darurat, RS, Polisi, dsb) di halaman depan.</p>
-            </div>
-
-            <div class="grid-container-2-col" style="gap: 20px; margin-bottom: 24px;">
-                <div class="form-group">
-                    <label class="card-label">Judul Bagian</label>
-                    <input type="text" id="web_info_penting_judul" class="input-field mt-1" placeholder="Cth: Informasi Penting Warga">
-                </div>
-                <div class="form-group">
-                    <label class="card-label">Deskripsi Bagian</label>
-                    <input type="text" id="web_info_penting_deskripsi" class="input-field mt-1" placeholder="Cth: Pintasan informasi mendasar...">
+        <div class="glass-card card-section mb-6">
+            <div class="section-header mb-8">
+                <div>
+                    <h4 class="section-title text-2xl"><i data-lucide="alert-circle" class="text-emerald-500 mr-2"></i> Kelola Informasi Penting</h4>
+                    <p class="text-slate-500 font-medium">Atur nomor darurat dan informasi krusial yang muncul di halaman depan.</p>
                 </div>
             </div>
 
-            <div class="grid-container-2-col" style="gap: 20px;">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+                <div class="form-group">
+                    <label class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3 block">Judul Bagian</label>
+                    <input type="text" id="web_info_penting_judul" class="input-field py-4" placeholder="Cth: Informasi Penting Warga">
+                </div>
+                <div class="form-group">
+                    <label class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3 block">Deskripsi Bagian</label>
+                    <input type="text" id="web_info_penting_deskripsi" class="input-field py-4" placeholder="Cth: Pintasan informasi mendasar...">
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 xl:grid-cols-2 gap-8">
                 <?php for($i=1; $i<=4; $i++): ?>
-                <div class="glass-card p-6" style="background: var(--bg-color-soft); border-radius: 24px; border: 1px solid var(--border-color);">
-                    <div class="flex items-center space-x-3 mb-6">
-                        <div class="w-10 h-10 rounded-xl bg-emerald-600/10 flex items-center justify-center text-emerald-600 font-bold"><?= $i ?></div>
-                        <h5 class="font-bold">Kartu <?= $i ?></h5>
-                    </div>
+                <div class="p-8 rounded-[2rem] bg-slate-50 border border-slate-100 relative group transition-all hover:shadow-xl hover:shadow-slate-200">
+                    <div class="absolute top-6 right-8 text-4xl font-black text-slate-100 group-hover:text-emerald-50/50 transition-colors"><?= $i ?></div>
                     
-                    <div class="grid-container-2-col" style="gap: 12px; margin-bottom: 12px;">
-                        <div class="form-group">
-                            <label class="card-label">Ikon (FontAwesome)</label>
-                            <input type="text" id="web_info_item_<?= $i ?>_icon" class="input-field mt-1" placeholder="Cth: fa-phone-volume">
+                    <div class="relative z-10">
+                        <div class="flex items-center gap-4 mb-8">
+                            <div class="w-12 h-12 rounded-2xl bg-white shadow-sm flex items-center justify-center text-emerald-600">
+                                <i class="fas fa-hashtag text-xl"></i>
+                            </div>
+                            <h5 class="text-lg font-bold text-slate-800">Kartu Informasi <?= $i ?></h5>
                         </div>
-                        <div class="form-group">
-                            <label class="card-label">Judul Kartu</label>
-                            <input type="text" id="web_info_item_<?= $i ?>_title" class="input-field mt-1">
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                            <div class="form-group">
+                                <label class="text-[10px] font-black text-slate-400 uppercase tracking-wider mb-2 block">Ikon FontAwesome</label>
+                                <div class="relative">
+                                    <i class="fas fa-icons absolute left-4 top-1/2 -translate-y-1/2 text-slate-300"></i>
+                                    <input type="text" id="web_info_item_<?= $i ?>_icon" class="input-field pl-12 py-3 text-sm" placeholder="fa-phone">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="text-[10px] font-black text-slate-400 uppercase tracking-wider mb-2 block">Judul Kartu</label>
+                                <input type="text" id="web_info_item_<?= $i ?>_title" class="input-field py-3 text-sm" placeholder="Nama Layanan">
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="card-label">Deskripsi Singkat</label>
-                        <textarea id="web_info_item_<?= $i ?>_desc" class="input-field mt-1" style="min-height: 80px;"></textarea>
+
+                        <div class="form-group">
+                            <label class="text-[10px] font-black text-slate-400 uppercase tracking-wider mb-2 block">Isi Informasi (Deskripsi)</label>
+                            <textarea id="web_info_item_<?= $i ?>_desc" class="input-field min-h-[100px] py-4 text-sm resize-none" placeholder="Masukkan nomor telepon atau info singkat..."></textarea>
+                        </div>
                     </div>
                 </div>
                 <?php endfor; ?>
             </div>
 
-            <div style="display: flex; justify-content: flex-end; margin-top: 24px;">
-                <button class="button-primary" style="padding: 14px 32px;" onclick="saveWebSettings()"><i data-lucide="save" style="margin-right: 8px;"></i> Simpan Info Penting</button>
+            <div class="flex justify-end mt-12 pt-8 border-t border-slate-100">
+                <button class="px-10 py-5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-2xl shadow-xl shadow-emerald-200 transition-all flex items-center gap-3" onclick="saveWebSettings()">
+                    <i data-lucide="save"></i> SIMPAN INFORMASI PENTING
+                </button>
             </div>
         </div>
     </div>
-
-    <!-- Tab Content: Manajemen Akses User Si-SmaRT (BARU) -->
-    <div id="info-users" class="info-tab-content hidden">
-        <div class="glass-card card-section">
-            <div class="section-header">
-                <div>
-                    <h4 class="section-title">Manajemen Akun Sistem</h4>
-                    <p class="text-secondary" style="font-size: 0.8rem;">Kelola administrator atau petugas yang berhak login ke dalam sistem Si-SmaRT.</p>
-                </div>
-                <button class="button-primary button-sm" onclick="openUserModal()"><i data-lucide="user-plus"></i> Tambah Pengguna</button>
-            </div>
-            <div class="table-responsive mt-4">
-                <table class="modern-table" style="width: 100%;">
-                    <thead>
-                        <tr>
-                            <th>Nama Lengkap</th>
-                            <th>Username</th>
-                            <th>Role / Hak Akses</th>
-                            <th class="text-right">Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody id="cms-users-body">
-                        <!-- Diisi via JS -->
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-
-<!-- MODAL MANAJEMEN USER -->
-<div id="modal-cms-user" class="modal-overlay hidden" style="z-index: 10020 !important;">
-    <div class="glass-card" style="width: 100%; max-width: 400px; padding: 32px; position: relative; max-height: 90vh; overflow-y: auto;">
-        <button class="modal-close-btn" style="position: absolute; top: 16px; right: 16px;" onclick="closeInfoModal('modal-cms-user')"><i data-lucide="x"></i></button>
-        <h2 id="modal-user-title" class="section-title" style="margin-bottom: 8px;">Tambah Pengguna</h2>
-        <p class="text-secondary" style="font-size: 0.875rem; margin-bottom: 24px;">Buat kredensial login baru.</p>
-        
-        <input type="hidden" id="cms-user-id" value="0">
-        <div class="form-group" style="margin-bottom: 16px;">
-            <label class="card-label">Nama Lengkap</label>
-            <input type="text" id="cms-user-nama" class="input-field" style="margin-top: 8px;" placeholder="Nama Karyawan/Pengurus">
-        </div>
-        <div class="form-group" style="margin-bottom: 16px;">
-            <label class="card-label">Username Login</label>
-            <input type="text" id="cms-user-username" class="input-field" style="margin-top: 8px;" placeholder="cth: admin_budi">
-        </div>
-        <div class="form-group" style="margin-bottom: 16px;">
-            <label class="card-label">Password <span class="text-xs text-red-500 font-normal">(Kosongkan jika tidak ingin diubah)</span></label>
-            <input type="password" id="cms-user-password" class="input-field" style="margin-top: 8px;" placeholder="Ketik kata sandi baru...">
-        </div>
-        <div class="form-group" style="margin-bottom: 24px;">
-            <label class="card-label">Role Akses</label>
-            <select id="cms-user-role" class="input-field select-custom" style="margin-top: 8px;">
-                <option value="Admin">Super Admin (Akses Penuh)</option>
-                <option value="Bendahara">Bendahara (Keuangan)</option>
-                <option value="Keamanan">Petugas Keamanan</option>
-                <option value="Penjual">Penjual (UMKM Pasar)</option>
-            </select>
-        </div>
-        <button class="button-primary" style="width: 100%; justify-content: center;" onclick="saveCmsUser()"><i data-lucide="save" style="margin-right: 8px;"></i> Simpan Pengguna</button>
-    </div>
-</div>
-</div>
+</div> <!-- info-main-content -->
+</div> <!-- info-layout-wrapper -->
 
 <!-- MODAL MENU CMS -->
 <div id="modal-cms-menu" class="modal-overlay hidden" style="z-index: 10020 !important;">
@@ -777,25 +804,4 @@
     }
 }
 </style>
-<script>
-    // JS logic untuk Manajemen User di Info.php
-    document.addEventListener('DOMContentLoaded', () => { if(typeof loadCmsUsers !== 'undefined') loadCmsUsers(); else setTimeout(loadCmsUsers, 1000); });
-    
-    function loadCmsUsers() {
-        const tbody = document.getElementById('cms-users-body');
-        if(!tbody) return;
-        fetch('views/pages/get_users.php').then(r=>r.json()).then(res => {
-            if(res.status === 'success') {
-                let html = '';
-                res.data.forEach(u => {
-                    const badgeColor = u.role === 'Admin' ? 'bg-red-100 text-red-700' : (u.role === 'Bendahara' ? 'bg-emerald-100 text-emerald-700' : (u.role === 'Penjual' ? 'bg-orange-100 text-orange-700' : 'bg-blue-100 text-blue-700'));
-                    html += `<tr class="hover:bg-[var(--hover-bg)] transition-colors border-b border-[var(--border-color)] last:border-0"><td class="py-4 px-2 font-bold">${u.nama_lengkap}</td><td class="py-4 px-2 text-[var(--text-secondary-color)]">@${u.username}</td><td class="py-4 px-2"><span class="px-2 py-1 rounded text-xs font-bold ${badgeColor}">${u.role}</span></td><td class="py-4 px-2 text-right"><button onclick='editCmsUser(${JSON.stringify(u).replace(/'/g, "&#39;")})' class="p-2 text-blue-500 hover:bg-blue-50 rounded-lg mr-2"><i data-lucide="edit"></i></button><button onclick="deleteCmsUser(${u.id})" class="p-2 text-red-500 hover:bg-red-50 rounded-lg"><i data-lucide="trash-2"></i></button></td></tr>`;
-                }); tbody.innerHTML = html || '<tr><td colspan="4" class="text-center py-4">Belum ada user sistem</td></tr>'; lucide.createIcons();
-            }
-        });
-    }
-    function openUserModal() { document.getElementById('cms-user-id').value=0; document.getElementById('cms-user-nama').value=''; document.getElementById('cms-user-username').value=''; document.getElementById('cms-user-password').value=''; document.getElementById('modal-cms-user').classList.remove('hidden'); }
-    function editCmsUser(u) { document.getElementById('cms-user-id').value=u.id; document.getElementById('cms-user-nama').value=u.nama_lengkap; document.getElementById('cms-user-username').value=u.username; document.getElementById('cms-user-password').value=''; document.getElementById('cms-user-role').value=u.role; document.getElementById('modal-cms-user').classList.remove('hidden'); }
-    function saveCmsUser() { const fd = new FormData(); fd.append('id', document.getElementById('cms-user-id').value); fd.append('nama_lengkap', document.getElementById('cms-user-nama').value); fd.append('username', document.getElementById('cms-user-username').value); fd.append('password', document.getElementById('cms-user-password').value); fd.append('role', document.getElementById('cms-user-role').value); showLoading('Menyimpan...'); fetch('views/pages/save_user.php', { method: 'POST', body: fd }).then(r=>r.json()).then(res=>{ if(res.status==='success'){showToast('Tersimpan'); closeInfoModal('modal-cms-user'); loadCmsUsers();}else{showToast(res.message, 'error');} }); }
-    function deleteCmsUser(id) { if(confirm('Hapus pengguna ini permanen?')) { const fd = new FormData(); fd.append('id', id); fetch('views/pages/delete_user.php', {method:'POST', body: fd}).then(r=>r.json()).then(res=>{ if(res.status==='success'){showToast('Terhapus'); loadCmsUsers();} }); } }
-</script>
+</div> <!-- Akhir dari #page-info -->
